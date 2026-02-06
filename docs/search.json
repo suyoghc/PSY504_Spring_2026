@@ -1,0 +1,450 @@
+[
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#packages",
+    "href": "posts/Multiple Regression/Mul_Reg.html#packages",
+    "title": "Multiple Regression",
+    "section": "Packages",
+    "text": "Packages\n\nlibrary(grateful)\npkgs &lt;- cite_packages(output = \"table\", out.dir = \".\")\npkgs\n\n       Package Version                                       Citation\n1         afex   1.5.1                                          @afex\n2         base   4.4.2                                          @base\n3    easystats   0.7.3                                     @easystats\n4      emmeans  1.10.6                                       @emmeans\n5    ggeffects   2.0.0                                     @ggeffects\n6           gt  0.11.1                                            @gt\n7   ICSOutlier   0.4.1                                    @ICSOutlier\n8      insight   1.4.5                                       @insight\n9   kableExtra   1.4.0                                    @kableExtra\n10       knitr    1.50             @knitr2014; @knitr2015; @knitr2025\n11       olsrr   0.6.1                                         @olsrr\n12      pacman   0.5.1                                        @pacman\n13      papaja   0.1.3                                        @papaja\n14 performance  0.15.3                                   @performance\n15   rmarkdown    2.29 @rmarkdown2018; @rmarkdown2020; @rmarkdown2024\n16         see   0.9.0                                           @see\n17   supernova   3.0.0                                     @supernova\n18   tidyverse   2.0.0                                     @tidyverse\n19     ungeviz   0.1.0                                       @ungeviz\n\n\n\n\nthese are the packages we’re using today\nThere’s this package named grateful which lets you list all the packages that you’ve used in your code!\nGood for reproducibility. But it also allows you to cite them / just add them to your references.\nYou can even take it one further and get all the dependencies if you wish."
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#today",
+    "href": "posts/Multiple Regression/Mul_Reg.html#today",
+    "title": "Multiple Regression",
+    "section": "Today",
+    "text": "Today\n\nIntroduction to multiple regression\n\nMotivation\nInterpretation of coefs\n\nAssumptions of multiple regression\nEffect size and power\nPlotting\nWrite-up\n\n\n\nRoadmap. Motivation. See MR in action.\nQ: I said that MR is an extension of LR, which allows us to consider more than 1 vars. But have you already considered more than 1 variable before? A: YES! with ANOVA. But why is that different? Hybrid is also called ancova\nWe’ll build on simple regression — add more predictors\nThen tackle the messiness: assumptions, outliers, multicollinearity\nEnd with how to report results properly"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#previously..-simpsons-paradox",
+    "href": "posts/Multiple Regression/Mul_Reg.html#previously..-simpsons-paradox",
+    "title": "Multiple Regression",
+    "section": "Previously.. Simpson’s paradox",
+    "text": "Previously.. Simpson’s paradox\n\n\n\nIn the context that looking at the data and thinking carefully about it matters\nY: admission rates for department\nX: percent of women who applied.\nDepartment and levels… also interaction effects (more messy and realistic, but not as much a paradox)"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#simpsons-paradox",
+    "href": "posts/Multiple Regression/Mul_Reg.html#simpsons-paradox",
+    "title": "Multiple Regression",
+    "section": "Simpson’s paradox",
+    "text": "Simpson’s paradox"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#simpsons-paradox-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#simpsons-paradox-1",
+    "title": "Multiple Regression",
+    "section": "Simpson’s paradox",
+    "text": "Simpson’s paradox\n\n\n\nQ: How do we solve for this?\nA: first, by even considering that the department matters: by adding it to your model\nA2: Mixed effects models are even more helpful. It prevents a single small, outlier department from skewing your entire conclusion. Let’s you do more such as account for different levels in it, etc."
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#correlation-confounds",
+    "href": "posts/Multiple Regression/Mul_Reg.html#correlation-confounds",
+    "title": "Multiple Regression",
+    "section": "Correlation & Confounds",
+    "text": "Correlation & Confounds"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#simple-linear-model",
+    "href": "posts/Multiple Regression/Mul_Reg.html#simple-linear-model",
+    "title": "Multiple Regression",
+    "section": "Simple Linear Model",
+    "text": "Simple Linear Model\n\n\n\nSLR: One predictor, one outcome\nX predicts Y — that’s our foundation\nSingle arrow, single relationship"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multiple-predictors-in-linear-regression",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multiple-predictors-in-linear-regression",
+    "title": "Multiple Regression",
+    "section": "Multiple predictors in linear regression",
+    "text": "Multiple predictors in linear regression\n\n\n\nNow we add more Xs\nMultiple arrows pointing to Y\nSame logic, just more of it"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multiple-regression",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multiple-regression",
+    "title": "Multiple Regression",
+    "section": "Multiple regression",
+    "text": "Multiple regression\n\\[\\begin{align}\n\\hat{Y} &= b_0 + \\beta_1 X\n\\end{align}\\]\n\\[\\large \\hat{Y} = b_0 + b_1X_1 + b_2X_2 + \\dots+b_kX_k\\]\n\nSimple as adding predictors to our linear equation\n\n\n\nSimple regression on top, multiple regression below\nWe just keep adding terms\nQ: what do you anctipate to change in the outputs?\n\n– A: Each X gets its own slope"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multiple-regression-equation",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multiple-regression-equation",
+    "title": "Multiple Regression",
+    "section": "Multiple regression equation",
+    "text": "Multiple regression equation\n\\[\\large \\hat{Y} = b_0 + b_1X_1 + b_2X_2 + \\dots+b_kX_k\\]\n\n\\(\\hat{Y}\\) = predicted value on the outcome variable Y\n\\(b_0\\) = predicted value on Y when all Xs = 0\n\\(X_k\\) = predictor variables\n\\(b_k\\) = unstandardized regression coefficients\n\\(k\\) = the number of predictor variables\n\n\n\nLet’s break this apart\nY-hat is our prediction\nb₀ is the intercept — Y when all predictors are zero (just like SLR)\nEach b is a slope, each X is a predictor\nk is how many predictors we have"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#straight-line-to-hyperplane",
+    "href": "posts/Multiple Regression/Mul_Reg.html#straight-line-to-hyperplane",
+    "title": "Multiple Regression",
+    "section": "Straight Line to Hyperplane",
+    "text": "Straight Line to Hyperplane\n\n\n\nMore than two predictors (plane)\n\nMulti-dimensional space\n\nRegression coefficients are “partial” regression coefficients\n\nSlope for variable X1 (\\(b_1\\)) predicts the change in Y per unit X1 holding X2 constant\nSlope for variable X2 (\\(b_2\\)) predicts the change in Y per unit X2 holding X1 constant\n\n\n\n\n\n\n\n\n\n\n\n\n\nWith one predictor we had a line that was fit to the data\nWith Two predictors we are fitting a plane\nMore than two: terminology is a hyperplane (hard to visualize)\nKey insight: each coefficient is now “partial” – It tells you the effect of X₁ after controlling for X₂ – what does that mean? It means, you stay at a fixed point in X1, then X2 has a slope – 2 different slopes =&gt; 2 coefficients"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multiple-regression-example",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multiple-regression-example",
+    "title": "Multiple Regression",
+    "section": "Multiple Regression: Example",
+    "text": "Multiple Regression: Example\n\\[\n\\begin{align*}\n\\operatorname{CESD\\_total} &= b_o + b_{1}(\\operatorname{PIL\\_total}) \\\\\n&+ b_{2}(\\operatorname{AUDIT\\_TOTAL\\_NEW}) \\\\\n&+ b_{3}(\\operatorname{DAST\\_TOTAL\\_NEW}) \\\\\n&+ e\n\\end{align*}\n\\]\n\nmaster &lt;- read.csv(\"https://raw.githubusercontent.com/jgeller112/psy503-psych_stats/master/static/slides/10-linear_modeling/data/regress.csv\")\n\nhead(master)\n\n  X PIL_total CESD_total AUDIT_TOTAL_NEW DAST_TOTAL_NEW\n1 1       121         28               1              0\n2 2        76         37               5              0\n3 3        98         20               3              0\n4 4       122         15               3              1\n5 5        99          7               2              0\n6 6       134          7               3              0\n\n\n\nMental Health and Drug Use:\n\nCESD = depression measure\nPIL total = measure of meaning in life\nAUDIT total = measure of alcohol use\nDAST total = measure of drug usage\n\n\n\n\nHere is some real data from a mental health study\nOutcome we’re predicting : depression (CESD) from three things\nMeaning in life, alcohol use, drug use\nWhat predicts depression when we account for everything simultaneously?"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multiple-regression-example-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multiple-regression-example-1",
+    "title": "Multiple Regression",
+    "section": "Multiple Regression: Example",
+    "text": "Multiple Regression: Example\n\nValidated Measures\n\nCESD : Center for Epidemiological Studies Depression Scale\nPIL : Purpose in Life Test\nAUDIT : Alcohol Use Disorders Identification Test\nDAST : Drug Abuse Screening Test\n\n\n\n\nHere is some real data from a mental health study\nOutcome we’re predicting : depression (CESD) from three predictors\nThat is…. Meaning in life, alcohol use, drug use\nWhat predicts depression when we account for everything simultaneously?"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#scatterplot",
+    "href": "posts/Multiple Regression/Mul_Reg.html#scatterplot",
+    "title": "Multiple Regression",
+    "section": "Scatterplot",
+    "text": "Scatterplot\n\n# Change the point sizes manually\n\nanim.1&lt;- ggplot(master, aes(x=PIL_total, y=CESD_total))+\n   geom_point() + \n  theme_minimal(base_size=20)\n\nanim.1\n\n\n\n\nAs usual, we start by visualizing data\nHere is a scatterplot: Meaning in life vs. depression\nClear negative relationship\nAnd it makes sense (Purpose in life/meaning increases -&gt; less depression)"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#scatterplot-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#scatterplot-1",
+    "title": "Multiple Regression",
+    "section": "Scatterplot",
+    "text": "Scatterplot\n\n# Change the point sizes manually\n\nanim.1&lt;- ggplot(master, aes(x=AUDIT_TOTAL_NEW, y=CESD_total))+\n   geom_point() + \n  theme_minimal(base_size=20)\n\nanim.1\n\n\n\n\nNext: Alcohol use vs. depression\nRelationship less clear\nSome positive trend maybe — noisier"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#scatterplot-2",
+    "href": "posts/Multiple Regression/Mul_Reg.html#scatterplot-2",
+    "title": "Multiple Regression",
+    "section": "Scatterplot",
+    "text": "Scatterplot\n\n# Change the point sizes manually\nanim.1&lt;- ggplot(master, aes(x=DAST_TOTAL_NEW, y=CESD_total))+\n   geom_point() + \n  theme_minimal(base_size=20)\n\nanim.1\n\n\n\n\nFinally: Drug use vs. depression\nAlso messy\nMost people cluster at zero… At 0 where most points are drug use isn’t helpful for capturing\nHard to see pattern"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#individual-predictors",
+    "href": "posts/Multiple Regression/Mul_Reg.html#individual-predictors",
+    "title": "Multiple Regression",
+    "section": "Individual Predictors",
+    "text": "Individual Predictors\n\nWe test the individual predictors with a t-test:\n\n\\(t = \\frac{b}{SE}\\)\nTherefore, the model for each individual predictor is our coefficient b\nSingle sample t-test to determine if the b value is different from zero\n\n\n\n\nHow do we test if each predictor matters?\nSame t-test logic\nTake the coefficient, divide by its standard error\n(Many of these tests are SNR / proportion of variance explained)\nIs b different from zero? That’s our question for each predictor"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model",
+    "href": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model",
+    "title": "Multiple Regression",
+    "section": "Fitting the model",
+    "text": "Fitting the model\n\nmodel_fit &lt;- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,\n             data = master) \n\nsummary(model_fit)\n\n\nCall:\nlm(formula = CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW, \n    data = master)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-19.619  -5.172  -1.256   3.420  28.847 \n\nCoefficients:\n                Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)     55.16374    3.88905  14.184   &lt;2e-16 ***\nPIL_total       -0.38158    0.03384 -11.276   &lt;2e-16 ***\nAUDIT_TOTAL_NEW -0.09211    0.09391  -0.981    0.328    \nDAST_TOTAL_NEW   1.03415    0.39871   2.594    0.010 *  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 7.585 on 262 degrees of freedom\n  (1 observation deleted due to missingness)\nMultiple R-squared:  0.3587,    Adjusted R-squared:  0.3513 \nF-statistic: 48.84 on 3 and 262 DF,  p-value: &lt; 2.2e-16\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\n\n\n\n\n(Intercept)\n55.1637359\n3.8890461\n14.1843873\n0.0000000\n47.5059719\n62.8214999\n\n\nPIL_total\n-0.3815778\n0.0338406\n-11.2757330\n0.0000000\n-0.4482119\n-0.3149436\n\n\nAUDIT_TOTAL_NEW\n-0.0921089\n0.0939109\n-0.9808116\n0.3275905\n-0.2770251\n0.0928073\n\n\nDAST_TOTAL_NEW\n1.0341539\n0.3987126\n2.5937324\n0.0100281\n0.2490649\n1.8192429\n\n\n\n\n\n\n\\(b_0\\): The value of Y when all the Xs=0\n\n\n\nHere’s the R code — simple formula\noutcome ~ predictor1 + predictor2 + predictor3\nYou plug all the coefficients in, you get the model with which you can make predictions!\nThe intercept (b₀ = 55.16): predicted depression when someone has zero meaning, zero alcohol use, zero drug use INTERCEPT: Not very interpretable in practice but mathematically necessary\nFor every 1-unit increase in meaning in life, depression scores are predicted to decrease by 0.38 units, (assuming alcohol and drug use remain the same.)\ncan think of t-statistics as SNR: meaning, …\nignore t-value of intercept\nacohold and depression not so much\nResiduals: distribution (min, max).. median is helpful… not a huge shift\nSE of the estimates… guess of how much the estimate my change as you look at different samples\nDAST….. high of drug abuse"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model-1",
+    "title": "Multiple Regression",
+    "section": "Fitting the model",
+    "text": "Fitting the model\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\n\n\n\n\n(Intercept)\n55.1637359\n3.8890461\n14.1843873\n0.0000000\n47.5059719\n62.8214999\n\n\nPIL_total\n-0.3815778\n0.0338406\n-11.2757330\n0.0000000\n-0.4482119\n-0.3149436\n\n\nAUDIT_TOTAL_NEW\n-0.0921089\n0.0939109\n-0.9808116\n0.3275905\n-0.2770251\n0.0928073\n\n\nDAST_TOTAL_NEW\n1.0341539\n0.3987126\n2.5937324\n0.0100281\n0.2490649\n1.8192429\n\n\n\n\n\n\n\\(b_1\\): If Alch and drug use are held constant, for every 1 unit increase in X (meaning) leads to a -0.38 decrease in depression scores.\n\n\n\nThe meaning coefficient: -0.38\nNegative — more meaning, less depression\n“Holding alcohol and drug use constant” — that’s the partial regression magic\nEach unit increase in meaning drops depression by 0.38 points"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model-2",
+    "href": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model-2",
+    "title": "Multiple Regression",
+    "section": "Fitting the model",
+    "text": "Fitting the model\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\n\n\n\n\n(Intercept)\n55.1637359\n3.8890461\n14.1843873\n0.0000000\n47.5059719\n62.8214999\n\n\nPIL_total\n-0.3815778\n0.0338406\n-11.2757330\n0.0000000\n-0.4482119\n-0.3149436\n\n\nAUDIT_TOTAL_NEW\n-0.0921089\n0.0939109\n-0.9808116\n0.3275905\n-0.2770251\n0.0928073\n\n\nDAST_TOTAL_NEW\n1.0341539\n0.3987126\n2.5937324\n0.0100281\n0.2490649\n1.8192429\n\n\n\n\n\n\n\\(b_2\\): Holding meaning and drug use constant, for every unit increase in alch use there is a -0.09 decrease in depression scores.\n\n\n\nAlcohol coefficient: -0.09\nTiny and not significant (p = .33)\nAfter accounting for meaning and drugs, alcohol doesn’t add much\nSurprising? Maybe meaning captures the variance"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model-3",
+    "href": "posts/Multiple Regression/Mul_Reg.html#fitting-the-model-3",
+    "title": "Multiple Regression",
+    "section": "Fitting the model",
+    "text": "Fitting the model\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\n\n\n\n\n(Intercept)\n55.1637359\n3.8890461\n14.1843873\n0.0000000\n47.5059719\n62.8214999\n\n\nPIL_total\n-0.3815778\n0.0338406\n-11.2757330\n0.0000000\n-0.4482119\n-0.3149436\n\n\nAUDIT_TOTAL_NEW\n-0.0921089\n0.0939109\n-0.9808116\n0.3275905\n-0.2770251\n0.0928073\n\n\nDAST_TOTAL_NEW\n1.0341539\n0.3987126\n2.5937324\n0.0100281\n0.2490649\n1.8192429\n\n\n\n\n\n\n\\(b_3\\): Holding meaning and alch usage constant, for every unit increase in drug usage there is a 1.03 increase in depression.\n\n\n\nDrug use coefficient: 1.03\nPositive — more drug use, more depression\nSignificant at p = .01\nEach unit increase in drug use adds about 1 point to depression"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#more-predictors-more-problems",
+    "href": "posts/Multiple Regression/Mul_Reg.html#more-predictors-more-problems",
+    "title": "Multiple Regression",
+    "section": "More predictors => more problems",
+    "text": "More predictors =&gt; more problems\n\nAssumptions\n\nLinearity\nIndependence\nNormality of residuals\nEqual error (“homoskedasticity”)\n\n\n\nIssues:\n\nMissingness\nFactors are correlated with one another (multicollinearity)\nUnusual values/outliers\n\n\n\n\nMore predictors = more things can go wrong\nStandard assumptions still apply: linearity, independence, normality, homoskedasticity\nNew issues: missing data, multicollinearity, outliers\nLet’s tackle each"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#problems",
+    "href": "posts/Multiple Regression/Mul_Reg.html#problems",
+    "title": "Multiple Regression",
+    "section": "Problems",
+    "text": "Problems\n\nMissingness\n\nlist-wise deletion (removes entire row where missingness occurs)\n\n\n\nnomiss &lt;- master %&gt;%\n  drop_na() # drop missing data\n\n#base r\nnomiss &lt;- master %&gt;%\n  na.omit() \n\nnrow(master)\n\n[1] 267\n\nnrow(nomiss)\n\n[1] 266\n\n\n\n\nMissing data? R uses listwise deletion by default\nOne missing value in a row? Whole row gone\nWe went from 267 to 266 — not bad here\nCan be catastrophic with more missingness\nLater in the semester, we’ll look at other solutions"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#problems-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#problems-1",
+    "title": "Multiple Regression",
+    "section": "Problems",
+    "text": "Problems\n\nMulticolinearity\n\nYou want X and Y to be correlated\nYou do not want the Xs to be highly correlated\n\n\n\n\n\nWe want X and Y correlated\nWe don’t want the Xs correlated with each other\nFigure: We want as much of the red circle to be calculated!\nNext: we also want blues to be seperated! If predictors overlap too much, we can’t untangle their unique effects!! which variable to give credit to! It’s also redundancy."
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multicolinearity",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multicolinearity",
+    "title": "Multiple Regression",
+    "section": "Multicolinearity",
+    "text": "Multicolinearity\n\nProblems\n\nExtreme cases (complete collinearity) = Nonidentifiable model\n“Unstable” regression coefficients (“bouncing betas”)\n\nImprecise estimation\n\nLarge standard errors\n\nIncreased Type II errors\n\nNot detecting a difference when there is one\n\n\n\n\n\n\nExtreme case: predictors perfectly correlated — model can’t be estimated at all\nLess extreme: “bouncing betas” — coefficients become unstable\nStandard errors inflate\nYou miss real effects (Type II errors)"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-1",
+    "title": "Multiple Regression",
+    "section": "Multicolinearity",
+    "text": "Multicolinearity\n\nTolerance\n\nMeasures influence of one predictor on another\nIf predictors are highly correlated, tolerance gets smaller\n\n\n\\[Tolerance=1- R^2_j\\]\n\nwhere \\(R^2_j\\) is the proportion of variation in X that is explained by the linear combination of the other predictors in the model\n\n\n\nTolerance: how much variance in X₁ is NOT explained by other Xs\nFormula: 1 - R²\nLower tolerance = more problematic\nThe predictor is redundant with others\n“How much unique information do I have about X1?”"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-2",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-2",
+    "title": "Multiple Regression",
+    "section": "Multicolinearity",
+    "text": "Multicolinearity\n\nVIF (variance inflation factor)\n\nHow much does our estimates (SEs) change due to the correlation\n\n\n\\[VIF=\\frac{1}{1- R^2_j}\\]\n\nRule of thumb:\n\nVIF &gt; 10 indicates issues\n\n\n\n\nVIF is the inverse of tolerance\n“How much damage is being done?”\nHow much are standard errors inflated due to collinearity?\nRule of thumb: VIF &gt; 10 is trouble, some say &gt; 5"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-3",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-3",
+    "title": "Multiple Regression",
+    "section": "Multicolinearity",
+    "text": "Multicolinearity\n\nCheck multicolinearity in your data\n\n\n#easystats performance package\n#plot(check_collinearity(model_fit))\n\n\n\nEasy to check with check_collinearity()\nOur predictors look fine — low VIF values\nNo multicollinearity concerns here"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-4",
+    "href": "posts/Multiple Regression/Mul_Reg.html#multicolinearity-4",
+    "title": "Multiple Regression",
+    "section": "Multicolinearity",
+    "text": "Multicolinearity\n\nStrategies\n\nAnticipate collinearity issues at the design stage\nDepends: Drop variable if there’s no theoretical pay-off anyway\nDepends: Fit separate models and compare fit\nDepends: Increase sample size\nDepends: Orthogonalize predictors experimentally\nDepends: Use alternative approaches, such as ridge regression or LASSO\nDo not do anything about it (if prediction is your goal)\n\n\n\n\nWhat if you have multicollinearity?\nOptions depend on your goal\nDrop redundant predictors, combine them into composites\nUse regularization (ridge, LASSO)\nIncrease sample size\nOr — if predicting is all you care about — ignore it\nPredictions stay fine; it’s the individual coefficients that suffer"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#identifying-unusual-cases",
+    "href": "posts/Multiple Regression/Mul_Reg.html#identifying-unusual-cases",
+    "title": "Multiple Regression",
+    "section": "Identifying unusual cases",
+    "text": "Identifying unusual cases\n\n\n\nOutliers matter more in regression\nOne weird point can drag the whole line\nWe need systematic ways to find them"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#influential-points",
+    "href": "posts/Multiple Regression/Mul_Reg.html#influential-points",
+    "title": "Multiple Regression",
+    "section": "Influential points",
+    "text": "Influential points\n\nAn observation or case is influential if removing it substantially changes the coefficients of the regression model\n\n\nInfluence = Leverage x Distance (outliers)\n\n\n\n\nKey formula: Influence = Leverage × Distance\nLeverage: how extreme is the X value?\nDistance: how far is Y from the prediction?\nBoth matter — high leverage + large residual = influential point"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#influential-points-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#influential-points-1",
+    "title": "Multiple Regression",
+    "section": "Influential points",
+    "text": "Influential points\n\nInfluential points have a large impact on the coefficients and standard errors used for inference\n\nCan be on x or y variables\n\nThese points can sometimes be identified in a scatterplot if there is only one predictor variable\n\nThis is often not the case when there are multiple predictors\n\nWe will use measures to quantify an individual observation’s influence on the regression model\n\nLeverage, Standardized residuals , and Cook’s distance\n\n\n\n\nThese points mess with your coefficients and standard errors\nWith one predictor, you might spot them in a scatterplot\nMultiple predictors? Need diagnostic measures\nThree key measures: leverage, standardized residuals, Cook’s distance"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#leverage",
+    "href": "posts/Multiple Regression/Mul_Reg.html#leverage",
+    "title": "Multiple Regression",
+    "section": "Leverage",
+    "text": "Leverage\n\nDeals with Xs\n\n\nMeasure of geometric distance of the observation’s predictor point (\\(X_{i1}\\), \\(X_{i2}\\)) from center point of the predictor space\n\n\\[\nh_i = \\dfrac{1}{n} + \\dfrac{\\left(x_i -\\overline{x}\\right)^2}{\\sum_{j=1}^{n}{\\left(x_j -\\overline{x}\\right)^2}} \\qquad \\text{and}\\qquad \\overline{h} = \\dfrac{k}{n}  \\qquad \\text{and}\\qquad \\dfrac{1}{n} \\leq h_i \\leq 1.0\n\\]\n\n\n\n\n\n\nNote\n\n\nIn multiple regression \\(h_i\\) measures distance from the centroid (point of means) of Xs\n\n\n\n\n\nLeverage (h): how unusual is this observation’s X values?\nFar from the center of predictor space = high leverage\nPoints on the edge of the X distribution have more “pull” on the regression line"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#leverage-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#leverage-1",
+    "title": "Multiple Regression",
+    "section": "Leverage",
+    "text": "Leverage\n\n\n\nVisual representation\nPoints far from the center have high leverage\nThey have more influence on where the line goes\nNot necessarily bad — but watch them"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#leverage-2",
+    "href": "posts/Multiple Regression/Mul_Reg.html#leverage-2",
+    "title": "Multiple Regression",
+    "section": "Leverage",
+    "text": "Leverage\n\nWe say a point is high leverage if:\n\n\\[\nh_i &gt; \\frac{2K+2}{N}\n\\]\n\nK is the number of predictors\nN is the sample size\n\n\nk &lt;- 3 ##number of IVs/predictors\n# label 1 if out 0 if not\nmodel_out&lt;- model_fit  %&gt;%\n  augment() %&gt;%\n  mutate(lev_out = ifelse(.hat&gt;(2*+2)/nrow(.),1, 0))\n\nmodel_out\n\n# A tibble: 266 × 12\n   .rownames CESD_total PIL_total AUDIT_TOTAL_NEW DAST_TOTAL_NEW .fitted .resid\n   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;           &lt;dbl&gt;          &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;\n 1 1                 28       121               1              0    8.90  19.1 \n 2 2                 37        76               5              0   25.7   11.3 \n 3 3                 20        98               3              0   17.5    2.51\n 4 4                 15       122               3              1    9.37   5.63\n 5 5                  7        99               2              0   17.2  -10.2 \n 6 6                  7       134               3              0    3.76   3.24\n 7 7                 27       102               2              1   17.1    9.91\n 8 8                 10       124               1              0    7.76   2.24\n 9 9                  9       126               1              0    6.99   2.01\n10 10                 8       112               7              1   12.8   -4.82\n# ℹ 256 more rows\n# ℹ 5 more variables: .hat &lt;dbl&gt;, .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;,\n#   .std.resid &lt;dbl&gt;, lev_out &lt;dbl&gt;\n\n\n\n\nThreshold formula: h &gt; (2k+2)/n\nk predictors, n observations\nThe .hat column from augment() gives you leverage values\nCompare to the threshold, flag the high ones\nfor each data point"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#standardized-residuals",
+    "href": "posts/Multiple Regression/Mul_Reg.html#standardized-residuals",
+    "title": "Multiple Regression",
+    "section": "Standardized Residuals",
+    "text": "Standardized Residuals\n\nDistance\n\nhow far away y point is from line\n\n\n\\[\nstd.res_i = \\frac{y_i - \\hat{y}_i}{\\hat{\\sigma}_\\epsilon\\sqrt{1-h_i}}\n\\]\n\nWhere \\(\\hat{\\sigma}_\\epsilon\\) is regression standard error\n\n\nUse cut-off &gt; 3\n\n\n\nNow the Y side\nHow far is each point from the line?\nStandardized residuals account for leverage too\nRule: |standardized residual| &gt; 3 is suspicious"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#standardized-residuals-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#standardized-residuals-1",
+    "title": "Multiple Regression",
+    "section": "Standardized Residuals",
+    "text": "Standardized Residuals\n\n# label 1 if out 0 if not\nmodel_out&lt;- model_fit  %&gt;%\n  augment() %&gt;%\n  mutate(lev_out = ifelse(.hat&gt;(2*k+2)/nrow(.),1, 0), \n         std_out=ifelse(abs(.std.resid) &gt; 3, 1, 0))\n\n\nlibrary(olsrr)\n\nols_plot_resid_stand(model_fit)\n\n\n\n\nVisual inspection\nMost residuals cluster near zero\nOutliers stick out\nThe olsrr package makes nice plots"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#leverage-and-distance",
+    "href": "posts/Multiple Regression/Mul_Reg.html#leverage-and-distance",
+    "title": "Multiple Regression",
+    "section": "Leverage and Distance",
+    "text": "Leverage and Distance\n\nMontoya\n\nFour quadrants to think about\nLow leverage + small residual: typical points (good)\nThis is what we want most of our data to look like"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#leverage-and-distance-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#leverage-and-distance-1",
+    "title": "Multiple Regression",
+    "section": "Leverage and distance",
+    "text": "Leverage and distance\n\nMontoya\n\nHigh leverage + small residual: unusual X but fits the pattern\nLow leverage + large residual: unusual Y but not very influential\nThese are less concerning"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#leverage-and-distance-2",
+    "href": "posts/Multiple Regression/Mul_Reg.html#leverage-and-distance-2",
+    "title": "Multiple Regression",
+    "section": "Leverage and distance",
+    "text": "Leverage and distance\n\nMontoya\n\nHigh leverage + large residual: TROUBLE\nThese are your influential points\nThey can dramatically change your regression line"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#cooks-distance",
+    "href": "posts/Multiple Regression/Mul_Reg.html#cooks-distance",
+    "title": "Multiple Regression",
+    "section": "Cook’s distance",
+    "text": "Cook’s distance\n\nInfluence (Cook’s Distance)\n\nA measure of how much of an effect that single case has on the whole model\n\nHow close it lies to general line (residuals)\nIt’s leverage \\[\nD_i = \\frac{(std.res_i)^2}{k + 1}\\bigg(\\frac{h_i}{1-h_i}\\bigg)\n\\]\nThreshold:\n\n\n\n\\[\n\\frac{4}{N-K-1}\n\\]\n\n\nCook’s D combines everything\nHow much would coefficients change if we removed this point?\nFormula incorporates both leverage and residuals\nThreshold: 4/(n-k-1)"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#cooks-distance-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#cooks-distance-1",
+    "title": "Multiple Regression",
+    "section": "Cook’s distance",
+    "text": "Cook’s distance\n\n# label 1 if out 0 if not\nmodel_out&lt;- model_fit  %&gt;%\n  augment() %&gt;%\n  mutate(lev_out = ifelse(.hat&gt;(2*k+2)/nrow(.),1, 0),\n         std_out=ifelse(abs(.std.resid) &gt; 3, 1, 0), \n         cook_out = ifelse(.cooksd &gt; (4 / (nrow(.) - 3 - 1)), 1, 0))\n\n\nlibrary(olsrr)\nols_plot_cooksd_bar(model_fit)\n\n\n\n\nBar plot of Cook’s D\nTall bars = influential points\nEasy to spot\nRed line is threshold"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#combine-metrics",
+    "href": "posts/Multiple Regression/Mul_Reg.html#combine-metrics",
+    "title": "Multiple Regression",
+    "section": "Combine Metrics",
+    "text": "Combine Metrics\n\nWhat do I do with all these numbers?\n\nCreate a total score for the number of indicators a data point has\nYou can decide what rule to use, but a suggestion is 2 or more indicators is an outliers\n\n\n\n# label 1 if out 0 if not\nmodel_out&lt;- model_fit  %&gt;%\n  augment() %&gt;%\n  mutate(lev_out = ifelse(.hat&gt;(2*k+2)/nrow(.),1, 0), cook_out = ifelse(.cooksd &gt; (4 / (nrow(.) - 3 - 1)), 1, 0), std_out=ifelse(.std.resid &gt;= 3, 1, 0)) %&gt;%\n  rowwise() %&gt;%\n  mutate(sum_out=lev_out+cook_out+std_out) %&gt;%\n  filter(sum_out &lt; 2)\n\n\nnrow(nomiss)\n\n[1] 266\n\nnrow(model_out)\n\n[1] 255\n\n\n\n\nMultiple indicators, multiple decisions\nMy suggestion: flag points that exceed 2+ thresholds\nMore robust than any single measure\nCreate a sum score, filter out the problems"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#easystats-check_outliers",
+    "href": "posts/Multiple Regression/Mul_Reg.html#easystats-check_outliers",
+    "title": "Multiple Regression",
+    "section": "Easystats: Check_outliers",
+    "text": "Easystats: Check_outliers\n\nUse consensus method\n\nIf half of methods say point is outlier, get rid of it\n\n\n\n# will estimate all outliers methods\noutliers_list &lt;- check_outliers(model_fit, method = \"all\")\n\n# provides a col called outliers with prob of outliers by method (50% more than half said ob was outlier)\n\nout_data &lt;-insight::get_data(model_fit)[outliers_list, ] # Show outliers data\n\n# get rid of values in outliers list in the main dataset \nclean_data &lt;- anti_join(nomiss,out_data, by=c(\"CESD_total\", \"PIL_total\", \"AUDIT_TOTAL_NEW\", \"DAST_TOTAL_NEW\"))\n\n\n\nEven easier: check_outliers() with method = “all”\nUses multiple methods\nConsensus approach: if half the methods flag it, remove it\nClean and principled"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#refit-model",
+    "href": "posts/Multiple Regression/Mul_Reg.html#refit-model",
+    "title": "Multiple Regression",
+    "section": "Refit model",
+    "text": "Refit model\n\nmodel_fit &lt;- lm(CESD_total ~ PIL_total + AUDIT_TOTAL_NEW + DAST_TOTAL_NEW,\n             data = clean_data) \n\n\n\nAfter removing outliers, refit\nNow we have clean data\nOur inferences will be more trustworthy"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#assumptions",
+    "href": "posts/Multiple Regression/Mul_Reg.html#assumptions",
+    "title": "Multiple Regression",
+    "section": "Assumptions",
+    "text": "Assumptions\n\nLinearity\nIndependence\nNormality of residuals\nEqual error (“homoskedasticity”)\n\n\n\nAdditivity (more than one variable)\n\n\n\nBack to basics\nLinearity, independence, normality, homoskedasticity\nPlus one new one for multiple regression: additivity\nEffects of predictors shouldn’t depend on each other — unless you model interactions"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#assumptions-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#assumptions-1",
+    "title": "Multiple Regression",
+    "section": "Assumptions",
+    "text": "Assumptions\n\nAdditivity\n\nImplies that for an existing model, the effect of a predictor on a response variable (whether it be linear or non-linear) is not affected by changes in other existing predictors\n\nAdd interaction if not the case\n\n\n\n\n\nAdditivity means: effect of X₁ doesn’t change across levels of X₂\nIf it does, you need an interaction term\nWe’ll cover interactions later"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#assumptions-2",
+    "href": "posts/Multiple Regression/Mul_Reg.html#assumptions-2",
+    "title": "Multiple Regression",
+    "section": "Assumptions",
+    "text": "Assumptions\n\nperformance::check_model(model_fit, check=c(\"normality\", \"linearity\", \"homogeneity\", \"qq\", \"vif\"))\n\n\n\n\ncheck_model() gives you everything\nVisual diagnostics for all assumptions at once\nLook for patterns in residuals"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#violation-assumptions",
+    "href": "posts/Multiple Regression/Mul_Reg.html#violation-assumptions",
+    "title": "Multiple Regression",
+    "section": "Violation Assumptions",
+    "text": "Violation Assumptions\n\nNormality (more on this next week)\nHomoskedasticity\n\n\n\nTwo common violations: non-normality and heteroskedasticity\nWe’ll focus on heteroskedasticity today\nNormality next week"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#heteroskedasticity",
+    "href": "posts/Multiple Regression/Mul_Reg.html#heteroskedasticity",
+    "title": "Multiple Regression",
+    "section": "Heteroskedasticity",
+    "text": "Heteroskedasticity\n\ncheck_heteroscedasticity(model_fit)\n\nWarning: Heteroscedasticity (non-constant error variance) detected (p = 0.001).\n\n\n\nWe can use robust SEs\nThey work by changing the covariance matrix (the diagonal is the variance)\n\\[\n\\text{Var}(\\epsilon) = \\sigma^2 I_n = \\sigma^2\n\\begin{bmatrix}\n1 & 0 & \\cdots & 0 \\\\\n0 & 1 & \\cdots & 0 \\\\\n\\vdots & \\vdots & \\ddots & \\vdots \\\\\n0 & 0 & \\cdots & 1\n\\end{bmatrix}\n\\]\n\n\n\ncheck_heteroscedasticity() detected a problem (p = .001)\nVariance isn’t constant — our standard errors are wrong\nSolution: robust standard errors\nThey adjust the covariance matrix"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#heteroskedasticity-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#heteroskedasticity-1",
+    "title": "Multiple Regression",
+    "section": "Heteroskedasticity",
+    "text": "Heteroskedasticity\n\\[\nD_{\\text{HC3}} =\n\\begin{bmatrix}\n\\frac{\\epsilon_1^2}{(1-h_{11})^2} & 0 & \\cdots & 0 \\\\\n0 & \\frac{\\epsilon_2^2}{(1-h_{22})^2} & \\cdots & 0 \\\\\n\\vdots & \\vdots & \\ddots & \\vdots \\\\\n0 & 0 & \\cdots & \\frac{\\epsilon_n^2}{(1-h_{nn})^2}\n\\end{bmatrix}\n\\]\n\nlibrary(easystats) # model_paramters function\n#fit model first then read into function\nmp &lt;- model_parameters(model_fit, vcov = \"HC3\")\n\nmp\n\nParameter       | Coefficient |   SE |         95% CI | t(256) |      p\n-----------------------------------------------------------------------\n(Intercept)     |       57.65 | 4.16 | [49.45, 65.84] |  13.85 | &lt; .001\nPIL total       |       -0.40 | 0.04 | [-0.47, -0.33] | -11.32 | &lt; .001\nAUDIT TOTAL NEW |       -0.10 | 0.09 | [-0.28,  0.07] |  -1.18 | 0.240 \nDAST TOTAL NEW  |        0.89 | 0.48 | [-0.06,  1.84] |   1.85 | 0.066 \n\n\n\n\nHC3 is the gold standard for robust SEs\nCorrects the covariance matrix\nSame coefficients, different (usually larger) standard errors\nMore honest inference"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#refit-model-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#refit-model-1",
+    "title": "Multiple Regression",
+    "section": "Refit Model",
+    "text": "Refit Model\n\nFit model on clean dataset with outliers removed\n\n\n\n\n\n\nParameter\nCoefficient\nSE\nCI\nCI_low\nCI_high\nt\ndf_error\np\n\n\n\n\n(Intercept)\n57.6453027\n4.1612337\n0.95\n49.4506937\n65.8399117\n13.852935\n256\n0.0000000\n\n\nPIL_total\n-0.4017946\n0.0354963\n0.95\n-0.4716965\n-0.3318927\n-11.319347\n256\n0.0000000\n\n\nAUDIT_TOTAL_NEW\n-0.1030182\n0.0874974\n0.95\n-0.2753246\n0.0692882\n-1.177385\n256\n0.2401352\n\n\nDAST_TOTAL_NEW\n0.8902347\n0.4822412\n0.95\n-0.0594303\n1.8398998\n1.846036\n256\n0.0660414\n\n\n\n\n\n\\(b_1\\):\n\n\nResults with robust SEs\nNotice the standard errors changed, p-values changed too\nMeaning: b = -0.40, still significant, still the strongest predictor"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#interpretation",
+    "href": "posts/Multiple Regression/Mul_Reg.html#interpretation",
+    "title": "Multiple Regression",
+    "section": "Interpretation",
+    "text": "Interpretation\n\n\n\n\n\nParameter\nCoefficient\nSE\nCI\nCI_low\nCI_high\nt\ndf_error\np\n\n\n\n\n(Intercept)\n57.6453027\n4.1612337\n0.95\n49.4506937\n65.8399117\n13.852935\n256\n0.0000000\n\n\nPIL_total\n-0.4017946\n0.0354963\n0.95\n-0.4716965\n-0.3318927\n-11.319347\n256\n0.0000000\n\n\nAUDIT_TOTAL_NEW\n-0.1030182\n0.0874974\n0.95\n-0.2753246\n0.0692882\n-1.177385\n256\n0.2401352\n\n\nDAST_TOTAL_NEW\n0.8902347\n0.4822412\n0.95\n-0.0594303\n1.8398998\n1.846036\n256\n0.0660414\n\n\n\n\n\n\\(b_2\\):\n\n\nAlcohol: b = -0.10\nStill not significant\nAlcohol doesn’t predict depression after controlling for meaning and drugs"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#interpretation-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#interpretation-1",
+    "title": "Multiple Regression",
+    "section": "Interpretation",
+    "text": "Interpretation\n\n\n\n\n\nParameter\nCoefficient\nSE\nCI\nCI_low\nCI_high\nt\ndf_error\np\n\n\n\n\n(Intercept)\n57.6453027\n4.1612337\n0.95\n49.4506937\n65.8399117\n13.852935\n256\n0.0000000\n\n\nPIL_total\n-0.4017946\n0.0354963\n0.95\n-0.4716965\n-0.3318927\n-11.319347\n256\n0.0000000\n\n\nAUDIT_TOTAL_NEW\n-0.1030182\n0.0874974\n0.95\n-0.2753246\n0.0692882\n-1.177385\n256\n0.2401352\n\n\nDAST_TOTAL_NEW\n0.8902347\n0.4822412\n0.95\n-0.0594303\n1.8398998\n1.846036\n256\n0.0660414\n\n\n\n\n\n\n\\(b_3\\):\n\n\n\nDrugs: b = 0.89\nNow marginal with robust SEs (p = .066)\nThe relationship is there but less certain"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#predictors",
+    "href": "posts/Multiple Regression/Mul_Reg.html#predictors",
+    "title": "Multiple Regression",
+    "section": "Predictors",
+    "text": "Predictors\n\nlibrary(papaja)\napa_style &lt;- apa_print(model_fit)\n\napa_style\n\n$estimate\n$estimate$Intercept\n[1] \"$b = 57.65$, 95\\\\% CI $[49.82, 65.47]$\"\n\n$estimate$PIL_total\n[1] \"$b = -0.40$, 95\\\\% CI $[-0.47, -0.33]$\"\n\n$estimate$AUDIT_TOTAL_NEW\n[1] \"$b = -0.10$, 95\\\\% CI $[-0.29, 0.09]$\"\n\n$estimate$DAST_TOTAL_NEW\n[1] \"$b = 0.89$, 95\\\\% CI $[-0.10, 1.88]$\"\n\n$estimate$modelfit\n$estimate$modelfit$r2\n[1] \"$R^2 = .37$, 90\\\\% CI $[0.28, 0.44]$\"\n\n$estimate$modelfit$r2_adj\n[1] \"$R^2_{adj} = .36$\"\n\n$estimate$modelfit$aic\n[1] \"$\\\\mathrm{AIC} = 1,787.29$\"\n\n$estimate$modelfit$bic\n[1] \"$\\\\mathrm{BIC} = 1,805.10$\"\n\n\n\n$statistic\n$statistic$Intercept\n[1] \"$t(256) = 14.50$, $p &lt; .001$\"\n\n$statistic$PIL_total\n[1] \"$t(256) = -11.63$, $p &lt; .001$\"\n\n$statistic$AUDIT_TOTAL_NEW\n[1] \"$t(256) = -1.08$, $p = .283$\"\n\n$statistic$DAST_TOTAL_NEW\n[1] \"$t(256) = 1.77$, $p = .077$\"\n\n$statistic$modelfit\n$statistic$modelfit$r2\n[1] \"$F(3, 256) = 49.58$, $p &lt; .001$\"\n\n\n\n$full_result\n$full_result$Intercept\n[1] \"$b = 57.65$, 95\\\\% CI $[49.82, 65.47]$, $t(256) = 14.50$, $p &lt; .001$\"\n\n$full_result$PIL_total\n[1] \"$b = -0.40$, 95\\\\% CI $[-0.47, -0.33]$, $t(256) = -11.63$, $p &lt; .001$\"\n\n$full_result$AUDIT_TOTAL_NEW\n[1] \"$b = -0.10$, 95\\\\% CI $[-0.29, 0.09]$, $t(256) = -1.08$, $p = .283$\"\n\n$full_result$DAST_TOTAL_NEW\n[1] \"$b = 0.89$, 95\\\\% CI $[-0.10, 1.88]$, $t(256) = 1.77$, $p = .077$\"\n\n$full_result$modelfit\n$full_result$modelfit$r2\n[1] \"$R^2 = .37$, 90\\\\% CI $[0.28, 0.44]$, $F(3, 256) = 49.58$, $p &lt; .001$\"\n\n\n\n$table\nA data.frame with 6 labelled columns:\n\n             term estimate       conf.int statistic  df p.value\n1       Intercept    57.65 [49.82, 65.47]     14.50 256  &lt; .001\n2       PIL total    -0.40 [-0.47, -0.33]    -11.63 256  &lt; .001\n3 AUDIT TOTAL NEW    -0.10  [-0.29, 0.09]     -1.08 256    .283\n4  DAST TOTAL NEW     0.89  [-0.10, 1.88]      1.77 256    .077\n\nterm     : Predictor \nestimate : $b$ \nconf.int : 95\\\\% CI \nstatistic: $t$ \ndf       : $\\\\mathit{df}$ \np.value  : $p$ \nattr(,\"class\")\n[1] \"apa_results\" \"list\"       \n\n\n\nMeaning: \\(b = -0.40\\), 95% CI \\([-0.47, -0.33]\\), \\(t(256) = -11.63\\), \\(p &lt; .001\\)\nAlcohol: \\(b = -0.10\\), 95% CI \\([-0.29, 0.09]\\), \\(t(256) = -1.08\\), \\(p = .283\\)\nDrugs: \\(b = 0.89\\), 95% CI \\([-0.10, 1.88]\\), \\(t(256) = 1.77\\), \\(p = .077\\)\n\n\n\npapaja formats everything for you\nCopy-paste into your paper\nNo manual formatting errors"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#overall-model-fit",
+    "href": "posts/Multiple Regression/Mul_Reg.html#overall-model-fit",
+    "title": "Multiple Regression",
+    "section": "Overall Model Fit",
+    "text": "Overall Model Fit\n\nIs the overall model significant?\n\n\napa_style &lt;- apa_print(model_fit)\n\n\n\\(R^2 = .37\\), 90% CI \\([0.28, 0.44]\\), \\(F(3, 256) = 49.58\\), \\(p &lt; .001\\)\n\n\n\nThe whole model: R² = .37\nF-test significant\nOur three predictors together explain 37% of depression variance\nIs that good? For psychological data, that’s solid"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#adjusted-r2",
+    "href": "posts/Multiple Regression/Mul_Reg.html#adjusted-r2",
+    "title": "Multiple Regression",
+    "section": "Adjusted \\(R^2\\)",
+    "text": "Adjusted \\(R^2\\)\n\\[\n\\large R_{A}^2 = 1 - (1 -R^2)\\frac{n-1}{n-p-1}\n\\]\n\nglance(model_fit) %&gt;%\n    knitr::kable() %&gt;%\n    kable_styling(font_size = 24) %&gt;%\n column_spec(2, color = \"white\",\n              background = \"red\")\n\n\n\n\nr.squared\nadj.r.squared\nsigma\nstatistic\np.value\ndf\nlogLik\nAIC\nBIC\ndeviance\ndf.residual\nnobs\n\n\n\n\n0.3675175\n0.3601056\n7.438596\n49.58476\n0\n3\n-888.6458\n1787.292\n1805.095\n14165.17\n256\n260\n\n\n\n\n\n\n\nAdjusted R² penalizes for adding predictors\nRegular R² always increases with more variables — even useless ones\nAdjusted R² can decrease\nKeeps us honest"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#effect-size",
+    "href": "posts/Multiple Regression/Mul_Reg.html#effect-size",
+    "title": "Multiple Regression",
+    "section": "Effect size",
+    "text": "Effect size\n\n\n\nR is the multiple correlation\n\\(R^2\\) is the multiple correlation squared\n\nAll overlap in Y used for overall model\n\\(A+B+C/(A+B+C+D)\\)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nVenn diagram view\nR² is the total overlap between predictors and outcome\nA + B + C in the diagram\nShared and unique variance lumped together"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#effect-size-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#effect-size-1",
+    "title": "Multiple Regression",
+    "section": "Effect Size",
+    "text": "Effect Size\n\n\n\nsr is the semipartial correlation\n\nIt represents (when squared) the proportion of (unique) variance accounted for by the predictor, relative to the total variance of Y\n\nIncrease in proportion of explained Y variance when X is added\n\nHow much does X add over and beyond other variables\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSemipartial correlation (sr): unique contribution\nHow much does this predictor add beyond the others?\nThe sliver that’s only X₁, not shared with X₂\nSquared gives you proportion of total Y variance uniquely explained"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#partial-regression-plots",
+    "href": "posts/Multiple Regression/Mul_Reg.html#partial-regression-plots",
+    "title": "Multiple Regression",
+    "section": "Partial regression plots",
+    "text": "Partial regression plots\n\nMust partial out other factors by setting them to some value (usually mean)\n\n\nlibrary(ggeffects)\n#will hold all other vars at mean level \ndat &lt;-ggpredict(model_fit, terms=c(\"PIL_total\")) \n#add raw data points to plot\nplot(dat, show_data=TRUE) + theme_minimal(base_size=20)\n\n\n\n\nCan’t just plot X vs Y anymore — other predictors confound things\nPartial regression plots hold other variables at their means\nShows the unique relationship\nggeffects makes this easy"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#write-up",
+    "href": "posts/Multiple Regression/Mul_Reg.html#write-up",
+    "title": "Multiple Regression",
+    "section": "Write-up",
+    "text": "Write-up\nWe fitted a linear model(estimated using OLS) to predictCESD_total with PIL_total,AUDIT_TOTAL_NEW andDAST_TOTAL_NEW (formula:CESD_total ~ PIL_total +AUDIT_TOTAL_NEW +DAST_TOTAL_NEW). The model explains a statistically significant and substantial proportion of variance (R2 =0.36, F(3, 262) = 48.84, p &lt;.001, adj. R2 = 0.35).\n\nMeaning: \\(b = -0.40\\), 95% CI \\([-0.47, -0.33]\\), \\(t(256) = -11.63\\), \\(p &lt; .001\\), \\(pr^2 = .35\\)`\nAlcohol: \\(b = -0.10\\), 95% CI \\([-0.29, 0.09]\\), \\(t(256) = -1.08\\), \\(p = .283\\), \\(pr^2 = .02\\)`\nDrugs: \\(b = 0.89\\), 95% CI \\([-0.10, 1.88]\\), \\(t(256) = 1.77\\), \\(p = .077\\), \\(pr^2 = .03\\)`\n\n\n\nPutting it all together\nState the model, report R² and F-test\nThen each predictor with b, CI, t, p, and effect size\nThis is publication-ready"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#oh-btw-ancova-vs-mr",
+    "href": "posts/Multiple Regression/Mul_Reg.html#oh-btw-ancova-vs-mr",
+    "title": "Multiple Regression",
+    "section": "Oh btw, ANCOVA vs MR",
+    "text": "Oh btw, ANCOVA vs MR\n\n\n\nI’d shown this before\nMR and ANCOVA are the same. but the emphasis is different\nANCOVA: Group difference after controlling for noise (another predictor u actually don’t care about)\nMR: How do the predictors together explain the outcome"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#ancova-vs-mr",
+    "href": "posts/Multiple Regression/Mul_Reg.html#ancova-vs-mr",
+    "title": "Multiple Regression",
+    "section": "ANCOVA vs MR",
+    "text": "ANCOVA vs MR"
+  },
+  {
+    "objectID": "posts/Multiple Regression/Mul_Reg.html#ancova-vs-mr-1",
+    "href": "posts/Multiple Regression/Mul_Reg.html#ancova-vs-mr-1",
+    "title": "Multiple Regression",
+    "section": "ANCOVA vs MR",
+    "text": "ANCOVA vs MR\n\nMultiple Regression are the same.\nBut the emphasis is different with respect to the research question\n\n– ANCOVA: Group difference after controlling for noise (another predictor u actually don’t care about)\n– MR: How do the predictors together explain the outcome"
+  }
+]

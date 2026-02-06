@@ -280,7 +280,6 @@ head(master)
     simultaneously?
 :::
 
-
 ## Multiple Regression: Example
 
 -   *Validated Measures*
@@ -321,7 +320,8 @@ anim.1
 
 -   Clear negative relationship
 
--   And it makes sense (Purpose in life/meaning increases -> less depression)
+-   And it makes sense (Purpose in life/meaning increases -\> less
+    depression)
 :::
 
 ## Scatterplot
@@ -362,14 +362,15 @@ anim.1
 
 -   Also messy
 
--   Most people cluster at zero... At 0 where most points are drug use isn't helpful for capturing
+-   Most people cluster at zero... At 0 where most points are drug use
+    isn't helpful for capturing
 
 -   Hard to see pattern
 :::
 
 ## Individual Predictors
 
-:::{.incremental}
+::: incremental
 -   We test the individual predictors with a t-test:
 
     -   $t = \frac{b}{SE}$
@@ -424,22 +425,32 @@ model_fit %>%
 
 -   outcome \~ predictor1 + predictor2 + predictor3
 
--   You plug all the coefficients in, you get the model with which you can make predictions!
+-   You plug all the coefficients in, you get the model with which you
+    can make predictions!
 
 -   The intercept (b₀ = 55.16): predicted depression when someone has
-    zero meaning, zero alcohol use, zero drug use
-    INTERCEPT: Not very interpretable in practice but mathematically necessary
-    
--     For every 1-unit increase in meaning in life, depression scores are predicted to decrease by 0.38 units, (assuming alcohol and drug use remain the same.)
+    zero meaning, zero alcohol use, zero drug use INTERCEPT: Not very
+    interpretable in practice but mathematically necessary
+
+-   
+
+    ```         
+    For every 1-unit increase in meaning in life, depression scores are predicted to decrease by 0.38 units, (assuming alcohol and drug use remain the same.)
+    ```
 
 -   can think of t-statistics as SNR: meaning, ...
--   ignore t-value of intercept
--   acohold and depression not so much
-    
-- Residuals: distribution (min, max).. median is helpful... not a huge shift
 
-- SE of the estimates... guess of how much the estimate my change as you look at different samples
-- DAST..... high of drug abuse
+-   ignore t-value of intercept
+
+-   acohold and depression not so much
+
+-   Residuals: distribution (min, max).. median is helpful... not a huge
+    shift
+
+-   SE of the estimates... guess of how much the estimate my change as
+    you look at different samples
+
+-   DAST..... high of drug abuse
 :::
 
 ## Fitting the model
@@ -522,7 +533,7 @@ model_fit %>%
 -   Each unit increase in drug use adds about 1 point to depression
 :::
 
-## More predictors => more problems
+## More predictors =\> more problems
 
 -   Assumptions
 
@@ -534,8 +545,7 @@ model_fit %>%
 
     -   Equal error ("homoskedasticity")
 
-
-::: {.incremental}
+::: incremental
 -   Issues:
 
     -   Missingness
@@ -588,7 +598,7 @@ nrow(nomiss)
 
 ## Problems
 
-::: {.incremental}
+::: incremental
 -   Multicolinearity
 
     -   You want X and Y to be correlated
@@ -605,13 +615,14 @@ nrow(nomiss)
 
 -   Figure: We want as much of the red circle to be calculated!
 
--   Next: we also want blues to be seperated! If predictors overlap too much, we can't untangle their unique
-    effects!! which variable to give credit to! It's also redundancy.
+-   Next: we also want blues to be seperated! If predictors overlap too
+    much, we can't untangle their unique effects!! which variable to
+    give credit to! It's also redundancy.
 :::
 
 ## Multicolinearity
 
-::: {.incremental}
+::: incremental
 -   Problems
 
     -   Extreme cases (complete collinearity) = Nonidentifiable model
@@ -678,7 +689,6 @@ $$VIF=\frac{1}{1- R^2_j}$$
 -   How much are standard errors inflated due to collinearity?
 
 -   Rule of thumb: VIF \> 10 is trouble, some say \> 5
-
 :::
 
 ## Multicolinearity
@@ -700,7 +710,7 @@ $$VIF=\frac{1}{1- R^2_j}$$
 
 ## Multicolinearity
 
-::: {.incremental}
+::: incremental
 -   Strategies
 
     -   Anticipate collinearity issues at the design stage
@@ -721,6 +731,7 @@ $$VIF=\frac{1}{1- R^2_j}$$
 
 ::: notes
 -   What if you have multicollinearity?
+
 -   Options depend on your goal
 
 -   Drop redundant predictors, combine them into composites
@@ -764,7 +775,7 @@ $$VIF=\frac{1}{1- R^2_j}$$
 
 ## Influential points
 
-::: {.incremental}
+::: incremental
 -   Influential points have a large impact on the coefficients and
     standard errors used for inference
 
@@ -1395,34 +1406,55 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 <!-- ## Effect Size -->
 
 <!-- ::::: columns -->
+
 <!-- ::: {.column width="50%"} -->
+
 <!-- -   $pr$ is the partial correlation -->
+
 <!--     -   When squared, proportion of variance not explained by other -->
+
 <!--         predictors but just X -->
+
 <!--         -   Removes influence of other variables -->
+
 <!-- -   Pr \> sr -->
+
 <!-- ::: -->
 
 <!-- ::: {.column width="50%"} -->
+
 <!-- ```{r} -->
+
 <!-- #| echo: false -->
+
 <!-- #| fig-align: center -->
+
 <!-- #| fig-height: 2 -->
+
 <!-- #| fig-width: 4 -->
+
 <!-- #|  -->
 
 <!-- knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide5.jpeg") -->
 
 <!-- knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images/venn/Slide6.jpeg") -->
+
 <!-- ``` -->
+
 <!-- ::: -->
+
 <!-- ::::: -->
 
 <!-- ::: notes -->
+
 <!-- -   Partial correlation (pr): different denominator -->
+
 <!-- -   Proportion of *unexplained* variance that this predictor captures -->
+
 <!-- -   pr \> sr always -->
+
 <!-- -   Different questions, different uses -->
+
 <!-- ::: -->
 
 <!-- ## When to use? -->
@@ -1430,6 +1462,7 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 <!-- -   $sr^2$ -->
 
 <!--     -   Most often used when we want to show that some variable adds -->
+
 <!--         incremental variance in Y above and beyond another X variable -->
 
 <!-- -   $pr^2$ -->
@@ -1437,28 +1470,39 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 <!--     -   Remove influence of another variable -->
 
 <!-- ::: notes -->
+
 <!-- -   sr² for "incremental validity" — does this variable add anything? -->
+
 <!-- -   pr² for "what's the relationship after removing confounds?" -->
+
 <!-- -   Choose based on your research question -->
+
 <!-- ::: -->
 
 <!-- ## Partial correlations -->
 
 <!-- ```{r} -->
+
 <!-- cor <- cor(clean_data[2:5]) -->
 
 <!-- #partial corr from easystats -->
+
 <!-- correlation::cor_to_pcor(cor)^2 -->
 
 <!-- #semipartial you need the covariance  -->
+
 <!-- #cor_to_spcor(cor, cov = sapply(clean_data[2:5], sd)) -->
 
 <!-- ``` -->
 
 <!-- ::: notes -->
+
 <!-- -   `correlation::cor_to_pcor()` gives partial correlations -->
+
 <!-- -   Square them for pr² -->
+
 <!-- -   For semipartial, use `r2_semipartial()` from easystats -->
+
 <!-- ::: -->
 
 <!-- ## Partial correlations -->
@@ -1468,16 +1512,21 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 <!-- ```{r} -->
 
 <!-- #input model to semi-partial -->
-<!-- r2_semipartial(model_fit) -->
 
+<!-- r2_semipartial(model_fit) -->
 
 <!-- ``` -->
 
 <!-- ::: notes -->
+
 <!-- -   sr² for meaning = .33 -->
+
 <!-- -   That's huge — one-third of depression variance is uniquely explained -->
+
 <!--     by meaning in life -->
+
 <!-- -   Alcohol and drugs contribute almost nothing uniquely -->
+
 <!-- ::: -->
 
 <!-- ## Partial correlations -->
@@ -1485,41 +1534,63 @@ knitr::include_graphics("https://brendanhcullen.github.io/psy612/lectures/images
 <!-- -   We would add these to our other reports: -->
 
 <!--     -   Meaning: `r apa_style$full_result$PIL_total`, $pr^2 = .33$\` -->
+
 <!--     -   Alcohol: `r apa_style$full_result$AUDIT_TOTAL_NEW`, -->
+
 <!--         $pr^2 = .02$\` -->
+
 <!--     -   Drugs: `r apa_style$full_result$DAST_TOTAL_NEW`, $pr^2 = .03$\` -->
 
 <!-- ::: callout-note -->
+
 <!-- $pr^2$: 33% of variance in Depression is explained by meaning that is -->
+
 <!-- not explained by the other variables -->
 
 <!-- $sr^2$: 3% of variance in depression can be uniquely explained by -->
+
 <!-- meaning above and beyond the other vars. -->
+
 <!-- ::: -->
 
 <!-- ::: notes -->
+
 <!-- -   Report both the coefficient and the effect size -->
+
 <!-- -   b tells you the unit change -->
+
 <!-- -   sr² tells you the importance -->
+
 <!-- -   Both matter -->
+
 <!-- ::: -->
 
 <!-- ## Multiple Regression: Power -->
 
 <!-- ```{r echo=TRUE, message=FALSE, warning=FALSE} -->
+
 <!-- R2<-glance(model_fit) -->
+
 <!-- R2 <- R2$adj.r.squared -->
+
 <!-- f2 <- R2 / (1-R2) -->
 
 <!-- WebPower::wp.regression(n=72, p1=3, p2=0, f2=f2, alpha=.05, power=NULL) -->
+
 <!-- ``` -->
 
 <!-- ::: notes -->
+
 <!-- -   Power analysis for multiple regression -->
+
 <!-- -   Convert R² to f² -->
+
 <!-- -   Use `WebPower` package -->
+
 <!-- -   With n = 72 and our effect size, power is nearly 1.0 -->
+
 <!-- -   We're well-powered -->
+
 <!-- ::: -->
 
 # Plotting
