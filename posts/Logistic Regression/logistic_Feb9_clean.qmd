@@ -615,14 +615,14 @@ knitr::include_graphics("images/mle-many.png")
 
 ```{webr-r}
 
-risk2009.data <- read.csv("https://raw.githubusercontent.com/jgeller112/PSY504-Advanced-Stats-S24/main/slides/04-logistic/data/risk2009.csv")
+risk2009.data <- read.csv("https://raw.githubusercontent.com/suyoghc/PSY504_Spring_2026/main/posts/Logistic%20Regression/data/risk2009.csv")
 
 ```
 
 ```{r}
 #| echo: false
 #| 
-risk2009 <- read.csv("https://raw.githubusercontent.com/jgeller112/PSY504-Advanced-Stats-S24/main/slides/04-logistic/data/risk2009.csv")
+risk2009 <- read.csv("https://raw.githubusercontent.com/suyoghc/PSY504_Spring_2026/main/posts/Logistic%20Regression/data/risk2009.csv")
 
 ```
 
