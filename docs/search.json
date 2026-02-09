@@ -585,7 +585,7 @@
     "href": "posts/Logistic Regression/logistic_Feb9_clean.html#slope-and-intercept-parameters",
     "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
     "section": "Slope and intercept parameters",
-    "text": "Slope and intercept parameters\n\n\n\n\n\n\n\n\nIntercept (\\(\\beta_0\\)) moves curve left or right\n\nDetermines where the 50% probability point falls\n\n\n. . . ::: {.column width=“50%”} \nSlope (\\(\\beta_1\\)) determines the steepness of the curve\n\nLarger values = steeper transition\n\n\n\n:::::"
+    "text": "Slope and intercept parameters\n\n\n\n\n\n\n\n\nIntercept (\\(\\beta_0\\)) moves curve left or right\n\nDetermines where the 50% probability point falls\n\n\n::: {.column width=“50%”} \nSlope (\\(\\beta_1\\)) determines the steepness of the curve\n\nLarger values = steeper transition\n\n\n\n:::::"
   },
   {
     "objectID": "posts/Logistic Regression/logistic_Feb9_clean.html#all-together",
@@ -907,7 +907,7 @@
     "href": "posts/Logistic Regression/logistic_Feb9_clean.html#common-mistakes",
     "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
     "section": "Common Mistakes",
-    "text": "Common Mistakes\n\nInterpreting log-odds coefficients as if they were probabilities\nForgetting that effects are non-linear on the probability scale\n\nA 1-unit change in X does not have a constant effect on P(Y=1)\n\nUsing \\(R^2\\) from linear regression — use pseudo \\(R^2\\) measures instead\nIgnoring complete/quasi-complete separation\n\nWhen a predictor perfectly predicts the outcome, coefficients blow up to \\(\\pm \\infty\\)\nWatch for very large coefficients and SEs\n\nNot checking for multicollinearity (VIF still applies!)\nTreating ordinal outcomes as binary when they shouldn’t be"
+    "text": "Common Mistakes\n\nInterpreting log-odds coefficients as if they were probabilities\nForgetting that effects are non-linear on the probability scale\n\nA 1-unit change in X does not have a constant effect on P(Y=1)\n\nUsing \\(R^2\\) from linear regression — use pseudo \\(R^2\\) measures instead\nNot checking for multicollinearity (VIF still applies!)"
   },
   {
     "objectID": "posts/Logistic Regression/logistic_Feb9_clean.html#when-to-use-logistic-regression-vs.-alternatives",

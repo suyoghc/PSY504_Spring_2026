@@ -1772,7 +1772,7 @@ Odds are always positive and asymmetric — an odds of 2 means twice as likely b
 <li>Determines where the 50% probability point falls</li>
 </ul></li>
 </ul>
-</div><p>. . . ::: {.column width=“50%”} <img data-src="images/slope_log.png" class="quarto-figure quarto-figure-center"></p><ul>
+</div><p>::: {.column width=“50%”} <img data-src="images/slope_log.png" class="quarto-figure quarto-figure-center"></p><ul>
 <li><strong>Slope</strong> (<span class="math inline">\(\beta_1\)</span>) determines the steepness of the curve
 <ul>
 <li>Larger values = steeper transition</li>
@@ -2592,43 +2592,6 @@ Tests are performed on the log odds ratio scale </code></pre>
 <li><p>Rule of thumb: If &gt;5% of bins fall outside the bands, model may need improvement</p></li>
 </ul>
 </section>
-<section id="binned-residuals-vs.-each-predictor-ros" class="slide level2">
-<h2>Binned Residuals vs.&nbsp;Each Predictor [ROS]</h2>
-<ul>
-<li><p>Residuals vs.&nbsp;fitted values tells us <strong>something is wrong</strong></p></li>
-<li><p>Residuals vs.&nbsp;<strong>each predictor</strong> tells us <strong>what to fix</strong></p></li>
-</ul>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># vs. fitted values (what we already did)</span></span>
-<span id="cb20-2"><a></a><span class="fu">binnedplot</span>(<span class="fu">fitted</span>(fit4), </span>
-<span id="cb20-3"><a></a>           <span class="fu">residuals</span>(fit4, <span class="at">type =</span> <span class="st">"response"</span>),</span>
-<span id="cb20-4"><a></a>           <span class="at">main =</span> <span class="st">"vs. Fitted Values"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="logistic_Feb9_clean_files/figure-revealjs/unnamed-chunk-34-1.png" class="quarto-figure quarto-figure-center" width="480"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="co"># vs. the continuous predictor</span></span>
-<span id="cb21-2"><a></a><span class="fu">binnedplot</span>(risk2009<span class="sc">$</span>bmipct, </span>
-<span id="cb21-3"><a></a>           <span class="fu">residuals</span>(fit4, <span class="at">type =</span> <span class="st">"response"</span>),</span>
-<span id="cb21-4"><a></a>           <span class="at">main =</span> <span class="st">"vs. BMI Percentile"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="logistic_Feb9_clean_files/figure-revealjs/unnamed-chunk-35-1.png" class="quarto-figure quarto-figure-center" width="480"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
 <section id="visualizing" class="slide level2">
 <h2>Visualizing</h2>
 <div class="panel-tabset">
@@ -2639,7 +2602,7 @@ Tests are performed on the log odds ratio scale </code></pre>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="logistic_Feb9_clean_files/figure-revealjs/unnamed-chunk-36-1.png" class="quarto-figure quarto-figure-center" width="768"></p>
+<p><img data-src="logistic_Feb9_clean_files/figure-revealjs/unnamed-chunk-34-1.png" class="quarto-figure quarto-figure-center" width="768"></p>
 </figure>
 </div>
 </div>
@@ -2647,9 +2610,9 @@ Tests are performed on the log odds ratio scale </code></pre>
 </div>
 <div id="tabset-2-2">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="co"># library(ggeffects)</span></span>
-<span id="cb22-2"><a></a><span class="co"># ggemmeans(fit4, terms=c("bmipct", "female")) %&gt;%</span></span>
-<span id="cb22-3"><a></a><span class="co">#   plot(ci = TRUE, add.data = TRUE, jitter=.05)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="co"># library(ggeffects)</span></span>
+<span id="cb20-2"><a></a><span class="co"># ggemmeans(fit4, terms=c("bmipct", "female")) %&gt;%</span></span>
+<span id="cb20-3"><a></a><span class="co">#   plot(ci = TRUE, add.data = TRUE, jitter=.05)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -2692,23 +2655,23 @@ Tests are performed on the log odds ratio scale </code></pre>
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a><span class="fu">check_model</span>(fit4, <span class="at">check=</span><span class="fu">c</span>(<span class="st">"binned_residuals"</span>, <span class="st">"outliers"</span>, <span class="st">"vif"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="fu">check_model</span>(fit4, <span class="at">check=</span><span class="fu">c</span>(<span class="st">"binned_residuals"</span>, <span class="st">"outliers"</span>, <span class="st">"vif"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="logistic_Feb9_clean_files/figure-revealjs/unnamed-chunk-38-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"></section>
+<img data-src="logistic_Feb9_clean_files/figure-revealjs/unnamed-chunk-36-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"></section>
 <section id="table" class="slide level2">
 <h2>Table</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="co"># Compare multiple models side by side</span></span>
-<span id="cb24-2"><a></a><span class="fu">modelsummary</span>(</span>
-<span id="cb24-3"><a></a>  <span class="fu">list</span>(<span class="st">"Intercept Only"</span> <span class="ot">=</span> fit1,</span>
-<span id="cb24-4"><a></a>       <span class="st">"Sex"</span> <span class="ot">=</span> fit2, </span>
-<span id="cb24-5"><a></a>       <span class="st">"BMI"</span> <span class="ot">=</span> fit3, </span>
-<span id="cb24-6"><a></a>       <span class="st">"Sex + BMI"</span> <span class="ot">=</span> fit4, </span>
-<span id="cb24-7"><a></a>       <span class="st">"Interaction"</span> <span class="ot">=</span> fit5),</span>
-<span id="cb24-8"><a></a>  <span class="at">exponentiate =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb24-9"><a></a>  <span class="at">stars =</span> <span class="cn">TRUE</span></span>
-<span id="cb24-10"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="co"># Compare multiple models side by side</span></span>
+<span id="cb22-2"><a></a><span class="fu">modelsummary</span>(</span>
+<span id="cb22-3"><a></a>  <span class="fu">list</span>(<span class="st">"Intercept Only"</span> <span class="ot">=</span> fit1,</span>
+<span id="cb22-4"><a></a>       <span class="st">"Sex"</span> <span class="ot">=</span> fit2, </span>
+<span id="cb22-5"><a></a>       <span class="st">"BMI"</span> <span class="ot">=</span> fit3, </span>
+<span id="cb22-6"><a></a>       <span class="st">"Sex + BMI"</span> <span class="ot">=</span> fit4, </span>
+<span id="cb22-7"><a></a>       <span class="st">"Interaction"</span> <span class="ot">=</span> fit5),</span>
+<span id="cb22-8"><a></a>  <span class="at">exponentiate =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-9"><a></a>  <span class="at">stars =</span> <span class="cn">TRUE</span></span>
+<span id="cb22-10"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
@@ -2964,68 +2927,11 @@ Tests are performed on the log odds ratio scale </code></pre>
 <li>A 1-unit change in X does not have a constant effect on P(Y=1)</li>
 </ul></li>
 <li><p>Using <span class="math inline">\(R^2\)</span> from linear regression — use pseudo <span class="math inline">\(R^2\)</span> measures instead</p></li>
-<li><p>Ignoring complete/quasi-complete separation</p>
-<ul>
-<li>When a predictor perfectly predicts the outcome, coefficients blow up to <span class="math inline">\(\pm \infty\)</span></li>
-<li>Watch for very large coefficients and SEs</li>
-</ul></li>
 <li><p>Not checking for multicollinearity (VIF still applies!)</p></li>
-<li><p>Treating ordinal outcomes as binary when they shouldn’t be</p></li>
 </ul>
 </section>
-<section id="when-to-use-logistic-regression-vs.-alternatives" class="slide level2">
-<h2>When to Use Logistic Regression vs.&nbsp;Alternatives</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 55%">
-<col style="width: 44%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Scenario</th>
-<th>Method</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Binary outcome (0/1)</td>
-<td><strong>Logistic regression</strong></td>
-</tr>
-<tr class="even">
-<td>Binary outcome, rare events (&lt;5%)</td>
-<td>Penalized likelihood (Firth)</td>
-</tr>
-<tr class="odd">
-<td>Ordinal outcome (ordered categories)</td>
-<td>Ordinal logistic regression</td>
-</tr>
-<tr class="even">
-<td>Nominal outcome (unordered categories)</td>
-<td>Multinomial logistic regression</td>
-</tr>
-<tr class="odd">
-<td>Count outcome</td>
-<td>Poisson or negative binomial regression</td>
-</tr>
-<tr class="even">
-<td>Binary outcome, focus on prediction</td>
-<td>Consider regularization, ROC/AUC</td>
-</tr>
-<tr class="odd">
-<td>Clustered/nested binary data</td>
-<td>Mixed-effects logistic regression</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="looking-ahead" class="slide level2">
-<h2>Looking Ahead</h2>
-<ul>
-<li><p>Classification metrics: Confusion matrix, sensitivity, specificity, ROC curves, AUC</p></li>
-<li><p>Probit regression: Alternative link function (normal CDF instead of logistic)</p></li>
-<li><p>Multilevel logistic models: For clustered data</p></li>
-<li><p>Regularized logistic regression: LASSO/Ridge for high-dimensional data</p></li>
-</ul>
+<section id="section" class="slide level2">
+<h2></h2>
 
 
 </section></section>

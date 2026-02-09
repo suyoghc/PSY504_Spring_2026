@@ -429,7 +429,7 @@ $$p(logit)=\frac{e^{logit}}{1+e^{{logit}}}$$
     -   Determines where the 50% probability point falls
 :::
 
-. . . ::: {.column width="50%"} ![](images/slope_log.png){fig-align="center"}
+::: {.column width="50%"} ![](images/slope_log.png){fig-align="center"}
 
 -   **Slope** ($\beta_1$) determines the steepness of the curve
     -   Larger values = steeper transition
@@ -1133,40 +1133,6 @@ binnedplot(fitted(fit4), residuals(fit4, type="response"))
 
 -   Rule of thumb: If \>5% of bins fall outside the bands, model may need improvement
 
-## Binned Residuals vs. Each Predictor \[ROS\]
-
--   Residuals vs. fitted values tells us **something is wrong**
-
--   Residuals vs. **each predictor** tells us **what to fix**
-
-::::: columns
-::: {.column width="50%"}
-```{r}
-#| fig-height: 4
-#| fig-width: 5
-#| fig-align: "center"
-
-# vs. fitted values (what we already did)
-binnedplot(fitted(fit4), 
-           residuals(fit4, type = "response"),
-           main = "vs. Fitted Values")
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-#| fig-height: 4
-#| fig-width: 5
-#| fig-align: "center"
-
-# vs. the continuous predictor
-binnedplot(risk2009$bmipct, 
-           residuals(fit4, type = "response"),
-           main = "vs. BMI Percentile")
-```
-:::
-:::::
-
 ## Visualizing
 
 ::: panel-tabset
@@ -1296,33 +1262,6 @@ We fitted a logistic model with a logit link (estimated using ML) with sex and b
 
 -   Using $R^2$ from linear regression — use pseudo $R^2$ measures instead
 
--   Ignoring complete/quasi-complete separation
-
-    -   When a predictor perfectly predicts the outcome, coefficients blow up to $\pm \infty$
-    -   Watch for very large coefficients and SEs
-
 -   Not checking for multicollinearity (VIF still applies!)
 
--   Treating ordinal outcomes as binary when they shouldn't be
-
-## When to Use Logistic Regression vs. Alternatives
-
-| Scenario | Method |
-|----------------------------------------|--------------------------------|
-| Binary outcome (0/1) | **Logistic regression** |
-| Binary outcome, rare events (\<5%) | Penalized likelihood (Firth) |
-| Ordinal outcome (ordered categories) | Ordinal logistic regression |
-| Nominal outcome (unordered categories) | Multinomial logistic regression |
-| Count outcome | Poisson or negative binomial regression |
-| Binary outcome, focus on prediction | Consider regularization, ROC/AUC |
-| Clustered/nested binary data | Mixed-effects logistic regression |
-
-## Looking Ahead
-
--   Classification metrics: Confusion matrix, sensitivity, specificity, ROC curves, AUC
-
--   Probit regression: Alternative link function (normal CDF instead of logistic)
-
--   Multilevel logistic models: For clustered data
-
--   Regularized logistic regression: LASSO/Ridge for high-dimensional data
+## 
