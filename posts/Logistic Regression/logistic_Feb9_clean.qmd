@@ -421,16 +421,19 @@ $$p(logit)=\frac{e^{logit}}{1+e^{{logit}}}$$
 ## Slope and intercept parameters
 
 :::: columns
+
 ::: {.column width="50%"}
 ![](images/intercept_log.png){fig-align="center"}
 -   **Intercept** ($\beta_0$) moves curve left or right
     -   Determines where the 50% probability point falls
 :::
+
 ::: {.column width="50%"}
 ![](images/slope_log.png){fig-align="center"}
 -   **Slope** ($\beta_1$) determines the steepness of the curve
     -   Larger values = steeper transition
 :::
+
 ::::
 
 ## All together
