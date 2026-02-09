@@ -585,7 +585,7 @@
     "href": "posts/Logistic Regression/logistic_Feb9_clean.html#slope-and-intercept-parameters",
     "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
     "section": "Slope and intercept parameters",
-    "text": "Slope and intercept parameters\n\n\n\n\n\n\n\n\nIntercept (\\(\\beta_0\\)) moves curve left or right\n\nDetermines where the 50% probability point falls\n\n\n::: {.column width=“50%”} \nSlope (\\(\\beta_1\\)) determines the steepness of the curve\n\nLarger values = steeper transition\n\n\n\n:::::"
+    "text": "Slope and intercept parameters\n\n\n - Intercept (\\(\\beta_0\\)) moves curve left or right - Determines where the 50% probability point falls\n\n - Slope (\\(\\beta_1\\)) determines the steepness of the curve - Larger values = steeper transition"
   },
   {
     "objectID": "posts/Logistic Regression/logistic_Feb9_clean.html#all-together",
