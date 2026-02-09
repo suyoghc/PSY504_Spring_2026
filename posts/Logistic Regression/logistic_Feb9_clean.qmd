@@ -1,5 +1,5 @@
 ---
-title: "Generalized Linear Madness: Binary Outcome Models/Logistic Regression"
+title: "Generalized Linear Madness: Binary Outcome Models/Logistic Regression "
 subtitle: "Princeton University"
 author: "Suyog Chandramouli"
 date: 'Updated:`r Sys.Date()`'
@@ -21,7 +21,7 @@ execute:
   freeze: auto
   echo: true
   message: false
-  warning: false
+  warning: false 
   fig-align: center
   fig-width: 12
   fig-height: 8
@@ -54,7 +54,6 @@ options(scipen = 999)
 
 -   Access the .qmd document here: <https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts>
 
-
 ## Announcements
 
 ## Today
@@ -85,7 +84,6 @@ options(scipen = 999)
 :::
 :::::
 
-
 ## Linear model
 
 -   Model $y$ as a linear function of predictors
@@ -102,11 +100,9 @@ $$Y \sim~Normal(\mu, \sigma)$$
     -   number of Xs
     -   interactions
 
-
 ## Dichotomous outcomes
 
 The simplest kind of categorical data is each case is binary
-
 
 . . .
 
@@ -137,7 +133,6 @@ The simplest kind of categorical data is each case is binary
 
 -   What happens if we try to model binary data (0/1) with a standard linear regression?
 
-
 . . .
 
 ```{r}
@@ -165,7 +160,6 @@ ggplot(df_demo, aes(x = x, y = y)) +
   annotate("text", x = max(x) - 5, y = 1.2, label = "Impossible predictions!", color = "red", size = 6)
 ```
 
-
 ## Problems with the Linear Probability Model
 
 -   Makes impossible predictions (values not between 0, 1)
@@ -178,9 +172,7 @@ ggplot(df_demo, aes(x = x, y = y)) +
 
     -   Variance is influenced by $\hat{p}$
 
-
 # Generalized linear model
-
 
 ## Generalized linear model
 
@@ -196,13 +188,11 @@ $$\begin{align*}
 
 -   $g$ is link function (in logistic regression we use *logit link*)
 
-
 ## What distribution do we use to model this process?
 
 -   We assume that there is **some probability** p of responding correctly (or selecting what is coded as 1)
 
 -   We don't know this probability, so we want to **use the data to estimate it**
-
 
 ## Bernoulli distribution
 
@@ -227,7 +217,6 @@ $$\begin{align*}
 :::
 :::::
 
-
 ## Binomial distribution
 
 ::::: columns
@@ -238,8 +227,8 @@ $$y\sim binomial(N,p)$$
 
 -   N = number of trials
 
-
 -   p = probability of "y = 1"
+
     -   $\mu$ = E(X)=np\$
     -   $\sigma^2(X)=np(1-p)$
     -   $\sigma(X)$=$\sqrt{np(1-p)}$
@@ -249,7 +238,6 @@ $$y\sim binomial(N,p)$$
 ![](images/bi.png){fig-align="center"}
 :::
 :::::
-
 
 ## Fitting a logistic regression in R
 
@@ -285,7 +273,6 @@ MASS::snails %>% dplyr::select(Deaths, N) %>% head() %>% kable()
 ```
 :::
 
-
 ## Logit link
 
 -   The logit link transforms a linear model in the log-odds metric:
@@ -300,7 +287,6 @@ $$\begin{equation*}
 p(logit)=\frac{e^{logit}}{1+e^{logit}}
 \end{equation*}=\frac{exp(logit)}{1+exp(logit)}$$
 
-
 ## Logit link
 
 -   Step 1
@@ -312,7 +298,6 @@ p(logit)=\frac{e^{logit}}{1+e^{logit}}
 $$\textrm{Odds} = \frac{\# \textrm{successes}}{\# \textrm{failures}}=
 \frac{\# \textrm{successes}/n}{\# \textrm{failures}/n}=
 \frac{p}{1-p}$$
-
 
 ## **L**ogit Link
 
@@ -342,19 +327,14 @@ $$\textrm{Odds} = \frac{\# \textrm{successes}}{\# \textrm{failures}}=
 
 ::::: notes
 If you look at the figure here, we have the odds scale..\
-P as a function of odds –\> bounded to 0.
-P\<0.5 is crammed to this region, and the rest extends to infinity\
+P as a function of odds –\> bounded to 0. P\<0.5 is crammed to this region, and the rest extends to infinity\
 \
 Odds are always positive and asymmetric — an odds of 2 means twice as likely but an odds of 0.5 means half as likely.
 
 Now we can take the log
 
 ::: {.column width="50%"}
--   Suddenly — symmetric.
-    Zero sits in the middle.
-    p \< 0.5 goes negative.
-    p \> 0.5 goes positive.
-    Equal room on both sides.
+-   Suddenly — symmetric. Zero sits in the middle. p \< 0.5 goes negative. p \> 0.5 goes positive. Equal room on both sides.
 
 -   This is a scale where regression works!
 :::
@@ -393,7 +373,6 @@ df_model <- bechdel_lin %>%
 :::
 :::::
 
-
 ## However...
 
 -   We need a function that scrunches the output of the linear predictor into a range appropriate for this parameter
@@ -401,7 +380,6 @@ df_model <- bechdel_lin %>%
 ```{r, echo=FALSE, fig.align='center', out.width="50%"}
 knitr::include_graphics("images/lin2.png")
 ```
-
 
 ## Squiggles
 
@@ -426,7 +404,6 @@ Squiggle = Sigmoid curve = S-curvew = inverse logit = logistic function = `plogi
 *Same thing, many names.*
 :::
 
-
 ## Logistic transform
 
 ```{r}
@@ -437,15 +414,13 @@ knitr::include_graphics("images/lin5.png")
 
 $$p(logit)=\frac{e^{logit}}{1+e^{{logit}}}$$
 
-
 ## How do the parameters affect the curve?
 
 -   Understanding what $\beta_0$ and $\beta_1$ do visually is key to building intuition
 
-
 ## Slope and intercept parameters
 
-::::: columns
+:::: columns
 ::: {.column width="50%"}
 ![](images/intercept_log.png){fig-align="center"}
 
@@ -454,15 +429,13 @@ $$p(logit)=\frac{e^{logit}}{1+e^{{logit}}}$$
     -   Determines where the 50% probability point falls
 :::
 
-
 . . . ::: {.column width="50%"} ![](images/slope_log.png){fig-align="center"}
 
 -   **Slope** ($\beta_1$) determines the steepness of the curve
     -   Larger values = steeper transition
-:::::
+::::
 
 :::::
-
 
 ## All together
 
@@ -472,13 +445,11 @@ Figures adapted from [Andrew Heiss](https://www.andrewheiss.com/)
 
 ![](images/loglogisticods.PNG){fig-align="center"}
 
-
 ## Probabilities, Odds, and Log Odds
 
 ```{r, echo=FALSE, fig.align='center', out.width="100%"}
 knitr::include_graphics("images/relationship.png")
 ```
-
 
 ## Probabilities, Odds, and Log Odds
 
@@ -495,7 +466,6 @@ qlogis(.3)
 plogis(-1)
 ```
 
-
 ## Probabilities, Odds, and Log Odds
 
 ::::: columns
@@ -507,7 +477,6 @@ plogis(-1)
 ![](images/interp_odds.jpg){fig-align="center"}
 :::
 :::::
-
 
 ## Two Link Functions You Need to Know \[B1\] {.smaller}
 
@@ -544,10 +513,8 @@ $$\log(\mu) = \beta_0 + \beta_1 X$$
 . . .
 
 ::: callout-note
-Both links solve the same problem — mapping a constrained parameter onto an unconstrained linear model.
-The logit handles probabilities; the log handles positive counts.
+Both links solve the same problem — mapping a constrained parameter onto an unconstrained linear model. The logit handles probabilities; the log handles positive counts.
 :::
-
 
 ## Best fitting squiggle
 
@@ -559,7 +526,6 @@ knitr::include_graphics("images/lin_fit.png")
 ```
 
 -   But with binary data, we need a different approach...
-
 
 -   Step 1: We need find where points lie on line and get corresponding logits
 
@@ -573,7 +539,6 @@ knitr::include_graphics("images/lin_fit.png")
 :::
 :::::
 
-
 ## ML: Logistic Regression
 
 -   Step 2: Project them onto the probability scale (rotate the log-odds line)
@@ -583,7 +548,6 @@ knitr::include_graphics("images/lin_fit.png")
 knitr::include_graphics("images/max.png")
 
 ```
-
 
 ## Now what?
 
@@ -597,21 +561,17 @@ knitr::include_graphics("images/mle-many.png")
 
 ```
 
-
 ## MLE vs. OLS
 
 -   OLS minimizes sum of squared residuals
 -   MLE finds parameter values that make observed data most probable
 -   No closed-form solution — uses iterative algorithms (Newton-Raphson / IRLS)
 
-
 ## Case Study: Losing Weight
 
--   These data are a sample of 500 teens from data collected in 2009 through the U.S.
-    Youth Risk Behavior Surveillance System (YRBSS)
+-   These data are a sample of 500 teens from data collected in 2009 through the U.S. Youth Risk Behavior Surveillance System (YRBSS)
 
--   Are the odds that young females report trying to lose weight greater than the odds that males do?
-    Is increasing BMI associated with an interest in losing weight, regardless of sex?
+-   Are the odds that young females report trying to lose weight greater than the odds that males do? Is increasing BMI associated with an interest in losing weight, regardless of sex?
 
 ```{webr-r}
 
@@ -626,19 +586,16 @@ risk2009 <- read.csv("https://raw.githubusercontent.com/suyoghc/PSY504_Spring_20
 
 ```
 
-
 ## Trying to lose weight
 
 -   Selected variables:
 
-DV: \*`lose.wt.01`, which is coded 1 when someone indicated they were trying to lost weight and 0 when they were not trying to.
-This is a dichotomized version of the `lose.wt` factor variable.
+DV: \*`lose.wt.01`, which is coded 1 when someone indicated they were trying to lost weight and 0 when they were not trying to. This is a dichotomized version of the `lose.wt` factor variable.
 
 -   Our two predictor variables will be:
 
     -   `sex` and its related dummy variable `female`
     -   `bmipct`, which is the percentile for a given BMI for members of the same sex
-
 
 ## Exploratory data analysis
 
@@ -679,7 +636,6 @@ theme_lucid(base_size=24)
 :::
 :::::
 
-
 ## Exploratory data analysis
 
 -   Here are the histograms for `bmipct`, faceted by `lose.wt`.
@@ -692,7 +648,6 @@ risk2009 %>%
   facet_wrap(~ lose.wt, ncol = 1) + 
   theme_lucid(base_size=24)
 ```
-
 
 ## Exploratory Data Analysis
 
@@ -707,7 +662,6 @@ risk2009 %>%
   theme_lucid(base_size=24)
 ```
 
-
 ## Logistic regression: Fitting model
 
 -   Let's fit an intercept-only model
@@ -718,7 +672,6 @@ $$
 \text{logit}(p_i) & = \beta_0
 \end{align*}
 $$
-
 
 ## Logistic Regression: Fitting Model
 
@@ -749,7 +702,6 @@ fit1 %>%
   kable()
 ```
 
-
 ## Hypothesis test for $\beta_j$
 
 -   Hypotheses:
@@ -761,7 +713,6 @@ fit1 %>%
 -   Test Statistic: $$\text{Wald z} = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}$$
 
 -   CIs: $$\Large{\hat{\beta}_j \pm z^* SE_{\hat{\beta}_j}}$$
-
 
 ## Interpreting $b_0$
 
@@ -783,7 +734,6 @@ exp(b0) / (1 + exp(b0)) # logistic transform
 
 -   Thus, the overall probability of students wanting to lose weight was about .45 or 45%
 
-
 ## Interpreting $b_0$
 
 -   Let's check that with the empirical proportions
@@ -799,7 +749,6 @@ risk2009 %>%
 ```{webr-r}
 plogis(b0)
 ```
-
 
 ## Logistic Regression
 
@@ -835,7 +784,6 @@ fit2 <- glm(
 
 ```
 
-
 ## Interpreting intercept: $b_0$
 
 ```{webr-r}
@@ -851,7 +799,6 @@ fit2 %>%
 
 
 ```
-
 
 ## Interpreting slope: $b_1$
 
@@ -869,7 +816,6 @@ fit2 %>%
 . . .
 
 -   Going from men to women, there is a change in the the log odds of wanting to lose weight of 1.09
-
 
 ## Coefficient effect size: Odd's Ratio
 
@@ -890,7 +836,6 @@ fit2 %>%
 (OR-1) * 100  # get probability of increase/decrease
 ```
 
-
 ## Coefficient Effect Size: Odd's Ratio
 
 ```{webr-r}
@@ -903,7 +848,6 @@ tidy(fit2,exponentiate = TRUE) %>%  # get odds ratio %>%
 -   The odds of wanting to lose weight in females is 2.98 times the odds of wanting to lose weight in men
 
     -   The odds of females wanting to lose weight are 198% higher than the odds of males wanting to lose weight
-
 
 ## Predicted probabilities
 
@@ -921,7 +865,6 @@ plogis(b0 + b1 * 0)
 plogis(b0 + b1 * 1)
 ```
 
-
 ## `Emmeans`
 
 -   Can use `emmeans` to get probabilities directly from model
@@ -934,7 +877,6 @@ plogis(b0 + b1 * 1)
     # get odd ratio for comparison
     pairs(emm, reverse=TRUE)
     ```
-
 
 ## Marginal effects
 
@@ -965,7 +907,6 @@ avg_comparisons(fit2, comparison = "difference") %>%
 ```
 :::
 :::::
-
 
 ## Logistic regression continuous
 
@@ -1000,7 +941,6 @@ fit3 <- glm(
 
 ```
 
-
 ## Logistic regression continuous
 
 ```{r}
@@ -1018,13 +958,11 @@ b1:
 
 ```
 
-> What is the OR for $b_1$?
-> How do we interpret this?
+> What is the OR for $b_1$? How do we interpret this?
 
 ```{webr-r}
 
 ```
-
 
 ## Marginal effects
 
@@ -1045,7 +983,6 @@ avg_slopes(fit3)%>%kable()
 An increase in BMI results in 70% increase in likelihood of wanting to lose weight
 :::
 
-
 ## Logistic Multiple Predictors
 
 -   The first will have both `female` and `bmipct` as predictors:
@@ -1065,7 +1002,6 @@ $$
 \text{logit}(p_i) & = \beta_0 + \beta_1 \text{female}_i + \beta_2 \text{bmipct}_i + \beta_3 \text{female}_i \cdot \text{bmipct}_i.
 \end{align*}
 $$
-
 
 ## Fitting both models
 
@@ -1099,7 +1035,6 @@ fit5 <- glm(
   )
 ```
 
-
 ## Model Comparisons
 
 ```{r, echo=FALSE, out.width="70%", fig.align='center'}
@@ -1126,7 +1061,6 @@ bind_rows(
 
 -   The interaction term `female:bmipct` (i.e., $\beta_3$) would not be statistically significant
 
-
 ## Likelihood ratio test
 
 -   Let's compare the models by performing likelihood ratio test
@@ -1138,7 +1072,6 @@ test_likelihoodratio(fit4, fit5) %>% kable()
 . . .
 
 -   When you compare model `fit4` with the interaction model `fit5`, it appears that the interaction term does not add anything
-
 
 ## Model Fit
 
@@ -1157,13 +1090,11 @@ r2_mcfadden(fit4)
 
 -   Not "explained variance" but ratio indicating how "good" the model fit Model Fit
 
-
 ## Model fit
 
 -   Plotting normal residuals are not really informative/useful
 
 ![](images/raw_residuals.png){fig-align="center"}
-
 
 ## Binned residuals
 
@@ -1188,7 +1119,6 @@ binnedplot(fitted(fit4), residuals(fit4, type="response"))
 :::
 :::::
 
-
 ## Binned residuals
 
 -   Look for patterns
@@ -1202,7 +1132,6 @@ binnedplot(fitted(fit4), residuals(fit4, type="response"))
     -   Interaction may be required
 
 -   Rule of thumb: If \>5% of bins fall outside the bands, model may need improvement
-
 
 ## Binned Residuals vs. Each Predictor \[ROS\]
 
@@ -1237,7 +1166,6 @@ binnedplot(risk2009$bmipct,
 ```
 :::
 :::::
-
 
 ## Visualizing
 
@@ -1297,9 +1225,7 @@ predict(
 ```
 :::
 
-
 # Assumptions
-
 
 ## Logistic regression assumptions
 
@@ -1315,7 +1241,6 @@ predict(
 
     -   Variance varies with $p$
 
-
 ## Logistic regression assumptions
 
 -   Can plot with `easystats` :)
@@ -1329,7 +1254,6 @@ Should check binned residuals of the predictor variables as well
 #| 
 check_model(fit4, check=c("binned_residuals", "outliers", "vif"))
 ```
-
 
 ## Table
 
@@ -1347,17 +1271,11 @@ modelsummary(
 )
 ```
 
-
 ## Reporting
 
 ::: callout-tip
-We fitted a logistic model with a logit link (estimated using ML) with sex and bmipct predicting desire to lose weight (formula: lose.wt.01 \~ 1 + female+ bmipct).
-The model's explanatory power is substantial (Tjur's $R^2$ =0.30).
-The probability of females wanting to lose weight was 33% higher, *b= 1.86, 95% CI \[1.37, 2.38\], p \< .001; OR = 2.98, 95% CI \[3.93, 10.9\]*.
-An increase in BMI was associated with an increased probability of wanting to lose weight, b = 0.05, 95% CI \[0.04, 0.06\], p \< .001, OR = 1.05, 95% CI \[1.04, 1.06\].
-Looking at the average marginal effect, 1 unit increases in BMI was associated with a 80% increase in desire to lose weight.
+We fitted a logistic model with a logit link (estimated using ML) with sex and bmipct predicting desire to lose weight (formula: lose.wt.01 \~ 1 + female+ bmipct). The model's explanatory power is substantial (Tjur's $R^2$ =0.30). The probability of females wanting to lose weight was 33% higher, *b= 1.86, 95% CI \[1.37, 2.38\], p \< .001; OR = 2.98, 95% CI \[3.93, 10.9\]*. An increase in BMI was associated with an increased probability of wanting to lose weight, b = 0.05, 95% CI \[0.04, 0.06\], p \< .001, OR = 1.05, 95% CI \[1.04, 1.06\]. Looking at the average marginal effect, 1 unit increases in BMI was associated with a 80% increase in desire to lose weight.
 :::
-
 
 ## Reporting Checklist
 
@@ -1367,7 +1285,6 @@ Looking at the average marginal effect, 1 unit increases in BMI was associated w
 -   Consider reporting marginal effects for practical significance
 -   Include sample size, number of events, and events-per-variable ratio
 -   Mention any convergence issues or model diagnostics
-
 
 ## Common Mistakes {.smaller}
 
@@ -1388,7 +1305,6 @@ Looking at the average marginal effect, 1 unit increases in BMI was associated w
 
 -   Treating ordinal outcomes as binary when they shouldn't be
 
-
 ## When to Use Logistic Regression vs. Alternatives
 
 | Scenario | Method |
@@ -1401,7 +1317,6 @@ Looking at the average marginal effect, 1 unit increases in BMI was associated w
 | Binary outcome, focus on prediction | Consider regularization, ROC/AUC |
 | Clustered/nested binary data | Mixed-effects logistic regression |
 
-
 ## Looking Ahead
 
 -   Classification metrics: Confusion matrix, sensitivity, specificity, ROC curves, AUC
@@ -1411,4 +1326,3 @@ Looking at the average marginal effect, 1 unit increases in BMI was associated w
 -   Multilevel logistic models: For clustered data
 
 -   Regularized logistic regression: LASSO/Ridge for high-dimensional data
-
