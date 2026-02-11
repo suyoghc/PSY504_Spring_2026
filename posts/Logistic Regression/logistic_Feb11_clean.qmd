@@ -1,8 +1,8 @@
 ---
-title: "Generalized Linear Madness: Binary Outcome Models/Logistic Regression "
+title: "GLM & Logistic Regression (updated) "
 subtitle: "Princeton University"
 author: "Suyog Chandramouli"
-date: 'Updated:`r Sys.Date()`'
+date: '2025-02-11'
 footer: "PSY 504: Advanced Statistics"
 format: 
   revealjs:
@@ -1267,7 +1267,7 @@ ggplot() +
 . . .
 
 | Line | Model | Equation | Bounded? |
-|-----------------|-----------------|-------------------|-------------------|
+|------------------|------------------|-------------------|-------------------|
 | **Red dashed** | OLS | $\hat{p} = b_0 + b_1 x$ | ✗ Escapes \[0, 1\] |
 | **Purple solid** | Logistic | $\hat{p} = \text{plogis}(\beta_0 + \beta_1 x)$ | ✓ Always in \[0, 1\] |
 

@@ -2,7 +2,7 @@
 title: "Generalized Linear Madness: Binary Outcome Models/Logistic Regression "
 subtitle: "Princeton University"
 author: "Suyog Chandramouli"
-date: 'Updated:`r Sys.Date()`'
+date: '2025-02-09'
 footer: "PSY 504: Advanced Statistics"
 format: 
   revealjs:
