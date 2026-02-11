@@ -922,5 +922,649 @@
     "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
     "section": "Looking Ahead",
     "text": "Looking Ahead\n\nClassification metrics: Confusion matrix, sensitivity, specificity, ROC curves, AUC\nProbit regression: Alternative link function (normal CDF instead of logistic)\nMultilevel logistic models: For clustered data\nRegularized logistic regression: LASSO/Ridge for high-dimensional data"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#packages",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#packages",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Packages",
+    "text": "Packages\n\nlibrary(easystats)\nlibrary(MASS)\nlibrary(arm) # residual plot\nlibrary(effectsize) \nlibrary(tidyverse)\nlibrary(equatiomatic)\nlibrary(kableExtra)\nlibrary(broom)\nlibrary(emmeans)\nlibrary(marginaleffects)\nlibrary(modelsummary)\nlibrary(logistf) # Firth's penalized likelihood for separation\n\noptions(scipen = 999)\n\n\nAccess the .qmd document here: https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#announcements",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#announcements",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Announcements",
+    "text": "Announcements"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#today",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#today",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Today",
+    "text": "Today\n\n\n\nGLM framework\nNuts and bolts of logistic regression\n\nThe model\n\nBinomial distribution\nLogit link\n\nWorking with it\n\nLog-odds, odds, probabilities\nLikelihood\n\n\n\n\n\nMotivating example: Weight loss, gender, BMI\n\nModeling fitting\nParameter interpretation\nModel fit and model diagnostics\nComparing models\nVisualizing\nReporting"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#linear-model",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#linear-model",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Linear model",
+    "text": "Linear model\n\nModel \\(y\\) as a linear function of predictors\n\n\\[ Y_i = b_0 + b_1*x + e_i\\]\n\\[Y \\sim~Normal(\\mu, \\sigma)\\]\n\nEverything so far has included a continuous outcome\nWe looked at different possibilities for the the RHS of this definition:\n\ntypes of X (Categorical, Continuous, Ordinal,.. )\nnumber of Xs\ninteractions"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#dichotomous-outcomes",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#dichotomous-outcomes",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Dichotomous outcomes",
+    "text": "Dichotomous outcomes\nThe simplest kind of categorical data is each case is binary\n\n\nCorrect/incorrect\nPass/fail\nChoose/Don’t choose\nSupport/Not support\nRelapse/Not relapse\n\n\n\n\n\n\n\nNote\n\n\n\nWe usually code these as 0s and 1s and\nAnd we model the probability of getting one or the other outcome.\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\n\n\nBinary outcomes are everywhere in psych\n\nrecall (memory) or search, choice (decision-making), relapse\n\nCode as 0/1, model probability of 1"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#dichotomous-outcomes-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#dichotomous-outcomes-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Dichotomous outcomes",
+    "text": "Dichotomous outcomes\n\nWhat happens if we try to model binary data (0/1) with a standard linear regression?"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#problems-with-the-linear-probability-model",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#problems-with-the-linear-probability-model",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Problems with the Linear Probability Model",
+    "text": "Problems with the Linear Probability Model\n\nMakes impossible predictions (values not between 0, 1)\nNon-normality of residuals\n\n\\(\\hat{p}\\) or (1-\\(\\hat{p}\\))\n\nHeteroskedasticity\n\nVariance is influenced by \\(\\hat{p}\\)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#generalized-linear-model-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#generalized-linear-model-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Generalized linear model",
+    "text": "Generalized linear model\n\nRegression models with non-normal response likelihoods\n\n\\[\\begin{align*}\n  Y_i & \\sim \\mathrm{Dist}(\\mu_i, \\tau)  \\\\\n  g(\\mu_i) & = \\eta_i \\\\\n  \\eta_i & = \\beta_0 + \\beta_1 X_{1i} + \\beta_2 X_{2i} + \\ldots\n\\end{align*}\\]Where:\n\n\\(y\\) is referenced with \\(\\mu\\)\n\\(g\\) is link function (in logistic regression we use logit link)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#what-distribution-do-we-use-to-model-this-process",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#what-distribution-do-we-use-to-model-this-process",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "What distribution do we use to model this process?",
+    "text": "What distribution do we use to model this process?\n\nWe assume that there is some probability p of responding correctly (or selecting what is coded as 1)\nWe don’t know this probability, so we want to use the data to estimate it"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#bernoulli-distribution",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#bernoulli-distribution",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Bernoulli distribution",
+    "text": "Bernoulli distribution\n\n\n\nDistribution of a single, discrete binary outcome \\[y\\sim Bernoulli(p)\\]\n\n\nA Bernoulli distribution generates a 1 (“success”) with probability p\nAnd a 0 (“failure”) with probability 1−p=q\n\n\\(\\mu\\) = E(X)=p\n\\(\\sigma^2(X)=p(1-p)\\)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#binomial-distribution",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#binomial-distribution",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Binomial distribution",
+    "text": "Binomial distribution\n\n\n\nDistribution of discrete counts of independent outcomes over a certain set of trials\n\n\\[y\\sim binomial(N,p)\\]\n\nN = number of trials\np = probability of “y = 1”\n\n\\(\\mu\\) = E(X)=np$\n\\(\\sigma^2(X)=np(1-p)\\)\n\\(\\sigma(X)\\)=\\(\\sqrt{np(1-p)}\\)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#fitting-a-logistic-regression-in-r",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#fitting-a-logistic-regression-in-r",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Fitting a logistic regression in R",
+    "text": "Fitting a logistic regression in R\n\nIn R we use the glm function as opposed to lm\n\n\nBernoulliBinomial\n\n\n\nlibrary(fivethirtyeight)\nbechdel=fivethirtyeight::bechdel\n\n#fit &lt;- glm(\n # data = bechdel,\n # family = binomial(link=\"logit\"),\n # binary  ~ 1 + budget_2013)\n\nbechdel %&gt;% dplyr::select(title, binary) %&gt;% head() %&gt;% kable()\n\n\n\n\ntitle\nbinary\n\n\n\n\n21 & Over\nFAIL\n\n\nDredd 3D\nPASS\n\n\n12 Years a Slave\nFAIL\n\n\n2 Guns\nFAIL\n\n\n42\nFAIL\n\n\n47 Ronin\nFAIL\n\n\n\n\n\n\n\n\n# one row with total # 1s and 0s instead of multiple rows \n\ndf=glm(cbind(Deaths, N-Deaths)~Species, family=binomial, data=MASS::snails)\n\nMASS::snails %&gt;% dplyr::select(Deaths, N) %&gt;% head() %&gt;% kable()\n\n\n\n\nDeaths\nN\n\n\n\n\n0\n20\n\n\n0\n20\n\n\n0\n20\n\n\n0\n20\n\n\n0\n20\n\n\n0\n20"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logit-link",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logit-link",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logit link",
+    "text": "Logit link\n\nThe logit link transforms a linear model in the log-odds metric:\n\n\\[\\begin{equation*}\n\\log\\left(\\frac{p}{1 - p}\\right)=b_0+b_1X\n\\end{equation*}\\]\n\nTo a non-linear model in the probability metric:\n\n\\[\\begin{equation*}\np(logit)=\\frac{e^{logit}}{1+e^{logit}}\n\\end{equation*}=\\frac{exp(logit)}{1+exp(logit)}\\]"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logit-link-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logit-link-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logit link",
+    "text": "Logit link\n\nStep 1\n\nTransform probability into odds\n\nThe “odds” of an event are just the probability it happens divided by the probability it does not happen\n\n\n\n\\[\\textrm{Odds} = \\frac{\\# \\textrm{successes}}{\\# \\textrm{failures}}=\n\\frac{\\# \\textrm{successes}/n}{\\# \\textrm{failures}/n}=\n\\frac{p}{1-p}\\]"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logit-link-2",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logit-link-2",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logit Link",
+    "text": "Logit Link\n\n\n\nStep 2\n\nWhen we convert a probability to odds, odds always &gt; 0\n\nAsymmetric\nCurvy\n\nProblematic for linear model\n\n\nSolution: take log of the odds\n\n\\[logit = log(\\frac{p}{1-p})\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIf you look at the figure here, we have the odds scale..\nP as a function of odds –&gt; bounded to 0. P&lt;0.5 is crammed to this region, and the rest extends to infinity\n\nOdds are always positive and asymmetric — an odds of 2 means twice as likely but an odds of 0.5 means half as likely.\nNow we can take the log\n\n\nSuddenly — symmetric. Zero sits in the middle. p &lt; 0.5 goes negative. p &gt; 0.5 goes positive. Equal room on both sides.\nThis is a scale where regression works!"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#however",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#however",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "However…",
+    "text": "However…\n\nWe need a function that scrunches the output of the linear predictor into a range appropriate for this parameter"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#squiggles",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#squiggles",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Squiggles",
+    "text": "Squiggles\n\nWe need a function that scrunches the output of the linear predictor into a range appropriate for this parameter\nA squiggle to the rescue!\n\n\n\n\n\n\n\n\n\n🏷️ Jargon Alert\n\n\nSquiggle = Sigmoid curve = S-curvew = inverse logit = logistic function = plogis() in R\n\nSame thing, many names."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-transform",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-transform",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic transform",
+    "text": "Logistic transform\n\n\\[p(logit)=\\frac{e^{logit}}{1+e^{{logit}}}\\]"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#how-do-the-parameters-affect-the-curve",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#how-do-the-parameters-affect-the-curve",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "How do the parameters affect the curve?",
+    "text": "How do the parameters affect the curve?\n\nUnderstanding what \\(\\beta_0\\) and \\(\\beta_1\\) do visually is key to building intuition"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#slope-and-intercept-parameters",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#slope-and-intercept-parameters",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Slope and intercept parameters",
+    "text": "Slope and intercept parameters\n\n\n - Intercept (\\(\\beta_0\\)) moves curve left or right - Determines where the 50% probability point falls\n\n - Slope (\\(\\beta_1\\)) determines the steepness of the curve - Larger values = steeper transition"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#all-together",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#all-together",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "All together",
+    "text": "All together\n\n\n\n\n\n\nNote\n\n\nFigures adapted from Andrew Heiss"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#probabilities-odds-and-log-odds",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#probabilities-odds-and-log-odds",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Probabilities, Odds, and Log Odds",
+    "text": "Probabilities, Odds, and Log Odds"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#probabilities-odds-and-log-odds-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#probabilities-odds-and-log-odds-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Probabilities, Odds, and Log Odds",
+    "text": "Probabilities, Odds, and Log Odds\n\nFrom probabilities to log-odds\n\n\nqlogis(.3)\n\n[1] -0.8472979\n\n\n\nFrom log-odds to probabilities\n\n\nplogis(-1)\n\n[1] 0.2689414"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#probabilities-odds-and-log-odds-2",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#probabilities-odds-and-log-odds-2",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Probabilities, Odds, and Log Odds",
+    "text": "Probabilities, Odds, and Log Odds"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#two-link-functions-you-need-to-know-b1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#two-link-functions-you-need-to-know-b1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Two Link Functions You Need to Know [B1]",
+    "text": "Two Link Functions You Need to Know [B1]\n\n\nLogit link (today)\n\nMaps probability \\((0, 1)\\) → log-odds \\((-\\infty, +\\infty)\\)\n\n\\[\\text{logit}(p) = \\log\\frac{p}{1-p}\\]\n\nUsed for: Binomial / Logistic models\nInverse (logistic function) produces the S-curve\nEffect on outcome: compressed near 0 and 1\n\n\nLog link (coming soon)\n\nMaps positive values \\((0, +\\infty)\\) → real line \\((-\\infty, +\\infty)\\)\n\n\\[\\log(\\mu) = \\beta_0 + \\beta_1 X\\]\n\nUsed for: Poisson / Count models\nInverse is exponentiation: \\(\\mu = e^{\\beta_0 + \\beta_1 X}\\)\nEffect on outcome: exponential scaling\n\n\n\n\n\n\n\n\n\nNote\n\n\nBoth links solve the same problem — mapping a constrained parameter onto an unconstrained linear model. The logit handles probabilities; the log handles positive counts."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#best-fitting-squiggle",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#best-fitting-squiggle",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Best fitting squiggle",
+    "text": "Best fitting squiggle\n\nIn standard linear regression we use least squares to find the best fitting line\n\n\n\n\n\n\n\n\n\n\n\nBut with binary data, we need a different approach…\nStep 1: We need find where points lie on line and get corresponding logits"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#ml-logistic-regression",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#ml-logistic-regression",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "ML: Logistic Regression",
+    "text": "ML: Logistic Regression\n\nStep 2: Project them onto the probability scale (rotate the log-odds line)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#now-what",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#now-what",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Now what?",
+    "text": "Now what?\n\nStep 3: We keep rotating the log odds (line) and projecting data on to it and transforming into probabilities\n\nUntil we find the set of parameters that maximizes the likelihood of observing our data!"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#mle-vs.-ols",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#mle-vs.-ols",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "MLE vs. OLS",
+    "text": "MLE vs. OLS\n\nOLS minimizes sum of squared residuals\nMLE finds parameter values that make observed data most probable\nNo closed-form solution — uses iterative algorithms (Newton-Raphson / IRLS)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#section",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#section",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "__",
+    "text": "__\n#Under the Hood New slides to address confusions from Monday ## Under the Hood {.center}\nAddressing confusions from Monday\nLet’s revisit:\n— what’s being transformed\n\nwhat the curves mean,\nwhat x and y in the plots are\nmaximum likelihood\n\nEasier to just simulate the binary outcomes from scratch and watch steps unfold."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#simulation-with-a-data-generating-process",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#simulation-with-a-data-generating-process",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Simulation with a Data Generating Process",
+    "text": "Simulation with a Data Generating Process\n8 coins. 20 tosses each.\nEach coin has a small lead weight on the heads side. More lead =&gt; higher probability of heads.\n\nset.seed(504)\n\n# --- DATA GENERATING FUNCTION ---\n# Lead weight (grams) determines each coin's bias\ncoins &lt;- tibble(\n  coin        = 1:8,\n  lead_weight = 1:8,\n  true_p      = c(0.05, 0.15, 0.30, 0.45, 0.55, 0.70, 0.85, 0.95)\n)\n\n# Flip each coin 20 times (individual tosses)\nindividual &lt;- coins %&gt;%\n  rowwise() %&gt;%\n  mutate(outcomes = list(rbinom(20, 1, true_p))) %&gt;%\n  unnest(outcomes) %&gt;%\n  ungroup() %&gt;%\n  group_by(coin) %&gt;%\n  mutate(toss = row_number()) %&gt;%\n  ungroup()\n\n# Aggregate to counts (same data, summarized)\ntosses &lt;- individual %&gt;%\n  group_by(coin, lead_weight, true_p) %&gt;%\n  summarize(\n    heads      = sum(outcomes),\n    tails      = 20 - heads,\n    observed_p = heads / 20,\n    .groups    = \"drop\"\n  )"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#the-raw-data",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#the-raw-data",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "The raw data",
+    "text": "The raw data\n\ntosses %&gt;% knitr::kable(digits = 2)\n\n\n\n\ncoin\nlead_weight\ntrue_p\nheads\ntails\nobserved_p\n\n\n\n\n1\n1\n0.05\n1\n19\n0.05\n\n\n2\n2\n0.15\n6\n14\n0.30\n\n\n3\n3\n0.30\n4\n16\n0.20\n\n\n4\n4\n0.45\n9\n11\n0.45\n\n\n5\n5\n0.55\n9\n11\n0.45\n\n\n6\n6\n0.70\n16\n4\n0.80\n\n\n7\n7\n0.85\n16\n4\n0.80\n\n\n8\n8\n0.95\n20\n0\n1.00\n\n\n\n\n\nThis table is the data generating function. In real life — you never get to see it."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#the-raw-data-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#the-raw-data-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "The raw data",
+    "text": "The raw data\nA panel for each coin.\nEach toss is a 0 or a 1.\n\n\nThe data are just 0s and 1s.\nAt this point, there are no curves or squiggles."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#the-two-data-representation-formats",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#the-two-data-representation-formats",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "The two data representation formats",
+    "text": "The two data representation formats\n\n\nBernoulli — each toss is a row\n\n\n\nLead (g)\nToss\nOutcome\n\n\n\n\n1\n1\n0\n\n\n1\n2\n0\n\n\n1\n3\n1\n\n\n…\n…\n…\n\n\n8\n20\n1\n\n\n\n160 rows. Each: \\(Y_i \\sim \\text{Bernoulli}(p)\\)\n\nBinomial — each coin is a row\n\n\n\nLead (g)\nHeads\nTails\n\n\n\n\n1\n1\n19\n\n\n2\n6\n14\n\n\n3\n4\n16\n\n\n4\n9\n11\n\n\n5\n9\n11\n\n\n6\n16\n4\n\n\n7\n16\n4\n\n\n8\n20\n0\n\n\n\n8 rows. Each: \\(Y_i \\sim \\text{Binomial}(20, p)\\)\n\n\nSame data — different representations. glm() works with both."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#what-if-we-fit-ols-bernoulli",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#what-if-we-fit-ols-bernoulli",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "What if we fit OLS? — Bernoulli",
+    "text": "What if we fit OLS? — Bernoulli\n\nols_bern &lt;- lm(outcomes ~ lead_weight, data = individual)\n\nggplot(individual, aes(x = lead_weight, y = outcomes)) +\n  geom_jitter(aes(color = factor(outcomes)), width = 0.12, height = 0.03, \n              size = 2, alpha = 0.6) +\n  geom_smooth(method = \"lm\", se = TRUE, color = \"red\", linewidth = 1.2, \n              fullrange = TRUE) +\n  scale_color_manual(values = c(\"0\" = color_tails, \"1\" = color_heads),\n                     labels = c(\"Tails\", \"Heads\"), guide = \"none\") +\n  scale_x_continuous(limits = c(-1, 11), breaks = 1:8) +\n  scale_y_continuous(limits = c(-0.5, 1.5), breaks = seq(0, 1, 0.25)) +\n  geom_hline(yintercept = c(0, 1), linetype = \"dashed\", color = \"grey50\") +\n  annotate(\"text\", x = 10, y = 1.35, label = \"Impossible!\", color = \"red\", size = 5) +\n  annotate(\"text\", x = -0.3, y = -0.35, label = \"Impossible!\", color = \"red\", size = 5) +\n  labs(x = \"Lead weight (grams)\", y = \"P(Heads)\") +\n  theme_lucid(base_size = 16)\n\n\n\nRed line = OLS. Predicts impossible values (probabilities below 0 and above 1)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#what-if-we-fit-ols-binomial",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#what-if-we-fit-ols-binomial",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "What if we fit OLS? — Binomial",
+    "text": "What if we fit OLS? — Binomial\nSame data. Same fitted line. But y-axis is proportion (not outcome)\n\nggplot(tosses, aes(x = lead_weight, y = observed_p)) +\n  geom_point(size = 4, color = \"#0984e3\") +\n  geom_smooth(method = \"lm\", se = TRUE, color = \"red\", linewidth = 1.2,\n              fullrange = TRUE) +\n  geom_point(aes(y = true_p), shape = 1, size = 4, color = \"grey50\") +\n  scale_x_continuous(limits = c(-1, 11), breaks = 1:8) +\n  scale_y_continuous(limits = c(-0.4, 1.4), breaks = seq(0, 1, 0.25)) +\n  geom_hline(yintercept = c(0, 1), linetype = \"dashed\", color = \"grey50\") +\n  annotate(\"text\", x = 10, y = 1.25, label = \"Impossible!\", color = \"red\", size = 5) +\n  annotate(\"text\", x = -0.3, y = -0.25, label = \"Impossible!\", color = \"red\", size = 5) +\n  labs(x = \"Lead weight (grams)\", y = \"P(Heads)\",\n       caption = \"Solid = observed. Open = true probability.\") +\n  theme_lucid(base_size = 16)\n\n\n\nEach gram of lead increases the predicted probability of heads by β₁ (harder to see this in Bernoulli) ."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#can-we-transform-the-data",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#can-we-transform-the-data",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Can we transform the data?",
+    "text": "Can we transform the data?\nWe need a scale where the relationship is linear. Can we just… transform?\n\nIndividual 0/1?\n\nlogit(0) = \\(-\\infty\\)\nlogit(1) = \\(+\\infty\\)\nDead end.\n\n\n\nAggregated proportions?\n\nlogit(0.15) = −1.73\nlogit(0.85) = +1.73\nWorks fine.\n\n\n\nSo we have two options."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#option-1-transform-the-proportions-run-ols",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#option-1-transform-the-proportions-run-ols",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Option 1: Transform the proportions, run OLS",
+    "text": "Option 1: Transform the proportions, run OLS\nWe have proportions — so we can convert them:\n\ntosses_scales &lt;- tosses %&gt;%\n  mutate(\n    odds     = observed_p / (1 - observed_p),\n    log_odds = log(odds)\n    # Shortcut: log_odds = qlogis(observed_p)\n  )\n\ntosses_scales %&gt;%\n  dplyr::select(lead_weight, observed_p, odds, log_odds) %&gt;%\n  knitr::kable(digits = 3, \n    col.names = c(\"Lead (g)\", \"Probability\", \"Odds = p/(1-p)\", \"Log-odds = log(odds)\"))\n\n\n\n\nLead (g)\nProbability\nOdds = p/(1-p)\nLog-odds = log(odds)\n\n\n\n\n1\n0.05\n0.053\n-2.944\n\n\n2\n0.30\n0.429\n-0.847\n\n\n3\n0.20\n0.250\n-1.386\n\n\n4\n0.45\n0.818\n-0.201\n\n\n5\n0.45\n0.818\n-0.201\n\n\n6\n0.80\n4.000\n1.386\n\n\n7\n0.80\n4.000\n1.386\n\n\n8\n1.00\nInf\nInf"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#option-1-works-but-has-limits",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#option-1-works-but-has-limits",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Option 1 works — but has limits",
+    "text": "Option 1 works — but has limits\n\n\nLog-odds scale is linear ✓ — OLS would work here.\n\n\nBut this needs groups to compute proportions from. Our coins had that — 20 tosses at each weight. What if we wanted predictors like spin rate, etc. that can vary across tosses ?\n\n\nOption 1 requires aggregation which requires clear grouping / binning (which can be lossy)."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#option-2-let-the-model-handle-it",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#option-2-let-the-model-handle-it",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Option 2: Let the model handle it",
+    "text": "Option 2: Let the model handle it\nglm() doesn’t transform your data. It works from the other direction.\n\n\nPropose a line in log-odds: \\(\\;\\text{logit}(\\hat{p}) = \\beta_0 + \\beta_1 x\\)\n\n\n\n\nConvert to predicted probabilities: \\(\\;\\hat{p} = \\text{plogis}(\\beta_0 + \\beta_1 x)\\)\n\n\n\n\nScore against your raw data (0/1s or counts) — “how likely is what I observed?”\n\n\n\nThe model builds its line in log-odds space. Then it comes to your data to check its work."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#option-2-the-models-predictions-gets-a-new-scale",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#option-2-the-models-predictions-gets-a-new-scale",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Option 2: The model’s predictions gets a new scale",
+    "text": "Option 2: The model’s predictions gets a new scale\nThe model’s predicted probability \\(\\hat{p}\\) can be expressed \\(\\hat{p}\\) on three scales:\n\n\nProbability\n\nBounded: \\([0, 1]\\)\nS-shaped\nWhat you want to estimate and interpret\nCan’t use OLS\n\n\nOdds\n\nBounded: \\([0, +\\infty)\\)\n\\(\\frac{\\hat{p}}{1-\\hat{p}}\\)\nStill undesirable for OLS\n\n\nLog-odds\n\nUnbounded: \\((-\\infty, +\\infty)\\)\n\\(\\log\\frac{\\hat{p}}{1-\\hat{p}}\\)\nModel is happy because now there’s a Linear relationship\nAnd you’re happy because you can map it to an interpetable parameter\n\n\nWhat do x and y mean in the S-curve?\n\n\n\n\n\n\n\n\n\n\n\nBlue line (left)\nPurple curve (right)\n\n\n\n\nx-axis\nYour predictor (lead weight)\nSame predictor\n\n\ny-axis\nPredicted log-odds\nPredicted probability\n\n\nShape\nStraight line\nS-curve\n\n\nEquation\n\\(\\text{logit}(p) = \\beta_0 + \\beta_1 x\\)\n\\(p = \\text{plogis}(\\beta_0 + \\beta_1 x)\\)\n\n\n\n\n\nWhat the intercept does\n\\(\\beta_0\\) shifts the curve left or right — controls where (on x) it crosses \\(p = 0.5\\)\n\nx &lt;- seq(-10, 10, length.out = 300)\n\nintercept_curves &lt;- tibble(\n  x = rep(x, 3),\n  intercept = rep(c(-5, 0, 5), each = 300),\n  log_odds = intercept + 1 * x,\n  probability = plogis(log_odds)\n)\n\nggplot(intercept_curves, aes(x = x, y = probability, color = factor(intercept))) +\n  geom_line(linewidth = 1.2) +\n  scale_color_manual(values = c(\"-5\" = \"#55efc4\", \"0\" = \"#00b894\", \"5\" = \"#006266\"),\n                     labels = c(\"β₀ = −5  (crosses 0.5 at x = 5)\", \n                                \"β₀ = 0   (crosses 0.5 at x = 0)\", \n                                \"β₀ = 5   (crosses 0.5 at x = −5)\")) +\n  geom_hline(yintercept = 0.5, linetype = \"dashed\", color = \"grey50\") +\n  labs(x = \"x (predictor)\", y = \"Predicted probability\", color = \"Intercept\") +\n  theme_lucid(base_size = 16)\n\n\n\nWhat the slope does\n\\(\\beta_1\\) controls how steep the S-curve is — how fast probability transitions from 0 to 1\n\n\n\n\n\n\n\n\n\n\nSlope\nCurve\nMeaning\n\n\n\n\n\\(\\beta_1 = 0.5\\)\nGradual\nWeak predictor — big change in x needed\n\n\n\\(\\beta_1 = 1\\)\nModerate\nModerate predictor\n\n\n\\(\\beta_1 = 2\\)\nSharp\nStrong predictor — small change in x flips probability\n\n\n\n\n\nWhat is Maximum Likelihood?\nIn OLS — we minimize the squared residuals. Closed-form solution.\nWith binary data — squared residuals don’t make sense. Instead:\n\nMaximum Likelihood Estimation (MLE)\nFind the parameter values that make the observed data least surprising/ most likely.\n\n\nThe logic:\n\nPropose some parameter values (\\(\\beta_0\\), \\(\\beta_1\\))\nAsk: if these were the true values, how probable is the data I actually got?\nScore that probability — the likelihood\nRepeat with different values until the likelihood is as high as possible\n\n\n\nThe parameters at the peak = the maximum likelihood estimates.\n\n\nMLE for logistic regression\nHow does MLE apply to our problem?\n\nThe model proposes a straight line in log-odds: \\(\\;\\text{logit}(p) = \\beta_0 + \\beta_1 \\cdot \\text{lead_weight}\\)\n\n\nConverts to probabilities: \\(\\;\\hat{p}_i = \\text{plogis}(\\beta_0 + \\beta_1 x_i)\\) for each observation\n\n\nScores against the data:\n\nObservation got a 1 ●? Score = \\(\\hat{p}_i\\) — higher is better\nObservation got a 0 ●? Score = \\(1 - \\hat{p}_i\\) — higher is better\n\n\n\nTotal likelihood = multiply all the scores: \\(\\;\\;L = \\prod_{i=1}^{n} \\hat{p}_i^{y_i}(1-\\hat{p}_i)^{1-y_i}\\)\n\n\nTry thousands of lines → find the one with the highest \\(L\\).\nThat line’s \\(\\beta_0\\) and \\(\\beta_1\\) are your estimates.\n\n\nMLE: Example with candidates\nThree candidate lines — which one fits our coin data best?\n\n\nWhere does the score come from?\nModel predicts \\(\\hat{p} = 0.88\\) for the 6g coin. It lands heads. How likely was that?\n\n*Bernoulli Likelihood formula:**\n\\[L(\\hat{p}_i) = \\hat{p}_i^{\\,y_i} \\cdot (1 - \\hat{p}_i)^{1-y_i}\\]\n\\(y = 1\\): just \\(\\hat{p}\\). \\(\\;\\;\\) \\(y = 0\\): just \\(1 - \\hat{p}\\).\n\n\nTwo observations? Multiply. 160 observations? Multiply all scores → likelihood.\nBut 160 tiny numbers multiplied → computer underflow. So we take the log:\n\\[\\log {L} = \\sum_{i=1}^{n} \\left[ y_i \\log(\\hat{p}_i) + (1 - y_i) \\log(1 - \\hat{p}_i) \\right]\\]\nSame ranking and same peak (what we need for max). And numerically stable.\n\nBuild the likelihood from a single observation. Left panel: if the coin lands heads (Y=1), the likelihood IS the predicted probability. The grey line is L(p̂) = p̂ — a straight line. At p̂ = 0.88, the green dot reads off 0.88. High prediction for an event that happened → high score. Right panel: same prediction, but tails (Y=0). Now L(p̂) = 1 − p̂. At p̂ = 0.88, the red dot reads off 0.12. The model predicted 88% heads but got tails — low score, the model was surprised.\nThe formula combines both. When y=1, the exponents collapse to p̂. When y=0, they collapse to 1−p̂.\nFor multiple observations, multiply. But 160 numbers between 0 and 1 multiplied together → astronomically small. Like 10⁻⁴⁷. Computers can’t handle that — underflow. So we take the log. Log turns products into sums. Same ranking — if likelihood A beats likelihood B, log-likelihood A also beats log-likelihood B. Same peak. Just stable arithmetic. (J: Let me show you exactly where the score comes from. Left panel — the coin lands heads. The likelihood function for a single heads is just a straight line: the higher your predicted probability, the higher your score. Our model predicted 0.88, so the score is 0.88. Green dot, right there. Right panel — same prediction, but tails happened. Now the likelihood goes the other way — high prediction for something that didn’t happen means a LOW score. 0.12. The model was wrong and the score shows it. The formula at the bottom just wraps both cases into one expression. Now — multiply 160 of these scores together and you get the likelihood. Problem is, 160 numbers less than 1 multiplied together gives you something tiny — like 10 to the negative 47. Computers can’t handle that. So we take the log. Addition instead of multiplication. Same answer, same winner, just numbers your computer can actually store.)\n\n\n\nScoring each guess\nFor each observation:\n\nIf \\(Y_i = 1\\) (heads ●): score = \\(\\hat{p}_i\\) — higher is better\nIf \\(Y_i = 0\\) (tails ●): score = \\(1 - \\hat{p}_i\\) — higher is better\n\nLog-likelihood = sum of log(scores) across all observations\n\ncompute_ll &lt;- function(b0, b1, data) {\n  p_hat &lt;- plogis(b0 + b1 * data$lead_weight)\n  sum(data$outcomes * log(p_hat) + (1 - data$outcomes) * log(1 - p_hat))\n}\n\ntibble(\n  Guess = c(\"A: shallow (red)\", \"B: moderate (blue)\", \"C: steep (purple)\"),\n  `β₀` = c(-0.5, -2.0, -4.0),\n  `β₁` = c(0.1, 0.5, 1.2),\n  `Log-likelihood` = round(c(\n    compute_ll(-0.5, 0.1, individual),\n    compute_ll(-2.0, 0.5, individual),\n    compute_ll(-4.0, 1.2, individual)\n  ), 2)\n) %&gt;% knitr::kable()\n\n\n\n\nGuess\nβ₀\nβ₁\nLog-likelihood\n\n\n\n\nA: shallow (red)\n-0.5\n0.1\n-101.10\n\n\nB: moderate (blue)\n-2.0\n0.5\n-80.95\n\n\nC: steep (purple)\n-4.0\n1.2\n-101.40\n\n\n\n\n\n\nHigher = better fit. The model searches for the maximum.\n\n\nThe likelihood surface\n\n\nWhite star ★ = where glm() converges — the maximum likelihood estimate. Colored triangles = our three guesses.\n\n\nFitting both ways in R\n\n# Bernoulli: 160 rows of 0/1\nfit_bernoulli &lt;- glm(outcomes ~ lead_weight, data = individual, family = binomial)\n\n# Binomial: 8 rows of counts\nfit_binomial &lt;- glm(cbind(heads, tails) ~ lead_weight, data = tosses, family = binomial)\n\n\nbind_rows(\n  tidy(fit_bernoulli) %&gt;% mutate(format = \"Bernoulli (160 rows)\"),\n  tidy(fit_binomial)  %&gt;% mutate(format = \"Binomial (8 rows)\")\n) %&gt;%\n  dplyr::select(format, term, estimate, std.error) %&gt;%\n  knitr::kable(digits = 3)\n\n\n\n\nformat\nterm\nestimate\nstd.error\n\n\n\n\nBernoulli (160 rows)\n(Intercept)\n-3.073\n0.514\n\n\nBernoulli (160 rows)\nlead_weight\n0.692\n0.106\n\n\nBinomial (8 rows)\n(Intercept)\n-3.073\n0.514\n\n\nBinomial (8 rows)\nlead_weight\n0.692\n0.106\n\n\n\n\n\n\nIdentical coefficients. Representation format doesn’t matter.\n\n\nThe best-fitting squiggle\n\ntidy(fit_bernoulli) %&gt;% knitr::kable(digits = 3)\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-3.073\n0.514\n-5.979\n0\n\n\nlead_weight\n0.692\n0.106\n6.507\n0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRed vs purple — the two models\n\n\n\n\n\n\n\n\n\n\n\nLine\nModel\nEquation\nBounded?\n\n\n\n\nRed dashed\nOLS\n\\(\\hat{p} = b_0 + b_1 x\\)\n✗ Escapes [0, 1]\n\n\nPurple solid\nLogistic\n\\(\\hat{p} = \\text{plogis}(\\beta_0 + \\beta_1 x)\\)\n✓ Always in [0, 1]\n\n\n\n\n\nInterpreting the squiggle — per-coin predictions\n\ncoin_preds &lt;- tosses %&gt;%\n  mutate(\n    pred_logodds = predict(fit_bernoulli, newdata = tibble(lead_weight = lead_weight)),\n    pred_prob    = plogis(pred_logodds)\n  )\n\ncoin_preds %&gt;%\n  dplyr::select(lead_weight, true_p, observed_p, pred_prob, pred_logodds) %&gt;%\n  knitr::kable(digits = 3, col.names = c(\"Lead (g)\", \"True p\", \"Observed p\", \n                                          \"Model's p̂\", \"Model's log-odds\"))\n\n\n\n\nLead (g)\nTrue p\nObserved p\nModel’s p̂\nModel’s log-odds\n\n\n\n\n1\n0.05\n0.05\n0.085\n-2.382\n\n\n2\n0.15\n0.30\n0.156\n-1.690\n\n\n3\n0.30\n0.20\n0.269\n-0.998\n\n\n4\n0.45\n0.45\n0.424\n-0.307\n\n\n5\n0.55\n0.45\n0.595\n0.385\n\n\n6\n0.70\n0.80\n0.746\n1.077\n\n\n7\n0.85\n0.80\n0.854\n1.768\n\n\n8\n0.95\n1.00\n0.921\n2.460\n\n\n\n\n\n\nInterpreting the squiggle — per-coin predictions\n\n\nUnrolling the coefficients\nThe model gives you log-odds. Three steps back to meaning:\n\nb0 &lt;- coef(fit_bernoulli)[1]\nb1 &lt;- coef(fit_bernoulli)[2]\n\n\n1. Log-odds — what the model estimates\n“Each gram of lead increases the log-odds of heads by 0.692”\n\n\n2. Odds ratio — exponentiate\n\nexp(b1)\n\nlead_weight \n   1.996982 \n\n\n“Each gram multiplies the odds of heads by 2”\n\n\n3. Probability — what you actually care about\n\nplogis(b0 + b1 * 5)  # prediction at 5g\n\n(Intercept) \n  0.5950678 \n\n\n“A coin with 5g of lead has about a 60% chance of heads”\n##__\n\n\nCase Study: Losing Weight\n\n\n\nCase Study: Losing Weight\n\nThese data are a sample of 500 teens from data collected in 2009 through the U.S. Youth Risk Behavior Surveillance System (YRBSS)\nAre the odds that young females report trying to lose weight greater than the odds that males do? Is increasing BMI associated with an interest in losing weight, regardless of sex?\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nTrying to lose weight\n\nSelected variables:\n\nDV: *lose.wt.01, which is coded 1 when someone indicated they were trying to lost weight and 0 when they were not trying to. This is a dichotomized version of the lose.wt factor variable.\n\nOur two predictor variables will be:\n\nsex and its related dummy variable female\nbmipct, which is the percentile for a given BMI for members of the same sex\n\n\n\n\nExploratory data analysis\n\nHere are two versions of comparing lose.wt.01 by sex\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExploratory data analysis\n\nHere are the histograms for bmipct, faceted by lose.wt.\n\n\n\n\nExploratory Data Analysis\n\nHere are the histograms for bmipct, faceted by both lose.wt and sex\n\n\n\n\nLogistic regression: Fitting model\n\nLet’s fit an intercept-only model\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i)\\\\\n\\text{logit}(p_i) & = \\beta_0\n\\end{align*}\n\\]\n\n\nLogistic Regression: Fitting Model\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-0.2120267\n0.0953418\n-2.22386\n0.0261579\n\n\n\n\n\n\n\nHypothesis test for \\(\\beta_j\\)\n\nHypotheses:\n\n\\(H_0\\): \\(\\beta_j\\) = 0\n\\(H_a\\): \\(\\beta_j \\neq 0\\)\n\nTest Statistic: \\[\\text{Wald z} = \\frac{\\hat{\\beta}_j - 0}{SE_{\\hat{\\beta}_j}}\\]\nCIs: \\[\\Large{\\hat{\\beta}_j \\pm z^* SE_{\\hat{\\beta}_j}}\\]\n\n\n\nInterpreting \\(b_0\\)\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-0.2120267\n0.0953418\n-2.22386\n0.0261579\n\n\n\n\n\n\nThe intercept \\(\\beta_0\\) is in the log-odds metric\n\nLog-odds of Y = 1 is -0.212\n\nWe can convert it to probability\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nThus, the overall probability of students wanting to lose weight was about .45 or 45%\n\n\n\nInterpreting \\(b_0\\)\n\nLet’s check that with the empirical proportions\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nWe can actually do that transformation with the base R plogis() function\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nLogistic Regression\n\nAdd our binary predictor female, which gives us the model\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{female}_i,\n\\end{align*}\n\\]\n\nWhere female is an 0/1 dummy variable.\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nInterpreting intercept: \\(b_0\\)\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\\(b_0\\):\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nInterpreting slope: \\(b_1\\)\n\nIf X is a categorical predictor\n\nThen \\(b_1\\) is the difference in the log-odds between group X and the baseline\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nGoing from men to women, there is a change in the the log odds of wanting to lose weight of 1.09\n\n\n\n\nCoefficient effect size: Odd’s Ratio\n\nWe can take the exp() of the log odds and get OR\n\nThe odds of Y for group X (females) are expected to be exp(\\(b_1\\)) times the odds of Y for the baseline group\n\nGreater than 1: One unit increase, the event is more likely to occur\nLess than 1: One unit increase, the event is less likely to occur\nEquals 1: One unit increase, the likelihood of the event does not change\n\nWe can describe the OR in terms of percentage increase/decrease\n\n\n\n(OR-1) * 100  # get probability of increase/decrease\n\n\n\nCoefficient Effect Size: Odd’s Ratio\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nThe odds of wanting to lose weight in females is 2.98 times the odds of wanting to lose weight in men\n\nThe odds of females wanting to lose weight are 198% higher than the odds of males wanting to lose weight\n\n\n\n\n\nPredicted probabilities\n\nNow we can compute the probabilities for young men and women as follows\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nEmmeans\n\nCan use emmeans to get probabilities directly from model\n\nCan also get odds ratios for comparisons!\n\n\nemm &lt;- emmeans(fit2, \"female\", type = \"response\")\nemm\n\n female  prob     SE  df asymp.LCL asymp.UCL\n      0 0.320 0.0307 Inf     0.263     0.383\n      1 0.584 0.0337 Inf     0.517     0.648\n\nConfidence level used: 0.95 \nIntervals are back-transformed from the logit scale \n\n# get odd ratio for comparison\npairs(emm, reverse=TRUE)\n\n contrast          odds.ratio    SE  df null z.ratio p.value\n female1 / female0       2.98 0.589 Inf    1   5.520  &lt;.0001\n\nTests are performed on the log odds ratio scale \n\n\n\n\n\nMarginal effects\n\n\n\nWe can also calculate differences in probabilities\n\nDifference in probabilities is called risk difference\n\nMarginal effects\n\nChange in probability that the outcome occurs for a 1 unit change in the predictor\n\nAverage marginal effect (AME)\n\n\n\n\n\nFor categorical variables it is just the probability difference between groups\n\nMuch easier to interpret than odds ratios!\n\n\n\n#can do this with emmeans but requires more steps\nlibrary(marginaleffects) # get predicted probs\n# get marginal effects\navg_comparisons(fit2, comparison = \"difference\") %&gt;% \n  kable()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\ncontrast\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\npredicted_lo\npredicted_hi\npredicted\n\n\n\n\nfemale\n1 - 0\n0.2637658\n0.0455817\n5.786657\n0\n27.05335\n0.1744273\n0.3531044\n0.3203463\n0.5841121\n0.3203463\n\n\n\n\n\n\n\n\nLogistic regression continuous\nNow we add our continuous predictor bmipct, which gives us the model:\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{bmipct}_i,\n\\end{align*}\n\\]\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nLogistic regression continuous\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-2.5685641\n0.3138083\n-8.185138\n0\n\n\nbmipct\n0.0355475\n0.0042828\n8.300008\n0\n\n\n\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nWhat is the OR for \\(b_1\\)? How do we interpret this?\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nMarginal effects\n\nWith continuous variables, obtaining the marginal effects is a bit trickier\n\nInstantaneous rate of change in the predicted probability\n\nChange in the predicted probability for a very small change in X\n\n\n\n\n#effect is computed for each observed value in the original dataset before being averaged\navg_slopes(fit3)%&gt;%kable()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\ncontrast\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\npredicted_lo\npredicted_hi\npredicted\n\n\n\n\nbmipct\ndY/dX\n0.0071934\n0.0005805\n12.39094\n0\n114.7185\n0.0060555\n0.0083312\n0.7140055\n0.7140781\n0.7140418\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\nAn increase in BMI results in 70% increase in likelihood of wanting to lose weight\n\n\n\n\n\n\nLogistic Multiple Predictors\n\nThe first will have both female and bmipct as predictors:\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{female}_i + \\beta_2 \\text{bmipct}_i.\n\\end{align*}\n\\]\n\nThe second model will add an interaction term between the two predictors:\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{female}_i + \\beta_2 \\text{bmipct}_i + \\beta_3 \\text{female}_i \\cdot \\text{bmipct}_i.\n\\end{align*}\n\\]\n\n\nFitting both models\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nModel Comparisons\n\n\nThe interaction term female:bmipct (i.e., \\(\\beta_3\\)) would not be statistically significant\n\n\n\nLikelihood ratio test\n\nLet’s compare the models by performing likelihood ratio test\n\n\ntest_likelihoodratio(fit4, fit5) %&gt;% kable()\n\n\n\n\n\nName\nModel\ndf\ndf_diff\nChi2\np\n\n\n\n\nfit4\nfit4\nglm\n3\nNA\nNA\nNA\n\n\nfit5\nfit5\nglm\n4\n1\n0.4976291\n0.4805437\n\n\n\n\n\n\n\nWhen you compare model fit4 with the interaction model fit5, it appears that the interaction term does not add anything\n\n\n\n\nModel Fit\n\nMcFadden Psuedo \\(R^2\\)\n\n\\[R^2 = \\frac{SSM}{SST} = \\frac{SST-SSE}{SST}=1-\\frac{SSE}{SST}\\] \\[R_{MF}^2 = 1-\\frac{D_{\\rm residual}}{D_{\\rm null}}\\]\n\n#easystats function\nr2_mcfadden(fit4)\n\n# R2 for Generalized Linear Regression\n       R2: 0.243\n  adj. R2: 0.240\n\n#r2_tjur\n#lots others\n\n\nNot “explained variance” but ratio indicating how “good” the model fit Model Fit\n\n\n\nModel fit\n\nPlotting normal residuals are not really informative/useful\n\n\n\n\nBinned residuals\n\n\n\nBinned residuals\n\nCalculate raw residuals\nOrder observations (probabilities of DV or predictor variable)\n\nCreate g bins of approximate equal size \\(\\sqrt(n)\\)\n\nCalculate average residuals\nPlot average residuals vs. average predicted probability (or predictor value)\n\nGrey bands represent ±2 SE — ideally ~95% of points fall within\n\n\n\n#performance::binned_residuals()\nbinnedplot(fitted(fit4), residuals(fit4, type=\"response\"))\n\n\n\n\n\n\n\n\n\n\n\nBinned residuals\n\nLook for patterns\n\nNonlinear trend may be indication that squared term or log transformation is required\n\nIf bins have average residuals with large magnitude\n\nLook at averages of other predictors across bins\nInteraction may be required\n\nRule of thumb: If &gt;5% of bins fall outside the bands, model may need improvement\n\n\n\nVisualizing\n\nggplotggeffects\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# library(ggeffects)\n# ggemmeans(fit4, terms=c(\"bmipct\", \"female\")) %&gt;%\n#   plot(ci = TRUE, add.data = TRUE, jitter=.05)\n\n\n\n\n\n\nAssumptions\n\n\n\nLogistic regression assumptions\n\nOutcome is dichotomous\nObservations are independent\nLinearity (in the log odds)\nNo normality assumptions\nHomogeneity of variance\n\nVariance varies with \\(p\\)\n\n\n\n\nLogistic regression assumptions\n\nCan plot with easystats :)\n\n\n\n\n\n\n\nNote\n\n\nShould check binned residuals of the predictor variables as well\n\n\n\n\ncheck_model(fit4, check=c(\"binned_residuals\", \"outliers\", \"vif\"))\n\n\n\n\nTable\n\n# Compare multiple models side by side\nmodelsummary(\n  list(\"Intercept Only\" = fit1,\n       \"Sex\" = fit2, \n       \"BMI\" = fit3, \n       \"Sex + BMI\" = fit4, \n       \"Interaction\" = fit5),\n  exponentiate = TRUE,\n  stars = TRUE\n)\n\n\n\n    \n\n    \n    \n      \n        \n        \n              \n                 \n                Intercept Only\n                Sex\n                BMI\n                Sex + BMI\n                Interaction\n              \n        \n        + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001\n        \n                \n                  (Intercept)\n                  0.809*\n                  0.471***\n                  0.077***\n                  0.014***\n                  0.010***\n                \n                \n                  \n                  (0.077)\n                  (0.066)\n                  (0.024)\n                  (0.006)\n                  (0.007)\n                \n                \n                  female\n                  \n                  2.980***\n                  \n                  6.428***\n                  11.148**\n                \n                \n                  \n                  \n                  (0.589)\n                  \n                  (1.665)\n                  (9.352)\n                \n                \n                  bmipct\n                  \n                  \n                  1.036***\n                  1.048***\n                  1.053***\n                \n                \n                  \n                  \n                  \n                  (0.004)\n                  (0.005)\n                  (0.009)\n                \n                \n                  female × bmipct\n                  \n                  \n                  \n                  \n                  0.992\n                \n                \n                  \n                  \n                  \n                  \n                  \n                  (0.011)\n                \n                \n                  Num.Obs.\n                  445\n                  445\n                  445\n                  445\n                  445\n                \n                \n                  AIC\n                  613.9\n                  584.3\n                  529.1\n                  469.0\n                  470.5\n                \n                \n                  BIC\n                  618.0\n                  592.5\n                  537.3\n                  481.3\n                  486.9\n                \n                \n                  Log.Lik.\n                  -305.964\n                  -290.158\n                  -262.557\n                  -231.493\n                  -231.244\n                \n                \n                  F\n                  \n                  30.475\n                  68.890\n                  45.842\n                  30.007\n                \n                \n                  RMSE\n                  0.50\n                  0.48\n                  0.45\n                  0.42\n                  0.42\n                \n        \n      \n    \n\n\n\n\n\nReporting\n\n\n\n\n\n\nTip\n\n\nWe fitted a logistic model with a logit link (estimated using ML) with sex and bmipct predicting desire to lose weight (formula: lose.wt.01 ~ 1 + female+ bmipct). The model’s explanatory power is substantial (Tjur’s \\(R^2\\) =0.30). The probability of females wanting to lose weight was 33% higher, b= 1.86, 95% CI [1.37, 2.38], p &lt; .001; OR = 2.98, 95% CI [3.93, 10.9]. An increase in BMI was associated with an increased probability of wanting to lose weight, b = 0.05, 95% CI [0.04, 0.06], p &lt; .001, OR = 1.05, 95% CI [1.04, 1.06]. Looking at the average marginal effect, 1 unit increases in BMI was associated with a 80% increase in desire to lose weight.\n\n\n\n\n\nReporting Checklist\n\nReport the link function and estimation method (e.g., logit link, ML estimation)\nReport log-odds coefficients and odds ratios with 95% CIs\nReport a measure of model fit (McFadden \\(R^2\\), Tjur \\(R^2\\), etc.)\nConsider reporting marginal effects for practical significance\nInclude sample size, number of events, and events-per-variable ratio\nMention any convergence issues or model diagnostics\n\n\n\nCommon Mistakes\n\nInterpreting log-odds coefficients as if they were probabilities\nForgetting that effects are non-linear on the probability scale\n\nA 1-unit change in X does not have a constant effect on P(Y=1)\n\nUsing \\(R^2\\) from linear regression — use pseudo \\(R^2\\) measures instead\nNot checking for multicollinearity (VIF still applies!)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#what-do-x-and-y-mean-in-the-s-curve",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#what-do-x-and-y-mean-in-the-s-curve",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "What do x and y mean in the S-curve?",
+    "text": "What do x and y mean in the S-curve?\n\n\n\n\n\n\n\n\n\n\n\nBlue line (left)\nPurple curve (right)\n\n\n\n\nx-axis\nYour predictor (lead weight)\nSame predictor\n\n\ny-axis\nPredicted log-odds\nPredicted probability\n\n\nShape\nStraight line\nS-curve\n\n\nEquation\n\\(\\text{logit}(p) = \\beta_0 + \\beta_1 x\\)\n\\(p = \\text{plogis}(\\beta_0 + \\beta_1 x)\\)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#what-the-intercept-does",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#what-the-intercept-does",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "What the intercept does",
+    "text": "What the intercept does\n\\(\\beta_0\\) shifts the curve left or right — controls where (on x) it crosses \\(p = 0.5\\)\n\nx &lt;- seq(-10, 10, length.out = 300)\n\nintercept_curves &lt;- tibble(\n  x = rep(x, 3),\n  intercept = rep(c(-5, 0, 5), each = 300),\n  log_odds = intercept + 1 * x,\n  probability = plogis(log_odds)\n)\n\nggplot(intercept_curves, aes(x = x, y = probability, color = factor(intercept))) +\n  geom_line(linewidth = 1.2) +\n  scale_color_manual(values = c(\"-5\" = \"#55efc4\", \"0\" = \"#00b894\", \"5\" = \"#006266\"),\n                     labels = c(\"β₀ = −5  (crosses 0.5 at x = 5)\", \n                                \"β₀ = 0   (crosses 0.5 at x = 0)\", \n                                \"β₀ = 5   (crosses 0.5 at x = −5)\")) +\n  geom_hline(yintercept = 0.5, linetype = \"dashed\", color = \"grey50\") +\n  labs(x = \"x (predictor)\", y = \"Predicted probability\", color = \"Intercept\") +\n  theme_lucid(base_size = 16)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#what-the-slope-does",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#what-the-slope-does",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "What the slope does",
+    "text": "What the slope does\n\\(\\beta_1\\) controls how steep the S-curve is — how fast probability transitions from 0 to 1\n\n\n\n\n\n\n\n\n\n\nSlope\nCurve\nMeaning\n\n\n\n\n\\(\\beta_1 = 0.5\\)\nGradual\nWeak predictor — big change in x needed\n\n\n\\(\\beta_1 = 1\\)\nModerate\nModerate predictor\n\n\n\\(\\beta_1 = 2\\)\nSharp\nStrong predictor — small change in x flips probability"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#what-is-maximum-likelihood",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#what-is-maximum-likelihood",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "What is Maximum Likelihood?",
+    "text": "What is Maximum Likelihood?\nIn OLS — we minimize the squared residuals. Closed-form solution.\nWith binary data — squared residuals don’t make sense. Instead:\n\nMaximum Likelihood Estimation (MLE)\nFind the parameter values that make the observed data least surprising/ most likely.\n\n\nThe logic:\n\nPropose some parameter values (\\(\\beta_0\\), \\(\\beta_1\\))\nAsk: if these were the true values, how probable is the data I actually got?\nScore that probability — the likelihood\nRepeat with different values until the likelihood is as high as possible\n\n\n\nThe parameters at the peak = the maximum likelihood estimates."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#mle-for-logistic-regression",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#mle-for-logistic-regression",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "MLE for logistic regression",
+    "text": "MLE for logistic regression\nHow does MLE apply to our problem?\n\nThe model proposes a straight line in log-odds: \\(\\;\\text{logit}(p) = \\beta_0 + \\beta_1 \\cdot \\text{lead_weight}\\)\n\n\nConverts to probabilities: \\(\\;\\hat{p}_i = \\text{plogis}(\\beta_0 + \\beta_1 x_i)\\) for each observation\n\n\nScores against the data:\n\nObservation got a 1 ●? Score = \\(\\hat{p}_i\\) — higher is better\nObservation got a 0 ●? Score = \\(1 - \\hat{p}_i\\) — higher is better\n\n\n\nTotal likelihood = multiply all the scores: \\(\\;\\;L = \\prod_{i=1}^{n} \\hat{p}_i^{y_i}(1-\\hat{p}_i)^{1-y_i}\\)\n\n\nTry thousands of lines → find the one with the highest \\(L\\).\nThat line’s \\(\\beta_0\\) and \\(\\beta_1\\) are your estimates."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#mle-example-with-candidates",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#mle-example-with-candidates",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "MLE: Example with candidates",
+    "text": "MLE: Example with candidates\nThree candidate lines — which one fits our coin data best?"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#where-does-the-score-come-from",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#where-does-the-score-come-from",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Where does the score come from?",
+    "text": "Where does the score come from?\nModel predicts \\(\\hat{p} = 0.88\\) for the 6g coin. It lands heads. How likely was that?\n\n*Bernoulli Likelihood formula:**\n\\[L(\\hat{p}_i) = \\hat{p}_i^{\\,y_i} \\cdot (1 - \\hat{p}_i)^{1-y_i}\\]\n\\(y = 1\\): just \\(\\hat{p}\\). \\(\\;\\;\\) \\(y = 0\\): just \\(1 - \\hat{p}\\).\n\n\nTwo observations? Multiply. 160 observations? Multiply all scores → likelihood.\nBut 160 tiny numbers multiplied → computer underflow. So we take the log:\n\\[\\log {L} = \\sum_{i=1}^{n} \\left[ y_i \\log(\\hat{p}_i) + (1 - y_i) \\log(1 - \\hat{p}_i) \\right]\\]\nSame ranking and same peak (what we need for max). And numerically stable.\n\nBuild the likelihood from a single observation. Left panel: if the coin lands heads (Y=1), the likelihood IS the predicted probability. The grey line is L(p̂) = p̂ — a straight line. At p̂ = 0.88, the green dot reads off 0.88. High prediction for an event that happened → high score. Right panel: same prediction, but tails (Y=0). Now L(p̂) = 1 − p̂. At p̂ = 0.88, the red dot reads off 0.12. The model predicted 88% heads but got tails — low score, the model was surprised.\nThe formula combines both. When y=1, the exponents collapse to p̂. When y=0, they collapse to 1−p̂.\nFor multiple observations, multiply. But 160 numbers between 0 and 1 multiplied together → astronomically small. Like 10⁻⁴⁷. Computers can’t handle that — underflow. So we take the log. Log turns products into sums. Same ranking — if likelihood A beats likelihood B, log-likelihood A also beats log-likelihood B. Same peak. Just stable arithmetic. (J: Let me show you exactly where the score comes from. Left panel — the coin lands heads. The likelihood function for a single heads is just a straight line: the higher your predicted probability, the higher your score. Our model predicted 0.88, so the score is 0.88. Green dot, right there. Right panel — same prediction, but tails happened. Now the likelihood goes the other way — high prediction for something that didn’t happen means a LOW score. 0.12. The model was wrong and the score shows it. The formula at the bottom just wraps both cases into one expression. Now — multiply 160 of these scores together and you get the likelihood. Problem is, 160 numbers less than 1 multiplied together gives you something tiny — like 10 to the negative 47. Computers can’t handle that. So we take the log. Addition instead of multiplication. Same answer, same winner, just numbers your computer can actually store.)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#scoring-each-guess",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#scoring-each-guess",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Scoring each guess",
+    "text": "Scoring each guess\nFor each observation:\n\nIf \\(Y_i = 1\\) (heads ●): score = \\(\\hat{p}_i\\) — higher is better\nIf \\(Y_i = 0\\) (tails ●): score = \\(1 - \\hat{p}_i\\) — higher is better\n\nLog-likelihood = sum of log(scores) across all observations\n\ncompute_ll &lt;- function(b0, b1, data) {\n  p_hat &lt;- plogis(b0 + b1 * data$lead_weight)\n  sum(data$outcomes * log(p_hat) + (1 - data$outcomes) * log(1 - p_hat))\n}\n\ntibble(\n  Guess = c(\"A: shallow (red)\", \"B: moderate (blue)\", \"C: steep (purple)\"),\n  `β₀` = c(-0.5, -2.0, -4.0),\n  `β₁` = c(0.1, 0.5, 1.2),\n  `Log-likelihood` = round(c(\n    compute_ll(-0.5, 0.1, individual),\n    compute_ll(-2.0, 0.5, individual),\n    compute_ll(-4.0, 1.2, individual)\n  ), 2)\n) %&gt;% knitr::kable()\n\n\n\n\nGuess\nβ₀\nβ₁\nLog-likelihood\n\n\n\n\nA: shallow (red)\n-0.5\n0.1\n-101.10\n\n\nB: moderate (blue)\n-2.0\n0.5\n-80.95\n\n\nC: steep (purple)\n-4.0\n1.2\n-101.40\n\n\n\n\n\n\nHigher = better fit. The model searches for the maximum."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#the-likelihood-surface",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#the-likelihood-surface",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "The likelihood surface",
+    "text": "The likelihood surface\n\n\nWhite star ★ = where glm() converges — the maximum likelihood estimate. Colored triangles = our three guesses."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#fitting-both-ways-in-r",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#fitting-both-ways-in-r",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Fitting both ways in R",
+    "text": "Fitting both ways in R\n\n# Bernoulli: 160 rows of 0/1\nfit_bernoulli &lt;- glm(outcomes ~ lead_weight, data = individual, family = binomial)\n\n# Binomial: 8 rows of counts\nfit_binomial &lt;- glm(cbind(heads, tails) ~ lead_weight, data = tosses, family = binomial)\n\n\nbind_rows(\n  tidy(fit_bernoulli) %&gt;% mutate(format = \"Bernoulli (160 rows)\"),\n  tidy(fit_binomial)  %&gt;% mutate(format = \"Binomial (8 rows)\")\n) %&gt;%\n  dplyr::select(format, term, estimate, std.error) %&gt;%\n  knitr::kable(digits = 3)\n\n\n\n\nformat\nterm\nestimate\nstd.error\n\n\n\n\nBernoulli (160 rows)\n(Intercept)\n-3.073\n0.514\n\n\nBernoulli (160 rows)\nlead_weight\n0.692\n0.106\n\n\nBinomial (8 rows)\n(Intercept)\n-3.073\n0.514\n\n\nBinomial (8 rows)\nlead_weight\n0.692\n0.106\n\n\n\n\n\n\nIdentical coefficients. Representation format doesn’t matter."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#the-best-fitting-squiggle",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#the-best-fitting-squiggle",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "The best-fitting squiggle",
+    "text": "The best-fitting squiggle\n\ntidy(fit_bernoulli) %&gt;% knitr::kable(digits = 3)\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-3.073\n0.514\n-5.979\n0\n\n\nlead_weight\n0.692\n0.106\n6.507\n0"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#red-vs-purple-the-two-models",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#red-vs-purple-the-two-models",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Red vs purple — the two models",
+    "text": "Red vs purple — the two models\n\n\n\n\n\n\n\n\n\n\n\nLine\nModel\nEquation\nBounded?\n\n\n\n\nRed dashed\nOLS\n\\(\\hat{p} = b_0 + b_1 x\\)\n✗ Escapes [0, 1]\n\n\nPurple solid\nLogistic\n\\(\\hat{p} = \\text{plogis}(\\beta_0 + \\beta_1 x)\\)\n✓ Always in [0, 1]"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-the-squiggle-per-coin-predictions",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-the-squiggle-per-coin-predictions",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Interpreting the squiggle — per-coin predictions",
+    "text": "Interpreting the squiggle — per-coin predictions\n\ncoin_preds &lt;- tosses %&gt;%\n  mutate(\n    pred_logodds = predict(fit_bernoulli, newdata = tibble(lead_weight = lead_weight)),\n    pred_prob    = plogis(pred_logodds)\n  )\n\ncoin_preds %&gt;%\n  dplyr::select(lead_weight, true_p, observed_p, pred_prob, pred_logodds) %&gt;%\n  knitr::kable(digits = 3, col.names = c(\"Lead (g)\", \"True p\", \"Observed p\", \n                                          \"Model's p̂\", \"Model's log-odds\"))\n\n\n\n\nLead (g)\nTrue p\nObserved p\nModel’s p̂\nModel’s log-odds\n\n\n\n\n1\n0.05\n0.05\n0.085\n-2.382\n\n\n2\n0.15\n0.30\n0.156\n-1.690\n\n\n3\n0.30\n0.20\n0.269\n-0.998\n\n\n4\n0.45\n0.45\n0.424\n-0.307\n\n\n5\n0.55\n0.45\n0.595\n0.385\n\n\n6\n0.70\n0.80\n0.746\n1.077\n\n\n7\n0.85\n0.80\n0.854\n1.768\n\n\n8\n0.95\n1.00\n0.921\n2.460"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-the-squiggle-per-coin-predictions-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-the-squiggle-per-coin-predictions-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Interpreting the squiggle — per-coin predictions",
+    "text": "Interpreting the squiggle — per-coin predictions"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#unrolling-the-coefficients",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#unrolling-the-coefficients",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Unrolling the coefficients",
+    "text": "Unrolling the coefficients\nThe model gives you log-odds. Three steps back to meaning:\n\nb0 &lt;- coef(fit_bernoulli)[1]\nb1 &lt;- coef(fit_bernoulli)[2]\n\n\n1. Log-odds — what the model estimates\n“Each gram of lead increases the log-odds of heads by 0.692”\n\n\n2. Odds ratio — exponentiate\n\nexp(b1)\n\nlead_weight \n   1.996982 \n\n\n“Each gram multiplies the odds of heads by 2”\n\n\n3. Probability — what you actually care about\n\nplogis(b0 + b1 * 5)  # prediction at 5g\n\n(Intercept) \n  0.5950678 \n\n\n“A coin with 5g of lead has about a 60% chance of heads”\n##__"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#case-study-losing-weight-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#case-study-losing-weight-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Case Study: Losing Weight",
+    "text": "Case Study: Losing Weight\n\nThese data are a sample of 500 teens from data collected in 2009 through the U.S. Youth Risk Behavior Surveillance System (YRBSS)\nAre the odds that young females report trying to lose weight greater than the odds that males do? Is increasing BMI associated with an interest in losing weight, regardless of sex?\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#trying-to-lose-weight",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#trying-to-lose-weight",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Trying to lose weight",
+    "text": "Trying to lose weight\n\nSelected variables:\n\nDV: *lose.wt.01, which is coded 1 when someone indicated they were trying to lost weight and 0 when they were not trying to. This is a dichotomized version of the lose.wt factor variable.\n\nOur two predictor variables will be:\n\nsex and its related dummy variable female\nbmipct, which is the percentile for a given BMI for members of the same sex"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#exploratory-data-analysis",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#exploratory-data-analysis",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Exploratory data analysis",
+    "text": "Exploratory data analysis\n\nHere are two versions of comparing lose.wt.01 by sex"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#exploratory-data-analysis-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#exploratory-data-analysis-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Exploratory data analysis",
+    "text": "Exploratory data analysis\n\nHere are the histograms for bmipct, faceted by lose.wt."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#exploratory-data-analysis-2",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#exploratory-data-analysis-2",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis\n\nHere are the histograms for bmipct, faceted by both lose.wt and sex"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-fitting-model",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-fitting-model",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic regression: Fitting model",
+    "text": "Logistic regression: Fitting model\n\nLet’s fit an intercept-only model\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i)\\\\\n\\text{logit}(p_i) & = \\beta_0\n\\end{align*}\n\\]"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-fitting-model-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-fitting-model-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic Regression: Fitting Model",
+    "text": "Logistic Regression: Fitting Model\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-0.2120267\n0.0953418\n-2.22386\n0.0261579"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#hypothesis-test-for-beta_j",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#hypothesis-test-for-beta_j",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Hypothesis test for \\(\\beta_j\\)",
+    "text": "Hypothesis test for \\(\\beta_j\\)\n\nHypotheses:\n\n\\(H_0\\): \\(\\beta_j\\) = 0\n\\(H_a\\): \\(\\beta_j \\neq 0\\)\n\nTest Statistic: \\[\\text{Wald z} = \\frac{\\hat{\\beta}_j - 0}{SE_{\\hat{\\beta}_j}}\\]\nCIs: \\[\\Large{\\hat{\\beta}_j \\pm z^* SE_{\\hat{\\beta}_j}}\\]"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-b_0",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-b_0",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Interpreting \\(b_0\\)",
+    "text": "Interpreting \\(b_0\\)\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-0.2120267\n0.0953418\n-2.22386\n0.0261579\n\n\n\n\n\n\nThe intercept \\(\\beta_0\\) is in the log-odds metric\n\nLog-odds of Y = 1 is -0.212\n\nWe can convert it to probability\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nThus, the overall probability of students wanting to lose weight was about .45 or 45%"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-b_0-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-b_0-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Interpreting \\(b_0\\)",
+    "text": "Interpreting \\(b_0\\)\n\nLet’s check that with the empirical proportions\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nWe can actually do that transformation with the base R plogis() function\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic Regression",
+    "text": "Logistic Regression\n\nAdd our binary predictor female, which gives us the model\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{female}_i,\n\\end{align*}\n\\]\n\nWhere female is an 0/1 dummy variable.\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-intercept-b_0",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-intercept-b_0",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Interpreting intercept: \\(b_0\\)",
+    "text": "Interpreting intercept: \\(b_0\\)\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\\(b_0\\):\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-slope-b_1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#interpreting-slope-b_1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Interpreting slope: \\(b_1\\)",
+    "text": "Interpreting slope: \\(b_1\\)\n\nIf X is a categorical predictor\n\nThen \\(b_1\\) is the difference in the log-odds between group X and the baseline\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nGoing from men to women, there is a change in the the log odds of wanting to lose weight of 1.09"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#coefficient-effect-size-odds-ratio",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#coefficient-effect-size-odds-ratio",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Coefficient effect size: Odd’s Ratio",
+    "text": "Coefficient effect size: Odd’s Ratio\n\nWe can take the exp() of the log odds and get OR\n\nThe odds of Y for group X (females) are expected to be exp(\\(b_1\\)) times the odds of Y for the baseline group\n\nGreater than 1: One unit increase, the event is more likely to occur\nLess than 1: One unit increase, the event is less likely to occur\nEquals 1: One unit increase, the likelihood of the event does not change\n\nWe can describe the OR in terms of percentage increase/decrease\n\n\n\n(OR-1) * 100  # get probability of increase/decrease"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#coefficient-effect-size-odds-ratio-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#coefficient-effect-size-odds-ratio-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Coefficient Effect Size: Odd’s Ratio",
+    "text": "Coefficient Effect Size: Odd’s Ratio\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nThe odds of wanting to lose weight in females is 2.98 times the odds of wanting to lose weight in men\n\nThe odds of females wanting to lose weight are 198% higher than the odds of males wanting to lose weight"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#predicted-probabilities",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#predicted-probabilities",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Predicted probabilities",
+    "text": "Predicted probabilities\n\nNow we can compute the probabilities for young men and women as follows\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#emmeans",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#emmeans",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Emmeans",
+    "text": "Emmeans\n\nCan use emmeans to get probabilities directly from model\n\nCan also get odds ratios for comparisons!\n\n\nemm &lt;- emmeans(fit2, \"female\", type = \"response\")\nemm\n\n female  prob     SE  df asymp.LCL asymp.UCL\n      0 0.320 0.0307 Inf     0.263     0.383\n      1 0.584 0.0337 Inf     0.517     0.648\n\nConfidence level used: 0.95 \nIntervals are back-transformed from the logit scale \n\n# get odd ratio for comparison\npairs(emm, reverse=TRUE)\n\n contrast          odds.ratio    SE  df null z.ratio p.value\n female1 / female0       2.98 0.589 Inf    1   5.520  &lt;.0001\n\nTests are performed on the log odds ratio scale"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#marginal-effects",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#marginal-effects",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Marginal effects",
+    "text": "Marginal effects\n\n\n\nWe can also calculate differences in probabilities\n\nDifference in probabilities is called risk difference\n\nMarginal effects\n\nChange in probability that the outcome occurs for a 1 unit change in the predictor\n\nAverage marginal effect (AME)\n\n\n\n\n\nFor categorical variables it is just the probability difference between groups\n\nMuch easier to interpret than odds ratios!\n\n\n\n#can do this with emmeans but requires more steps\nlibrary(marginaleffects) # get predicted probs\n# get marginal effects\navg_comparisons(fit2, comparison = \"difference\") %&gt;% \n  kable()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\ncontrast\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\npredicted_lo\npredicted_hi\npredicted\n\n\n\n\nfemale\n1 - 0\n0.2637658\n0.0455817\n5.786657\n0\n27.05335\n0.1744273\n0.3531044\n0.3203463\n0.5841121\n0.3203463"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-continuous",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-continuous",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic regression continuous",
+    "text": "Logistic regression continuous\nNow we add our continuous predictor bmipct, which gives us the model:\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{bmipct}_i,\n\\end{align*}\n\\]\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-continuous-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-continuous-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic regression continuous",
+    "text": "Logistic regression continuous\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n-2.5685641\n0.3138083\n-8.185138\n0\n\n\nbmipct\n0.0355475\n0.0042828\n8.300008\n0\n\n\n\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nWhat is the OR for \\(b_1\\)? How do we interpret this?\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#marginal-effects-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#marginal-effects-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Marginal effects",
+    "text": "Marginal effects\n\nWith continuous variables, obtaining the marginal effects is a bit trickier\n\nInstantaneous rate of change in the predicted probability\n\nChange in the predicted probability for a very small change in X\n\n\n\n\n#effect is computed for each observed value in the original dataset before being averaged\navg_slopes(fit3)%&gt;%kable()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\ncontrast\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\npredicted_lo\npredicted_hi\npredicted\n\n\n\n\nbmipct\ndY/dX\n0.0071934\n0.0005805\n12.39094\n0\n114.7185\n0.0060555\n0.0083312\n0.7140055\n0.7140781\n0.7140418\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\nAn increase in BMI results in 70% increase in likelihood of wanting to lose weight"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-multiple-predictors",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-multiple-predictors",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic Multiple Predictors",
+    "text": "Logistic Multiple Predictors\n\nThe first will have both female and bmipct as predictors:\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{female}_i + \\beta_2 \\text{bmipct}_i.\n\\end{align*}\n\\]\n\nThe second model will add an interaction term between the two predictors:\n\n\\[\n\\begin{align*}\n\\text{lose.wt.01}_i & \\sim \\operatorname{Binomial}(n = 1, p_i) \\\\\n\\text{logit}(p_i) & = \\beta_0 + \\beta_1 \\text{female}_i + \\beta_2 \\text{bmipct}_i + \\beta_3 \\text{female}_i \\cdot \\text{bmipct}_i.\n\\end{align*}\n\\]"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#fitting-both-models",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#fitting-both-models",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Fitting both models",
+    "text": "Fitting both models\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#model-comparisons",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#model-comparisons",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Model Comparisons",
+    "text": "Model Comparisons\n\n\nThe interaction term female:bmipct (i.e., \\(\\beta_3\\)) would not be statistically significant"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#likelihood-ratio-test",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#likelihood-ratio-test",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Likelihood ratio test",
+    "text": "Likelihood ratio test\n\nLet’s compare the models by performing likelihood ratio test\n\n\ntest_likelihoodratio(fit4, fit5) %&gt;% kable()\n\n\n\n\n\nName\nModel\ndf\ndf_diff\nChi2\np\n\n\n\n\nfit4\nfit4\nglm\n3\nNA\nNA\nNA\n\n\nfit5\nfit5\nglm\n4\n1\n0.4976291\n0.4805437\n\n\n\n\n\n\n\nWhen you compare model fit4 with the interaction model fit5, it appears that the interaction term does not add anything"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#model-fit",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#model-fit",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Model Fit",
+    "text": "Model Fit\n\nMcFadden Psuedo \\(R^2\\)\n\n\\[R^2 = \\frac{SSM}{SST} = \\frac{SST-SSE}{SST}=1-\\frac{SSE}{SST}\\] \\[R_{MF}^2 = 1-\\frac{D_{\\rm residual}}{D_{\\rm null}}\\]\n\n#easystats function\nr2_mcfadden(fit4)\n\n# R2 for Generalized Linear Regression\n       R2: 0.243\n  adj. R2: 0.240\n\n#r2_tjur\n#lots others\n\n\nNot “explained variance” but ratio indicating how “good” the model fit Model Fit"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#model-fit-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#model-fit-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Model fit",
+    "text": "Model fit\n\nPlotting normal residuals are not really informative/useful"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#binned-residuals",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#binned-residuals",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Binned residuals",
+    "text": "Binned residuals\n\n\n\nBinned residuals\n\nCalculate raw residuals\nOrder observations (probabilities of DV or predictor variable)\n\nCreate g bins of approximate equal size \\(\\sqrt(n)\\)\n\nCalculate average residuals\nPlot average residuals vs. average predicted probability (or predictor value)\n\nGrey bands represent ±2 SE — ideally ~95% of points fall within\n\n\n\n#performance::binned_residuals()\nbinnedplot(fitted(fit4), residuals(fit4, type=\"response\"))"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#binned-residuals-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#binned-residuals-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Binned residuals",
+    "text": "Binned residuals\n\nLook for patterns\n\nNonlinear trend may be indication that squared term or log transformation is required\n\nIf bins have average residuals with large magnitude\n\nLook at averages of other predictors across bins\nInteraction may be required\n\nRule of thumb: If &gt;5% of bins fall outside the bands, model may need improvement"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#visualizing",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#visualizing",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Visualizing",
+    "text": "Visualizing\n\nggplotggeffects\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# library(ggeffects)\n# ggemmeans(fit4, terms=c(\"bmipct\", \"female\")) %&gt;%\n#   plot(ci = TRUE, add.data = TRUE, jitter=.05)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-assumptions",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-assumptions",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic regression assumptions",
+    "text": "Logistic regression assumptions\n\nOutcome is dichotomous\nObservations are independent\nLinearity (in the log odds)\nNo normality assumptions\nHomogeneity of variance\n\nVariance varies with \\(p\\)"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-assumptions-1",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#logistic-regression-assumptions-1",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Logistic regression assumptions",
+    "text": "Logistic regression assumptions\n\nCan plot with easystats :)\n\n\n\n\n\n\n\nNote\n\n\nShould check binned residuals of the predictor variables as well\n\n\n\n\ncheck_model(fit4, check=c(\"binned_residuals\", \"outliers\", \"vif\"))"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#table",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#table",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Table",
+    "text": "Table\n\n# Compare multiple models side by side\nmodelsummary(\n  list(\"Intercept Only\" = fit1,\n       \"Sex\" = fit2, \n       \"BMI\" = fit3, \n       \"Sex + BMI\" = fit4, \n       \"Interaction\" = fit5),\n  exponentiate = TRUE,\n  stars = TRUE\n)\n\n\n\n    \n\n    \n    \n      \n        \n        \n              \n                 \n                Intercept Only\n                Sex\n                BMI\n                Sex + BMI\n                Interaction\n              \n        \n        + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001\n        \n                \n                  (Intercept)\n                  0.809*\n                  0.471***\n                  0.077***\n                  0.014***\n                  0.010***\n                \n                \n                  \n                  (0.077)\n                  (0.066)\n                  (0.024)\n                  (0.006)\n                  (0.007)\n                \n                \n                  female\n                  \n                  2.980***\n                  \n                  6.428***\n                  11.148**\n                \n                \n                  \n                  \n                  (0.589)\n                  \n                  (1.665)\n                  (9.352)\n                \n                \n                  bmipct\n                  \n                  \n                  1.036***\n                  1.048***\n                  1.053***\n                \n                \n                  \n                  \n                  \n                  (0.004)\n                  (0.005)\n                  (0.009)\n                \n                \n                  female × bmipct\n                  \n                  \n                  \n                  \n                  0.992\n                \n                \n                  \n                  \n                  \n                  \n                  \n                  (0.011)\n                \n                \n                  Num.Obs.\n                  445\n                  445\n                  445\n                  445\n                  445\n                \n                \n                  AIC\n                  613.9\n                  584.3\n                  529.1\n                  469.0\n                  470.5\n                \n                \n                  BIC\n                  618.0\n                  592.5\n                  537.3\n                  481.3\n                  486.9\n                \n                \n                  Log.Lik.\n                  -305.964\n                  -290.158\n                  -262.557\n                  -231.493\n                  -231.244\n                \n                \n                  F\n                  \n                  30.475\n                  68.890\n                  45.842\n                  30.007\n                \n                \n                  RMSE\n                  0.50\n                  0.48\n                  0.45\n                  0.42\n                  0.42"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#reporting",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#reporting",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Reporting",
+    "text": "Reporting\n\n\n\n\n\n\nTip\n\n\nWe fitted a logistic model with a logit link (estimated using ML) with sex and bmipct predicting desire to lose weight (formula: lose.wt.01 ~ 1 + female+ bmipct). The model’s explanatory power is substantial (Tjur’s \\(R^2\\) =0.30). The probability of females wanting to lose weight was 33% higher, b= 1.86, 95% CI [1.37, 2.38], p &lt; .001; OR = 2.98, 95% CI [3.93, 10.9]. An increase in BMI was associated with an increased probability of wanting to lose weight, b = 0.05, 95% CI [0.04, 0.06], p &lt; .001, OR = 1.05, 95% CI [1.04, 1.06]. Looking at the average marginal effect, 1 unit increases in BMI was associated with a 80% increase in desire to lose weight."
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#reporting-checklist",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#reporting-checklist",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Reporting Checklist",
+    "text": "Reporting Checklist\n\nReport the link function and estimation method (e.g., logit link, ML estimation)\nReport log-odds coefficients and odds ratios with 95% CIs\nReport a measure of model fit (McFadden \\(R^2\\), Tjur \\(R^2\\), etc.)\nConsider reporting marginal effects for practical significance\nInclude sample size, number of events, and events-per-variable ratio\nMention any convergence issues or model diagnostics"
+  },
+  {
+    "objectID": "posts/Logistic Regression/logistic_Feb11_clean.html#common-mistakes",
+    "href": "posts/Logistic Regression/logistic_Feb11_clean.html#common-mistakes",
+    "title": "Generalized Linear Madness: Binary Outcome Models/Logistic Regression",
+    "section": "Common Mistakes",
+    "text": "Common Mistakes\n\nInterpreting log-odds coefficients as if they were probabilities\nForgetting that effects are non-linear on the probability scale\n\nA 1-unit change in X does not have a constant effect on P(Y=1)\n\nUsing \\(R^2\\) from linear regression — use pseudo \\(R^2\\) measures instead\nNot checking for multicollinearity (VIF still applies!)"
   }
 ]
