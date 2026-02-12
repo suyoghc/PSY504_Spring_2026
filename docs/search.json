@@ -1570,9 +1570,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "PSY504_Spring_2026 Lecture Slides",
+    "title": "Advanced Statistics for Psychology",
     "section": "",
-    "text": "GLM & Logistic Regression (updated)\n\n\nPrinceton University\n\n\n\n\n\n\n\n\nFeb 11, 2025\n\n\nSuyog Chandramouli\n\n\n\n\n\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\nPrinceton University\n\n\n\n\n\n\n\n\nFeb 9, 2025\n\n\nSuyog Chandramouli\n\n\n\n\n\n\n\n\n\n\n\n\nMultiple Regression\n\n\n(modified from Jason Geller)\n\n\n\n\n\n\n\n\nFeb 4, 2025\n\n\nSuyog Chandramouli\n\n\n\n\n\nNo matching items"
+    "text": "Spring 2026 · Mon / Wed 10:00 AM · NEU A30 · Suyog Chandramouli"
   },
   {
     "objectID": "about.html",
@@ -1580,5 +1580,26 @@
     "title": "About",
     "section": "",
     "text": "About this blog"
+  },
+  {
+    "objectID": "misc/index.html",
+    "href": "misc/index.html",
+    "title": "Advanced Statistics for Psychology",
+    "section": "",
+    "text": "Spring 2026 · Mon / Wed 10:00 AM · NEU A30 · Suyog Chandramouli"
+  },
+  {
+    "objectID": "misc/index.html#lecture-slides",
+    "href": "misc/index.html#lecture-slides",
+    "title": "Advanced Statistics for Psychology",
+    "section": "Lecture Slides",
+    "text": "Lecture Slides\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html#lecture-slides",
+    "href": "index.html#lecture-slides",
+    "title": "Advanced Statistics for Psychology",
+    "section": "Lecture Slides",
+    "text": "Lecture Slides\n\n\n\n\n\nGLM & Logistic Regression (updated)\n\n\n\n\n\n\n\n\nFeb 11\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\n\n\n\n\n\n\nFeb 09\n\n\n\n\n\n\n\nMultiple Regression\n\n\n\n\n\n\n\n\nFeb 04\n\n\n\n\n\nNo matching items"
   }
 ]

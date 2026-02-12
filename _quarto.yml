@@ -1,24 +1,36 @@
 project:
   type: website
   output-dir: docs
-  
+
 website:
-  description: "A blog built with Quarto"
-  site-url: https://your-website-url.example.com # you must change this appropriately for RSS feeds to work properly
-  title: "PSY504_Spring_2026"
+  title: "PSY 504, Spring 2026"
   navbar:
-    right:
-      - about.qmd
-      - icon: github
-        href: https://github.com/
-      - icon: twitter
-        href: https://twitter.com
+    background: light
+    logo-alt: "PSY 504"
+    left:
+      - text: "Lectures"
+        href: index.qmd
+      - text: "Syllabus"
+        href: https://docs.google.com/document/d/1mXjcFA67TXVNmGNlOfn11-vb5wBbP5yJ8LPKqMjoweM/edit
+        target: _blank
+      - text: "Schedule"
+        href: https://docs.google.com/document/d/1fZhqADwjg8B8YvxYaPCOVUBOh3ounTP8L2g5p31fp18/edit
+        target: _blank
+      - text: "About"
+        href: about.qmd
+
 format:
   html:
+    include-in-header:
+      text: |
+        <meta name="robots" content="noindex, nofollow">
     theme:
       - cosmo
-      - brand
+      - custom.scss
     css: styles.css
+    toc: false
+
+resources:
+  - robots.txt
 
 editor: visual
-

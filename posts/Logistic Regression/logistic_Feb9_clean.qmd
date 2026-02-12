@@ -4,6 +4,7 @@ subtitle: "Princeton University"
 author: "Suyog Chandramouli"
 date: '2025-02-09'
 footer: "PSY 504: Advanced Statistics"
+categories: [GLM]
 format: 
   revealjs:
     theme: solarized

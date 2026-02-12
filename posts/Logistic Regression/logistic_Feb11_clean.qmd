@@ -3,6 +3,7 @@ title: "GLM & Logistic Regression (updated) "
 subtitle: "Princeton University"
 author: "Suyog Chandramouli"
 date: '2025-02-11'
+categories: [GLM]
 footer: "PSY 504: Advanced Statistics"
 format: 
   revealjs:

@@ -2,6 +2,7 @@
 title: "Multiple Regression"
 subtitle: "<small>(modified from Jason Geller)</small>"
 author: "Suyog Chandramouli "
+categories: [Linear Models]
 date: '2025-02-04'
 institute: 'PSY504, Advanced Statistics in Psychology<br>Princeton University'
 format: 
