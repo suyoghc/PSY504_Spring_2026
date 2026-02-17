@@ -21,7 +21,16 @@ Spring 2026 · Mon / Wed 10:00 AM · NEU A30 · Suyog Chandramouli
 [📄 Syllabus](https://docs.google.com/document/d/1mXjcFA67TXVNmGNlOfn11-vb5wBbP5yJ8LPKqMjoweM/edit){.ql-chip target="_blank"} [📅 Schedule](https://docs.google.com/document/d/1fZhqADwjg8B8YvxYaPCOVUBOh3ounTP8L2g5p31fp18/edit){.ql-chip target="_blank"} [📁 Google Drive](https://drive.google.com){.ql-chip target="_blank"} [💬 Anonymous Feedback](https://forms.gle/YOUR_FORM_ID){.ql-chip target="_blank"}
 :::
 
+
+## Student Presentations
+
+- [Sebastian - Intro to Bayes (Feb 16)](https://drive.google.com/file/d/1nuKOfsitg4etXtqP1fb-EbEFlFq59RE3/view?usp=drive_link){target="_blank"}
+
+<br>
+<br>
+
 ## Lecture Slides
 
 ::: {#lecture-listing}
 :::
+

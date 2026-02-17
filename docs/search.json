@@ -3050,5 +3050,12 @@
     "title": "Introduction to Bayesian Inference",
     "section": "Inference : Data (column) is fixed",
     "text": "Inference : Data (column) is fixed\nTry to make a statement:\n\nForward: “There’s a 35% chance of getting 3 heads.” ✓\n\n\nBackward: “There’s a **___% chance** that \\(\\theta\\) is 0.6.” ?\n\n\nWe can’t fill in the blank yet.\nThe scores don’t add to 1.\n\n\nWe are looking for \\(p(\\theta \\mid \\text{data})\\)."
+  },
+  {
+    "objectID": "index.html#student-presentations",
+    "href": "index.html#student-presentations",
+    "title": "PSY 504 Advanced Statistics for Psychology",
+    "section": "Student Presentations",
+    "text": "Student Presentations\n\nSebastian - Intro to Bayes (Feb 16)"
   }
 ]
