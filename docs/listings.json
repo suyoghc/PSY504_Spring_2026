@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Bayes Intro/Bayes_Intro_2026_Lecture.html",
       "/posts/Logistic Regression/logistic_Feb11_clean.html",
       "/posts/Logistic Regression/logistic_Feb9_clean.html",
       "/posts/Multiple Regression/Mul_Reg.html"

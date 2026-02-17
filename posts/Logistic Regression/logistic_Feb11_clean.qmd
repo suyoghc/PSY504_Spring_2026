@@ -39,7 +39,7 @@ execute:
 ```{r}
 library(easystats)
 library(MASS)
-library(arm) # residual plot
+#library(arm) # residual plot
 library(effectsize) 
 library(tidyverse)
 library(equatiomatic)
@@ -300,7 +300,7 @@ $$\textrm{Odds} = \frac{\# \textrm{successes}}{\# \textrm{failures}}=
 \frac{\# \textrm{successes}/n}{\# \textrm{failures}/n}=
 \frac{p}{1-p}$$
 
-## **L**ogit Link
+## Logit Link
 
 ::::: columns
 ::: {.column width="50%"}
@@ -560,8 +560,6 @@ knitr::include_graphics("images/mle-many.png")
 -   OLS minimizes sum of squared residuals
 -   MLE finds parameter values that make observed data most probable
 -   No closed-form solution — uses iterative algorithms (Newton-Raphson / IRLS)
-
-## \_\_
 
 #Under the Hood New slides to address confusions from Monday \## Under the Hood {.center}
 
@@ -868,7 +866,7 @@ The model builds its line in log-odds space. Then it **comes to your data** to c
 
 The model's **predicted probability** $\hat{p}$ can be expressed $\hat{p}$ on three scales:
 
-:::::::::::::::::::: columns
+:::::: columns
 ::: {.column width="33%"}
 ### Probability
 
@@ -894,6 +892,7 @@ The model's **predicted probability** $\hat{p}$ can be expressed $\hat{p}$ on th
 -   Model is happy because now there's a **Linear** relationship
 -   And you're happy because you can map it to an interpetable parameter
 :::
+::::::
 
 ## What do x and y mean in the S-curve? {.smaller}
 
@@ -1268,7 +1267,7 @@ ggplot() +
 . . .
 
 | Line | Model | Equation | Bounded? |
-|------------------|------------------|-------------------|-------------------|
+|------------------|------------------|------------------|------------------|
 | **Red dashed** | OLS | $\hat{p} = b_0 + b_1 x$ | ✗ Escapes \[0, 1\] |
 | **Purple solid** | Logistic | $\hat{p} = \text{plogis}(\beta_0 + \beta_1 x)$ | ✓ Always in \[0, 1\] |
 
@@ -1903,7 +1902,8 @@ r2_mcfadden(fit4)
 ::: {.column width="50%"}
 ```{r}
 #performance::binned_residuals()
-binnedplot(fitted(fit4), residuals(fit4, type="response"))
+#binnedplot(fitted(fit4), residuals(fit4, type="response"))
+binned_residuals(fit4) %>% plot()
 ```
 :::
 :::::
@@ -2053,5 +2053,3 @@ We fitted a logistic model with a logit link (estimated using ML) with sex and b
 
 -   Not checking for multicollinearity (VIF still applies!)
 
-## 
-::::::::::::::::::::

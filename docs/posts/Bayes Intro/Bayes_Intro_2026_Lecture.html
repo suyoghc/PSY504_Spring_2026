@@ -1290,34 +1290,41 @@ Suyog Chandramouli
 <ul>
 <li>QMD available in: <a href="https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts" class="uri">https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts</a></li>
 </ul>
-<p><br> <br></p>
+</section>
+<section id="today" class="title-slide slide level1 center">
+<h1>Today</h1>
 <ul>
 <li><p>A gentle introduction to Bayesian inference</p></li>
 <li><p>Fit, interpret, and report a Bayesian regression with <code>brms</code></p></li>
 </ul>
 </section>
+
 <section>
 <section id="models-and-data-generating-processes" class="title-slide slide level1 center">
 <h1>Models and Data Generating Processes</h1>
 
 </section>
-<section id="what-is-a-data-generating-process" class="slide level2">
-<h2>What is a data generating process?</h2>
+<section id="what-is-a-data-generating-process-dgp" class="slide level2">
+<h2>What is a data generating process (DGP)?</h2>
 <p>The process that produced your data.</p>
 <div class="fragment">
-<p>Last semester — every simulation you wrote was one.</p>
-<p>Pick a distribution. Pick parameters. Generate data.</p>
+<p>Last semester: every simulation you wrote was a DGP.</p>
+<p>Steps:</p>
+<ul>
+<li><p>Pick a distribution.</p></li>
+<li><p>Pick parameters.</p></li>
+<li><p>Generate data.</p></li>
+</ul>
 </div>
 <div class="fragment">
-<p>Last week — logistic regression was one.</p>
-<p>Lead weight → probability → coin flips.</p>
+<p>Last week: logistic regression was a DGP</p>
 </div>
 </section>
 <section id="a-model-class-is-a-family-of-dgps" class="slide level2">
 <h2>A model (class) is a <em>family</em> of DGPs</h2>
 <p>A <strong>model</strong> = a structure with free parameters.</p>
 <div class="fragment">
-<p>Each choice of parameters → a different member.</p>
+<p>Each choice of parameters → a different member of the family.</p>
 </div>
 <div class="fragment">
 <p><span class="math display">\[Y_i \sim \text{Normal}(\mu_i, \sigma), \quad \mu_i = \beta_0 + \beta_1 X_i\]</span></p>
@@ -1327,9 +1334,6 @@ Suyog Chandramouli
 <li><span class="math inline">\(\beta_0 = 50, \beta_1 = 0.3, \sigma = 10\)</span> → one member</li>
 <li><span class="math inline">\(\beta_0 = 40, \beta_1 = 0.8, \sigma = 5\)</span> → another member</li>
 </ul>
-</div>
-<div class="fragment">
-<p>Same family. Different members.</p>
 </div>
 </section>
 <section id="two-families-you-already-know" class="slide level2">
@@ -1353,7 +1357,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 \]</span></p>
 </div></div>
 <div class="fragment">
-<p>Same structure:</p>
+<p>Model structure:</p>
 <ul>
 <li><p>you specify parameters</p></li>
 <li><p>at each X, the parameters produce a different distribution</p></li>
@@ -1370,25 +1374,24 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </div>
 <div class="fragment">
 <ul>
-<li>Parameters are <strong>known</strong> (you chose them)</li>
-<li>Data <strong>varies</strong> (different every time you simulate)</li>
-<li>This is simulation — <code>r</code> functions: <code>rnorm()</code>, <code>rbinom()</code></li>
+<li>Parameters are <strong>known</strong>/ fixed by you</li>
+<li>Data <strong>varies</strong> (different in each simulation)</li>
+<li><code>r</code> functions: <code>rnorm()</code>, <code>rbinom()</code></li>
 </ul>
 </div>
 </section>
 <section id="what-means" class="slide level2">
 <h2>What ~ means</h2>
-<p><span class="math inline">\(Y_i \sim \text{Binomial}(n, \theta)\)</span> means:</p>
+<p><span class="math inline">\(Y_i \sim \text{Binomial}(n, \theta)\)</span> means you are sampling n points from:</p>
 <p><span class="math display">\[p(Y = k \mid \theta) = \binom{n}{k}\theta^k(1-\theta)^{n-k}\]</span></p>
 <div class="fragment">
-<p>“If <span class="math inline">\(\theta = 0.6\)</span> — what data can come out, and how often?”</p>
+<p>Now you can ask questions like “If <span class="math inline">\(\theta = 0.6\)</span> — what data/outcomes are possible, and how likely are they?”</p>
 </div>
 <div class="fragment">
-<p>In R,</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> <span class="fl">0.6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="fragment">
-<p>These sum to 1. Every outcome covered. A proper distribution.</p>
+<p>These sum to 1. . . .</p>
+<p>The probability of each outcome is covered.</p>
+<p>You get a proper probability distribution.</p>
 </div>
 <div class="fragment">
 <p>This is <span class="math inline">\(p(\text{data} \mid \theta)\)</span><strong>.</strong></p>
@@ -1396,17 +1399,18 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </section>
 <section id="ptextdata-mid-theta-for-the-coin-family" class="slide level2">
 <h2><span class="math inline">\(p(\text{data} \mid \theta)\)</span> for the coin family</h2>
-<p>5 tosses. Each row = one family member.</p>
+<p>Consider 5 tosses.</p>
+<p>Each row is DGP/ a member of the model family.</p>
 <table class="caption-top">
 <colgroup>
-<col style="width: 19%">
-<col style="width: 10%">
-<col style="width: 9%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 15%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1475,26 +1479,26 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </table>
 <div class="fragment">
 <p>Every row sums to 1.</p>
-<p>Pick a family member → all outcomes covered → proper distribution.</p>
+<p>Each row is a probability distribution.</p>
 </div>
 </section>
 <section id="the-true-dgp-is-unknown" class="slide level2">
 <h2>The true DGP is unknown</h2>
-<p>You observed 3 heads out of 5.</p>
+<p>Say, you observed 3 heads out of 5 tosses.</p>
 <div class="fragment">
-<p>Which <span class="math inline">\(\theta\)</span> produced the data?</p>
+<p>Can you answer, “Which <span class="math inline">\(\theta\)</span> produced the data?”</p>
 </div>
 <div class="fragment">
 <table class="caption-top">
 <colgroup>
-<col style="width: 19%">
-<col style="width: 10%">
-<col style="width: 9%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 15%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1563,25 +1567,26 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </table>
 </div>
 <div class="fragment">
-<p>You don’t know. You never get to see the true <span class="math inline">\(\theta\)</span>.</p>
+<p>In reality, you don’t know. But you’re making an educated guess.</p>
 </div>
 <div class="fragment">
-<p><strong>Inference</strong> = using the data to figure out which row produced it.</p>
+<p><strong>Inference</strong> = using the data to figure out which model parameters (row) likely produced it.</p>
 </div>
 </section>
 <section id="inference-runs-backward-data-parameters" class="slide level2">
 <h2>Inference runs backward (data → parameters)</h2>
-<p>You observed 3 heads out of 5.</p>
-<p>Which member of the family produced them?</p>
+<p>You observed 3 heads out of 5 tosses.</p>
+<p>Which model parameterization produced these observations?</p>
 <div class="fragment">
-<p>Data are fixed. Parameters are unknown.</p>
+<p>Here, data are fixed.</p>
+<p>But, parameters are unknown.</p>
 </div>
 <div class="fragment">
-<p>Two strategies:</p>
+<p>Two strategies for guessing:</p>
 </div>
 <div class="fragment">
 <ul>
-<li>MLE — find the best-scoring member</li>
+<li>MLE — find the best-scoring row in the table</li>
 </ul>
 </div>
 <div class="fragment">
@@ -1592,9 +1597,10 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </section>
 <section id="how-do-we-score-the-members" class="slide level2">
 <h2>How do we score the members?</h2>
-<p>Fix the data. Ask each member: how well do you explain this?</p>
+<p>Fix the data.</p>
+<p>In each row, ask: how often does one expect the outcome?</p>
 <div class="fragment">
-<p>You got 3 heads out of 5.</p>
+<p>We observe 3 heads out of 5.</p>
 </div>
 <div class="fragment">
 <p><span class="math inline">\(\theta = 0.6\)</span> → score: 0.346</p>
@@ -1602,26 +1608,11 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <p><span class="math inline">\(\theta = 0.2\)</span> → score: 0.051</p>
 </div>
 <div class="fragment">
-<p>Higher score = that member explains the data better.</p>
+<p>Higher score =&gt; that row explains the data better.</p>
 </div>
 </section>
-<section id="how-do-we-score-the-members-1" class="slide level2">
-<h2>How do we score the members?</h2>
-<p>Fix the data. Ask each member: how well do you explain this?</p>
-<div class="fragment">
-<p>You got 3 heads out of 5.</p>
-</div>
-<div class="fragment">
-<p><span class="math inline">\(\theta = 0.6\)</span> → score: 0.346</p>
-<p><span class="math inline">\(\theta = 0.5\)</span> → score: 0.312</p>
-<p><span class="math inline">\(\theta = 0.2\)</span> → score: 0.051</p>
-</div>
-<div class="fragment">
-<p>Higher score = that member explains the data better.</p>
-</div>
-</section>
-<section id="same-table-read-it-the-other-way" class="slide level2">
-<h2>Same table — read it the other way</h2>
+<section id="inference-data-column-is-fixed" class="slide level2">
+<h2>Inference : Data (column) is fixed</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 20%">
@@ -1701,17 +1692,19 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </tbody>
 </table>
 <div class="fragment">
-<p>Data fixed at 3 heads. Read <strong>down</strong> the column.</p>
+<p>Data fixed at 3 heads.</p>
+<p>Read <strong>down</strong> the column.</p>
 </div>
 <div class="fragment">
-<p>Peak at <span class="math inline">\(\theta = 0.6\)</span>. That’s what MLE does — pick the peak.</p>
+<p>Peak at <span class="math inline">\(\theta = 0.6\)</span>. Maximum Likelihood Estimation (MLE) picks the max.</p>
 </div>
 <div class="fragment">
-<p>Sum = 1.144. <strong>Not 1.</strong> This column is not a distribution.</p>
-<p>True bias: <span class="math inline">\(\theta = 0.5\)</span>. You flip 5 times. You get 4 heads.</p>
+<p>Sum = 1.144. The column is not a distribution!</p>
 </div>
-<div class="fragment">
-<p>Read down the “4 heads” column:</p>
+</section>
+<section id="inference-data-column-is-fixed-1" class="slide level2">
+<h2>Inference : Data (column) is fixed</h2>
+<p>You might also have observed 4 heads in 5 tosses</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -1746,57 +1739,29 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </tr>
 </tbody>
 </table>
-</div>
 <div class="fragment">
 <p>MLE picks <span class="math inline">\(\theta = 0.8\)</span>. The true value is 0.5.</p>
 </div>
 <div class="fragment">
-<p>With 5 flips — the peak is noisy. The best-scoring member isn’t necessarily the true one.</p>
+<p>With just 5 flips MLE is noisy.</p>
+<p>The best-scoring <span class="math inline">\(\theta\)</span> isn’t necessarily the true <span class="math inline">\(\theta\)</span>.</p>
 </div>
 </section>
-<section id="but-its-the-same-tablenumber" class="slide level2">
-<h2>“But it’s the same table/number!”</h2>
-<p><code>dbinom(3, 5, 0.6)</code> = 0.346 in both tables. So why does it matter?</p>
-<div class="fragment">
+<section id="inference-data-column-is-fixed-2" class="slide level2">
+<h2>Inference : Data (column) is fixed</h2>
 <p>Try to make a statement:</p>
-</div>
 <div class="fragment">
 <p>Forward: “There’s a <strong>35% chance</strong> of getting 3 heads.” ✓</p>
 </div>
 <div class="fragment">
-<p>Backward: “There’s a **___% chance** that <span class="math inline">\(\theta\)</span> is 0.6.”</p>
+<p>Backward: “There’s a **___% chance** that <span class="math inline">\(\theta\)</span> is 0.6.” ?</p>
 </div>
 <div class="fragment">
-<p>You can’t fill in the blank.</p>
-<p>The scores don’t add to 1. 0.346 is not a percentage here.</p>
+<p>We can’t fill in the blank yet.</p>
+<p>The scores don’t add to 1.</p>
 </div>
 <div class="fragment">
-<p>That blank is <span class="math inline">\(p(\theta \mid \text{data})\)</span>. We don’t have it yet.</p>
-</div>
-</section>
-<section id="probability-vs.-likelihood" class="slide level2">
-<h2>Probability vs.&nbsp;likelihood</h2>
-<p>Same formula: <span class="math inline">\(p(\text{data} \mid \theta)\)</span>. Different direction.</p>
-<div class="fragment">
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>Read across a row</strong></p>
-<ul>
-<li><span class="math inline">\(\theta\)</span> fixed, data varies</li>
-<li>Sums to 1 ✓</li>
-<li>Probability</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Read down a column</strong></p>
-<ul>
-<li>Data fixed, <span class="math inline">\(\theta\)</span> varies</li>
-<li>Does <strong>not</strong> sum to 1 ✗</li>
-<li>Likelihood <span class="math inline">\(L(\theta)\)</span></li>
-</ul>
-</div></div>
-</div>
-<div class="fragment">
-<p>Rows = distribution. Columns = scoring function.</p>
+<p>We are looking for <span class="math inline">\(p(\theta \mid \text{data})\)</span>.</p>
 </div>
 </section>
 <section id="the-likelihood-is-not-enough" class="slide level2">
@@ -1808,9 +1773,6 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <div class="fragment">
 <p>But it can’t fill in the blank: “___% chance <span class="math inline">\(\theta\)</span> is between 0.4 and 0.8.”</p>
 </div>
-<div class="fragment">
-<p>We need one more ingredient.</p>
-</div>
 </section>
 <section id="you-know-things-before-seeing-data" class="slide level2">
 <h2>You know things before seeing data</h2>
@@ -1821,10 +1783,11 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <p>Most coins are roughly fair. <span class="math inline">\(\theta\)</span> is probably near 0.5.</p>
 </div>
 <div class="fragment">
-<p><span class="math inline">\(\theta = 0.0\)</span> or <span class="math inline">\(\theta = 1.0\)</span>? A two-headed or two-tailed coin? Possible — but unlikely.</p>
+<p><span class="math inline">\(\theta = 0.0\)</span> or <span class="math inline">\(\theta = 1.0\)</span>? Possible — but highly unlikely.</p>
 </div>
 <div class="fragment">
-<p>The likelihood doesn’t have this knowledge. It just scores.</p>
+<p>The likelihood doesn’t have this knowledge.</p>
+<p>It just scores based on <span class="math inline">\(P(D|\theta_i)\)</span></p>
 </div>
 </section>
 <section id="a-prior-distribution" class="slide level2">
@@ -2054,21 +2017,19 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <h2>Why can’t we just compute it?</h2>
 <p>In principle — just multiply prior × likelihood at every <span class="math inline">\(\theta\)</span>.</p>
 <div class="fragment">
-<p>For the coin with 5 values of <span class="math inline">\(\theta\)</span>? Easy. Do it by hand.</p>
-</div>
-<div class="fragment">
-<p>But real models have continuous parameters — every <span class="math inline">\(\theta\)</span> between 0 and 1.</p>
+<p>But most models in practice have continuous parameters — every <span class="math inline">\(\theta\)</span> between 0 and 1.</p>
 <p><span class="math display">\[p(\theta \mid \text{data}) = \frac{p(\theta) \times L(\theta)}{\int p(\theta) \times L(\theta) \, d\theta}\]</span></p>
 </div>
 <div class="fragment">
-<p>That denominator — integrate over <strong>every possible</strong> <span class="math inline">\(\theta\)</span>.</p>
+<p>The denominator integrates over <strong>every possible</strong> <span class="math inline">\(\theta\)</span>.</p>
 </div>
 <div class="fragment">
-<p>1 parameter → fine. 3 → hard. 20 → forget it.</p>
+<p>1 parameter → easy.</p>
+<p>3 → hard.</p>
+<p>20 → forget it.</p>
 </div>
 <div class="fragment">
-<p>Solution: don’t compute it. <strong>Sample from it.</strong></p>
-<p>That’s MCMC. That’s <code>brms</code>.</p>
+<p>Solution: don’t compute it. <strong>Sample from it.</strong> . . . Probabilistic programming languages let you do this more easily.</p>
 </div>
 </section>
 <section id="what-does-sample-from-it-mean" class="slide level2">
@@ -2088,10 +2049,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 </div>
 <div class="fragment">
 <p>The histogram of those draws <strong>is</strong> the posterior.</p>
-<p>No formula needed. Just draws.</p>
-</div>
-<div class="fragment">
-<p>That’s what MCMC does. That’s what <code>brms</code> gives you.</p>
+<p>We can compute probabilities now without the formula/ without knowing the likelihood function!</p>
 </div>
 </section>
 <section id="what-bayes-gives-you-that-mle-doesnt" class="slide level2">
@@ -2642,21 +2600,16 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <p><strong>Bayesian data analysis</strong></p>
 <p>(what we’re doing)</p>
 <p>A tool for <strong>analyzing data</strong>.</p>
-<p>You, the researcher, use Bayes’ rule to estimate parameters from your experiment.</p>
+<p>Bayes’ rule used estimate parameters from your experiment.</p>
 <p>The model describes your <strong>data</strong>.</p>
 </div><div class="column" style="width:50%;">
 <p><strong>Bayesian models of cognition</strong></p>
 <p>(Griffiths, Tenenbaum, etc.)</p>
 <p>A theory of <strong>how people think</strong>.</p>
 <p>The claim: human minds use something like Bayes’ rule to learn and make decisions.</p>
-<p>The model describes the <strong>mind</strong>.</p>
+<p>The model describes cognition.</p>
 </div></div>
-<div class="fragment">
-<p>Similar math. Completely different claim.</p>
-</div>
-<div class="fragment">
-<p>You can use Bayesian data analysis without believing the brain is Bayesian.</p>
-</div>
+<p>You can use Bayesian data analysis without committing to the Bayesian Brian hypothesis!</p>
 </section>
 <section id="bayesian-models-as-psychological-theory" class="slide level2">
 <h2>Bayesian models as psychological theory</h2>
@@ -2680,11 +2633,6 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <ul>
 <li><strong>Motor control:</strong> You catch a ball by combining visual uncertainty with learned priors (Körding &amp; Wolpert, 2004)</li>
 </ul>
-</div>
-<div class="fragment">
-<p>These are <strong>theories about cognition</strong> — testable, debatable, sometimes wrong.</p>
-<p>Our course: Bayes as a <strong>screwdriver</strong>, not a theory of the hand.</p>
-<p>##~~</p>
 </div>
 </section></section>
 <section>
@@ -2732,11 +2680,11 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <section id="avgview-plot" class="slide level2">
 <h2><code>avgView</code> plot</h2>
 
-<img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:70.0%" class="r-stretch"></section>
+<img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-14-1.png" style="width:70.0%" class="r-stretch"></section>
 <section id="sync-plot" class="slide level2">
 <h2><code>sync</code> plot</h2>
 
-<img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-15-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:70.0%"></section>
+<img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-15-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:70.0%"></section>
 <section id="simple-regression" class="slide level2">
 <h2>Simple regression</h2>
 <div class="cell">
@@ -2876,7 +2824,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <span id="cb9-5"><a></a>           <span class="at">facet_args =</span> <span class="fu">list</span>(<span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">strip.position =</span> <span class="st">"left"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-18-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:40.0%"></section>
+<img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-18-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:40.0%"></section>
 <section id="mcmc-diagnostics-1" class="slide level2">
 <h2>MCMC Diagnostics</h2>
 <ul>
@@ -2905,20 +2853,20 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <tr class="odd">
 <td style="text-align: left;">b_avgView</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">9623.102</td>
+<td style="text-align: right;">8391.196</td>
 <td style="text-align: right;">0.002</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">b_Intercept</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">9135.265</td>
-<td style="text-align: right;">0.098</td>
+<td style="text-align: right;">8091.311</td>
+<td style="text-align: right;">0.105</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">b_sync_cont</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">9173.967</td>
-<td style="text-align: right;">0.084</td>
+<td style="text-align: right;">8429.292</td>
+<td style="text-align: right;">0.088</td>
 </tr>
 </tbody>
 </table>
@@ -2953,20 +2901,20 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <tr class="odd">
 <td style="text-align: left;">b_avgView</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">9623.102</td>
+<td style="text-align: right;">8391.196</td>
 <td style="text-align: right;">0.002</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">b_Intercept</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">9135.265</td>
-<td style="text-align: right;">0.098</td>
+<td style="text-align: right;">8091.311</td>
+<td style="text-align: right;">0.105</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">b_sync_cont</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">9173.967</td>
-<td style="text-align: right;">0.084</td>
+<td style="text-align: right;">8429.292</td>
+<td style="text-align: right;">0.088</td>
 </tr>
 </tbody>
 </table>
@@ -3031,7 +2979,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <span id="cb14-7"><a></a><span class="fu">plot</span>(<span class="fu">density</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-23-1.png" width="1152" class="r-stretch"></section>
+<img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-23-1.png" width="1152" class="r-stretch"></section>
 <section id="weakly-informative-priors-1" class="slide level2">
 <h2>Weakly informative priors</h2>
 <ul>
@@ -3050,7 +2998,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <span id="cb15-7"><a></a><span class="fu">plot</span>(<span class="fu">density</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-24-1.png" width="1152" class="r-stretch"></section>
+<img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-24-1.png" width="1152" class="r-stretch"></section>
 <section id="visualize-prior-predictive-distribution" class="slide level2">
 <h2>Visualize prior predictive distribution</h2>
 <ul>
@@ -3095,7 +3043,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-26-1.png" width="1152"></p>
+<p><img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-26-1.png" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -3121,7 +3069,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <span id="cb18-3"><a></a><span class="fu">pp_check</span>(brm_class1, <span class="at">type=</span><span class="st">"stat_grouped"</span>, <span class="at">group=</span><span class="st">"sync_cont"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-27-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"></section>
+<img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-27-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"></section>
 <section id="posterior-distribution-plot-1" class="slide level2">
 <h2>Posterior distribution plot</h2>
 <div class="cell">
@@ -3130,7 +3078,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <span id="cb19-3"><a></a><span class="fu">pp_check</span>(brm_class1,<span class="at">group=</span><span class="st">"avgView"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 </div>
-<img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-28-1.png" width="1152" class="r-stretch"></section>
+<img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-28-1.png" width="1152" class="r-stretch"></section>
 <section id="point-estimate" class="slide level2">
 <h2>Point-estimate</h2>
 <div class="cell">
@@ -3138,16 +3086,16 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <span id="cb20-2"><a></a></span>
 <span id="cb20-3"><a></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<table class="caption-top" style="width:100%;">
+<table class="caption-top">
 <colgroup>
 <col style="width: 13%">
 <col style="width: 13%">
-<col style="width: 11%">
+<col style="width: 12%">
 <col style="width: 5%">
 <col style="width: 13%">
-<col style="width: 11%">
+<col style="width: 12%">
 <col style="width: 10%">
-<col style="width: 10%">
+<col style="width: 9%">
 <col style="width: 9%">
 </colgroup>
 <thead>
@@ -3167,46 +3115,46 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <tr class="odd">
 <td style="text-align: left;">b_Intercept</td>
 <td style="text-align: left;">conditional</td>
-<td style="text-align: right;">56.0072891</td>
+<td style="text-align: right;">56.3103739</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">37.5582822</td>
-<td style="text-align: right;">75.0019031</td>
+<td style="text-align: right;">37.4655778</td>
+<td style="text-align: right;">74.7421003</td>
 <td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9998436</td>
-<td style="text-align: right;">9135.265</td>
+<td style="text-align: right;">1.000229</td>
+<td style="text-align: right;">8091.311</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">b_avgView</td>
 <td style="text-align: left;">conditional</td>
-<td style="text-align: right;">0.4619967</td>
+<td style="text-align: right;">0.4598995</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">0.1500022</td>
-<td style="text-align: right;">0.7667555</td>
-<td style="text-align: right;">0.9974167</td>
-<td style="text-align: right;">0.9999134</td>
-<td style="text-align: right;">9623.102</td>
+<td style="text-align: right;">0.1518022</td>
+<td style="text-align: right;">0.7708005</td>
+<td style="text-align: right;">0.9975833</td>
+<td style="text-align: right;">1.000014</td>
+<td style="text-align: right;">8391.196</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">b_sync_cont</td>
 <td style="text-align: left;">conditional</td>
-<td style="text-align: right;">0.4003846</td>
+<td style="text-align: right;">0.3311553</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">-15.8149115</td>
-<td style="text-align: right;">16.2378535</td>
-<td style="text-align: right;">0.5195000</td>
-<td style="text-align: right;">0.9998680</td>
-<td style="text-align: right;">9173.967</td>
+<td style="text-align: right;">-15.6759460</td>
+<td style="text-align: right;">16.1269756</td>
+<td style="text-align: right;">0.5179167</td>
+<td style="text-align: right;">1.000419</td>
+<td style="text-align: right;">8429.292</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">sigma</td>
 <td style="text-align: left;">sigma</td>
-<td style="text-align: right;">15.1995056</td>
+<td style="text-align: right;">15.2288556</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">12.0450342</td>
-<td style="text-align: right;">19.8649576</td>
+<td style="text-align: right;">12.1180817</td>
+<td style="text-align: right;">20.0271727</td>
 <td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9999695</td>
-<td style="text-align: right;">9348.400</td>
+<td style="text-align: right;">1.000364</td>
+<td style="text-align: right;">8646.667</td>
 </tr>
 </tbody>
 </table>
@@ -3273,7 +3221,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-35-1.png" width="1152"></p>
+<p><img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-35-1.png" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -3309,7 +3257,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-36-1.png" width="1152"></p>
+<p><img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-36-1.png" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -3338,7 +3286,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="08-Bayes_2026_Lecture_files/figure-revealjs/unnamed-chunk-37-1.png" width="1152"></p>
+<p><img data-src="Bayes_Intro_2026_Lecture_files/figure-revealjs/unnamed-chunk-37-1.png" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -3379,7 +3327,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <col style="width: 10%">
 <col style="width: 9%">
 <col style="width: 8%">
-<col style="width: 8%">
+<col style="width: 7%">
 <col style="width: 7%">
 </colgroup>
 <thead>
@@ -3403,57 +3351,57 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <td style="text-align: left;">2</td>
 <td style="text-align: left;">b_Intercept</td>
 <td style="text-align: left;">conditional</td>
-<td style="text-align: right;">56.0072891</td>
-<td style="text-align: right;">56.1130432</td>
-<td style="text-align: right;">55.6533850</td>
+<td style="text-align: right;">56.3103739</td>
+<td style="text-align: right;">56.1604602</td>
+<td style="text-align: right;">57.8731843</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">37.5582822</td>
-<td style="text-align: right;">75.0019031</td>
+<td style="text-align: right;">37.4655778</td>
+<td style="text-align: right;">74.7421003</td>
 <td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9998436</td>
-<td style="text-align: right;">9135.265</td>
+<td style="text-align: right;">1.000229</td>
+<td style="text-align: right;">8091.311</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
 <td style="text-align: left;">b_avgView</td>
 <td style="text-align: left;">conditional</td>
-<td style="text-align: right;">0.4619967</td>
-<td style="text-align: right;">0.4604641</td>
-<td style="text-align: right;">0.4637517</td>
+<td style="text-align: right;">0.4598995</td>
+<td style="text-align: right;">0.4606532</td>
+<td style="text-align: right;">0.4605568</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">0.1500022</td>
-<td style="text-align: right;">0.7667555</td>
-<td style="text-align: right;">0.9974167</td>
-<td style="text-align: right;">0.9999134</td>
-<td style="text-align: right;">9623.102</td>
+<td style="text-align: right;">0.1518022</td>
+<td style="text-align: right;">0.7708005</td>
+<td style="text-align: right;">0.9975833</td>
+<td style="text-align: right;">1.000014</td>
+<td style="text-align: right;">8391.196</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">3</td>
 <td style="text-align: left;">b_sync_cont</td>
 <td style="text-align: left;">conditional</td>
-<td style="text-align: right;">0.4003846</td>
-<td style="text-align: right;">0.3861651</td>
-<td style="text-align: right;">0.4936140</td>
+<td style="text-align: right;">0.3311553</td>
+<td style="text-align: right;">0.3057853</td>
+<td style="text-align: right;">0.1150063</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">-15.8149115</td>
-<td style="text-align: right;">16.2378535</td>
-<td style="text-align: right;">0.5195000</td>
-<td style="text-align: right;">0.9998680</td>
-<td style="text-align: right;">9173.967</td>
+<td style="text-align: right;">-15.6759460</td>
+<td style="text-align: right;">16.1269756</td>
+<td style="text-align: right;">0.5179167</td>
+<td style="text-align: right;">1.000419</td>
+<td style="text-align: right;">8429.292</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">4</td>
 <td style="text-align: left;">sigma</td>
 <td style="text-align: left;">sigma</td>
-<td style="text-align: right;">15.1995056</td>
-<td style="text-align: right;">15.3831752</td>
-<td style="text-align: right;">14.7434975</td>
+<td style="text-align: right;">15.2288556</td>
+<td style="text-align: right;">15.4250568</td>
+<td style="text-align: right;">14.6218903</td>
 <td style="text-align: right;">0.95</td>
-<td style="text-align: right;">12.0450342</td>
-<td style="text-align: right;">19.8649576</td>
+<td style="text-align: right;">12.1180817</td>
+<td style="text-align: right;">20.0271727</td>
 <td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9999695</td>
-<td style="text-align: right;">9348.400</td>
+<td style="text-align: right;">1.000364</td>
+<td style="text-align: right;">8646.667</td>
 </tr>
 </tbody>
 </table>
@@ -3488,7 +3436,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a><span class="fu">hdi</span>(posteriors<span class="sc">$</span>b_avgView, <span class="at">ci=</span><span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          [,1]      [,2]
-[1,] 0.1515011 0.7685293</code></pre>
+[1,] 0.1571096 0.7759116</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -3510,7 +3458,7 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a><span class="fu">hdi</span>(posteriors<span class="sc">$</span>b_sync_cont, <span class="at">ci=</span><span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          [,1]    [,2]
-[1,] -15.00873 16.9237</code></pre>
+[1,] -15.68191 16.1268</code></pre>
 </div>
 </div>
 <div class="fragment">
@@ -3558,12 +3506,12 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 <tr class="odd">
 <td style="text-align: left;">sync_cont</td>
 <td style="text-align: left;">+1</td>
-<td style="text-align: right;">0.4003846</td>
-<td style="text-align: right;">-15.81491</td>
-<td style="text-align: right;">16.23785</td>
-<td style="text-align: right;">79.86956</td>
-<td style="text-align: right;">80.23936</td>
-<td style="text-align: right;">79.86956</td>
+<td style="text-align: right;">0.3311553</td>
+<td style="text-align: right;">-15.67595</td>
+<td style="text-align: right;">16.12698</td>
+<td style="text-align: right;">79.94773</td>
+<td style="text-align: right;">80.32768</td>
+<td style="text-align: right;">79.94773</td>
 <td style="text-align: right;">1</td>
 </tr>
 </tbody>
@@ -3610,9 +3558,9 @@ Y_i &amp;\sim \text{Bernoulli}(p_i) \\
 
 Parameter   |       BF
 ----------------------
-(Intercept) | 2.66e+03
-avgView     |     1.12
-sync_cont   |    0.594
+(Intercept) | 4.83e+03
+avgView     |     1.37
+sync_cont   |    0.592
 
 * Evidence Against The Null: 0</code></pre>
 </div>
@@ -3650,7 +3598,7 @@ sync_cont   |    0.594
 <pre><code>Bayes Factors for Model Comparison
 
     Model     BF
-[2] avgView 1.63
+[2] avgView 1.61
 
 * Against Denominator: [1] avgView + sync
 *   Bayes Factor Type: marginal likelihoods (bridgesampling)</code></pre>
@@ -3674,8 +3622,8 @@ sync_cont   |    0.594
 
 Parameter   |       BF
 ----------------------
-(Intercept) | 1.17e+06
-avgView     |     7.82
+(Intercept) | 1.67e+06
+avgView     |     6.76
 
 * Evidence Against The Null: 0</code></pre>
 </div>
