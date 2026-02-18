@@ -1,0 +1,449 @@
+---
+title: "PSY 504 2026: Bayes Lab 1 — From Tables to MCMC"
+format:
+  html:
+    code-fold: true
+editor: visual
+---
+
+Consider the following setting: A factory produces coins, each with a different bias $\theta_i$. You don't know which coin you received. You have prior beliefs about which coins the factory is likely to produce — $p(\theta_i)$. You flip the coin $N$ times, observe $Y$ heads, and use that data to figure out which coin you probably got — $p(\theta_i \mid \text{data})$.
+
+In Monday's lecture, you saw a setting like this play out with a table of probabilities:
+
+-   each row was a different coin (a different $\theta_i$), showing what it could produce — $p(\text{data} \mid \theta_i)$ — with one column for each possible outcome (0 heads, 1 head, … $N$ heads)
+
+-   you then observed $Y$ heads out of $N$ tosses
+
+-   you fixed the data (the $\text{data} = Y$ column) and scored each coin on how well it explained your observation — that's the likelihood, $p(\text{data} = Y \mid \theta_i)$
+
+-   then you multiplied each cell of this column by your prior on $\theta_i$, and divided by the column sum:
+
+$$\frac{p(\text{data} = Y \mid \theta_i) \times p(\theta_i)}{\sum_i p(\text{data} = Y \mid \theta_i) \times p(\theta_i)}$$
+
+-   this is the posterior — you just applied Bayes' rule!
+
+In this lab, you'll do all of this in R — first by hand, then with `brms`. The entire lab uses coins. But you'll be using three different methods to obtain your posterior — a table, grid approximation, and MCMC.
+
+***A note on how to work through this lab:*** Throughout this lab, you'll find that some code is commented out, and some is left for you to write yourself. You can uncomment the commented code to run it (CMD + Shift + C on selected lines). But before doing so, take a moment to think about how you'd write this yourself. What functions would you use? What inputs are needed, etc? Then uncomment the code, and make sure you understand each line / contrast with your approach before moving on. For the blanks marked \# Your code here: that's your turn — write the code, run it, and check that the output makes sense before continuing. Also, make sure to answer the descriptive follow-up questions such as "what does these tell you?"\
+\
+
+## Setup
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(brms)
+library(tidybayes)
+library(ggdist)
+```
+
+# Part 1: The lecture table — in R
+
+In lecture, we built a table with 5 coins ($\theta_i$ = 0.2, 0.4, 0.5, 0.6, 0.8) and $N = 5$ flips, giving 6 possible outcomes (0 through 5 heads). Let's recreate it, and then observe $Y = 3$ heads.
+
+## Section 1: Build the probability table
+
+Use `dbinom()` to compute the probability of each outcome for each coin. (This is reading **across a row** — $p(\text{data} \mid \theta_i)$ with $\theta_i$ fixed.)
+
+```{r}
+# ## Define our coins
+# theta_values <- c(0.2, 0.4, 0.5, 0.6, 0.8)
+# 
+# ## For each theta_i, compute the probability of 0, 1, 2, 3, 4, 5 heads
+# prob_table <- tibble(theta = theta_values) %>%
+#   rowwise() %>%
+#   mutate(
+#     probs = list(dbinom(0:5, size = 5, prob = theta))
+#   ) %>%
+#   unnest_wider(probs, names_sep = "_") %>%
+#   rename_with(~ paste0("heads_", 0:5), starts_with("probs_"))
+# 
+# prob_table
+```
+
+### Question 1.1
+
+Verify that each row sums to 1. What does this tell you?
+
+```{r}
+# Your code here: using a similar structure as above, compute row sums, mutate it (and excluding the theta column)
+```
+
+## Section 2: Read the table down a column
+
+Now fix the data at 3 heads (Y = 3) and read **down the column**. This gives you the likelihood function for Y = 3 — $p(\text{data} = 3 \mid \theta_i)$ — which scores each coin on how well it explains your observation.
+
+Hint: you used `dbinom()` in Section 1 across outcomes — now use it across $\theta_i$ values, fixing the number of heads at 3.
+
+::: {.callout-tip collapse="true" title="Code"}
+```{r}
+# ## Score each coin on how well they explain 3 heads out of 5 (Y = 3, N = 5)
+# likelihood_table <- tibble(
+#   theta = theta_values,
+#   likelihood = dbinom(3, size = 5, prob = theta_values)
+# )
+# 
+# likelihood_table
+```
+:::
+
+### Question 2.1
+
+Does the likelihood column sum to 1? Compute it. What does this tell you about the likelihood?
+
+```{r}
+# Your code here
+```
+
+### Question 2.2
+
+Which $\theta_i$ has the highest likelihood score? That's the MLE. Can you call it a probability? Why or why not?
+
+## Section 3: Compute the posterior with a flat prior
+
+Now do what Bayes' rule does: multiply each likelihood by a prior, then normalize so it sums to 1.
+
+Start with a flat prior — each $\theta_i$ is equally plausible before seeing data. You have the `likelihood_table` from Section 2. Add columns for the prior, the product of prior × likelihood, and the normalized posterior.
+
+::: {.callout-tip collapse="true" title="Code"}
+```{r}
+# posterior_table <- likelihood_table %>%
+#   mutate(
+#     prior = 1 / n(),                          # flat prior: each theta_i gets equal weight
+#     prior_x_likelihood = prior * likelihood,   # numerator of Bayes' rule
+#     posterior = prior_x_likelihood / sum(prior_x_likelihood)  # normalize
+#   )
+# 
+# posterior_table
+```
+:::
+
+### Question 3.1
+
+Verify that the posterior column sums to 1. What does this tell you?
+
+```{r}
+# Your code here
+```
+
+### Question 3.2
+
+In lecture, we asked: "There's a \_\_\_% chance that $\theta$ is 0.6." Fill in the blank using your posterior table. Can you also state: "There's a \_\_\_% chance that $\theta$ is 0.5 or 0.6"?
+
+```{r}
+# Your code here
+```
+
+You just did something that the likelihood alone could not do — you made a probability statement about a parameter.
+
+## Section 4: Change the prior
+
+Now use an informative prior — "most coins are roughly fair." Assume that the bias probabilities are c(0.05, 0.20, 0.50, 0.20, 0.05)
+
+```{r}
+# posterior_informative <- likelihood_table %>%
+#   mutate(
+#     # Prior peaked at 0.5, lower at extremes
+#     prior = c(0.05, 0.20, 0.50, 0.20, 0.05),
+#     prior_x_likelihood = prior * likelihood,
+#     posterior = prior_x_likelihood / sum(prior_x_likelihood)
+#   )
+# 
+# posterior_informative
+```
+
+### Question 4.1
+
+Compare this posterior to the flat-prior posterior. Which $\theta$ is most probable now? Did the prior pull the estimate? In which direction?
+
+### 4.2
+
+Plot both posteriors side by side.
+
+```{r}
+# Combine the two posteriors for plotting
+bind_rows(
+  posterior_table %>% mutate(prior_type = "Flat prior"),
+  posterior_informative %>% mutate(prior_type = "Informative prior")
+) %>%
+  ggplot(aes(x = factor(theta), y = posterior, fill = prior_type)) +
+  geom_col(position = "dodge") +
+  labs(x = expression(theta), y = "Posterior probability",
+       fill = "Prior") +
+  theme_minimal()
+```
+
+### Question 4.3
+
+The data are the same (3 heads out of 5). Only the prior changed. Why did the posterior shift? When would this matter more — with 5 flips or 500 flips?
+
+# Part 2: Grid approximation — finer resolution
+
+With only 5 values of $\theta_i$, we got a rough picture. What if we tried 1,000 values between 0 and 1? That's grid approximation — the same logic, just with a much finer grid. Now $\theta$ becomes effectively continuous.
+
+## Section 5: Grid approximation with a flat prior
+
+Replace the 5 $\theta_i$ values with `seq(0, 1, length.out = 1000)` and repeat the same multiply-and-normalize steps from Section 3. Then plot the posterior.
+
+::: {.callout-tip collapse="true" title="Code"}
+```{r}
+# ## Define a fine grid of theta values
+# grid <- tibble(
+#   theta = seq(0, 1, length.out = 1000)
+# ) %>%
+#   mutate(
+#     prior = 1,                                           # flat prior (unnormalized is fine)
+#     likelihood = dbinom(3, size = 5, prob = theta),      # score each theta
+#     unstd_posterior = prior * likelihood,                 # prior × likelihood
+#     posterior = unstd_posterior / sum(unstd_posterior)     # normalize
+#   )
+# 
+# ## Plot the posterior
+# ggplot(grid, aes(x = theta, y = posterior)) +
+#   geom_line() +
+#   labs(x = expression(theta), y = "Posterior probability",
+#        title = "Posterior: 3 heads out of 5 (Y = 3, N = 5), flat prior") +
+#   theme_minimal()
+```
+:::
+
+### Question 5.1
+
+Where is the peak of the posterior? Does this match the MLE from Section 2?
+
+## Section 6: Grid approximation with an informative prior
+
+Now replace the flat prior with a Beta(10, 10) distribution — peaked near 0.5, skeptical of extreme values.\
+\
+***Note below:** The likelihood and posterior are on different scales, so we rescale the likelihood to the same height for visual comparison. It's juat a plotting/visualization trick. The shapes and peaks are what matter here, not the y-axis values.*
+
+```{r}
+grid_informative <- tibble(
+  theta = seq(0, 1, length.out = 1000)
+) %>%
+  mutate(
+    prior = dbeta(theta, 10, 10),                        # peaked near 0.5
+    likelihood = dbinom(3, size = 5, prob = theta),
+    unstd_posterior = prior * likelihood,
+    posterior = unstd_posterior / sum(unstd_posterior)
+  )
+
+## Plot prior, likelihood (rescaled), and posterior together
+grid_informative %>%
+  mutate(
+    likelihood_scaled = likelihood / max(likelihood) * max(posterior)  # rescale for visibility
+  ) %>%
+  ggplot(aes(x = theta)) +
+  geom_line(aes(y = posterior), color = "blue", linewidth = 1) +
+  geom_line(aes(y = prior / sum(prior)), color = "red", linetype = "dashed") +
+  geom_line(aes(y = likelihood_scaled), color = "gray50", linetype = "dotted") +
+  labs(x = expression(theta), y = "Density (rescaled)",
+       title = "Blue = Posterior, Red = Prior, Gray = Likelihood") +
+  theme_minimal()
+```
+
+### Question 6.1
+
+The posterior (blue) sits between the prior (red) and the likelihood (gray). Why? What would happen to the posterior if you had $Y = 300$ heads out of $N = 500$ instead of $Y = 3$ out of $N = 5$?
+
+## Section 7: Watch the prior wash out
+
+Increase the sample size while keeping the same proportion of heads (60%).
+
+```{r}
+# Same proportion (60% heads), increasing sample sizes
+sample_sizes <- c(5, 20, 50, 200)
+heads_observed <- round(0.6 * sample_sizes)  # Y = 3, 12, 30, 120
+
+grid_by_n <- map2_dfr(sample_sizes, heads_observed, function(n, k) {
+  tibble(
+    theta = seq(0, 1, length.out = 1000),
+    n = n,
+    prior = dbeta(theta, 10, 10),
+    likelihood = dbinom(k, size = n, prob = theta),
+    unstd_posterior = prior * likelihood,
+    posterior = unstd_posterior / sum(unstd_posterior)
+  )
+})
+
+ggplot(grid_by_n, aes(x = theta, y = posterior)) +
+  geom_line(color = "blue") +
+  geom_line(aes(y = prior / sum(prior)), color = "red", linetype = "dashed",
+            data = grid_by_n %>% filter(n == 5)) +
+  facet_wrap(~ paste0("n = ", n), scales = "free_y") +
+  labs(x = expression(theta), y = "Posterior probability",
+       title = "Same prior, more data → posterior concentrates") +
+  theme_minimal()
+```
+
+### Question 7.1
+
+What happens to the posterior as n increases? Does the prior still matter at n = 200? This is what the "Three ingredients" slide was about: "With lots of data — likelihood dominates."
+
+# Part 3: Let brms do it
+
+Grid approximation works beautifully for one parameter. But your regression models have $\beta_0$, $\beta_1$, and $\sigma$ — three parameters. A 3D grid with 1000 points per dimension means \_\_\_\_\_\_\_(fill in the blank) cells. That's why we need MCMC. Let's fit the same coin problem with `brms` and see that it gives us the same answer.
+
+## Section 8: Set up the coin data
+
+`brms` needs data in a data frame. For a binomial model, we tell it how many successes and how many trials.
+
+```{r}
+# Our coin data: Y = 3 heads out of N = 5 flips
+coin_data <- data.frame(
+  heads = 3,
+  trials = 5
+)
+```
+
+## Section 9: Fit with brms — flat prior
+
+We'll use `family = binomial` and a very wide prior on the intercept (which is on the logit scale). A wide prior on the logit scale approximates a flat prior on the probability scale.
+
+```{r fit_flat, results = "hide", message = FALSE}
+fit_flat <- brm(
+  heads | trials(trials) ~ 1,     # intercept-only binomial model
+  family = binomial(link = "logit"),
+  data = coin_data,
+  prior = prior(normal(0, 10), class = Intercept),  # wide prior ≈ flat on prob scale
+  seed = 504,
+  iter = 4000, warmup = 1000, chains = 4
+)
+```
+
+```{r}
+summary(fit_flat)
+```
+
+### Question 9.1
+
+The intercept is on the logit scale. To convert to $\theta$ (probability scale), apply the inverse logit: `plogis()`. What's the posterior mean of $\theta$? Is it closer to 0.5 or 0.6? Why?
+
+```{r}
+# # Extract posterior draws of the intercept
+# draws_flat <- as_draws_df(fit_flat) %>%
+#   mutate(theta = plogis(b_Intercept))  # convert logit → probability
+# 
+# # Posterior mean of theta
+# mean(draws_flat$theta)
+```
+
+### Question 9.2
+
+How does this compare to your grid approximation result from Section 5?
+
+## Section 10: Plot the posterior from MCMC draws
+
+```{r}
+# ggplot(draws_flat, aes(x = theta)) +
+#   geom_histogram(aes(y = after_stat(density)), bins = 50,
+#                  fill = "steelblue", alpha = 0.7) +
+#   labs(x = expression(theta), y = "Density",
+#        title = "MCMC posterior: 3 heads out of 5 (Y = 3, N = 5), approximately flat prior") +
+#   theme_minimal()
+```
+
+### Question 10.1
+
+This histogram is made from 12,000 draws (4 chains × 3000 post-warmup). Each draw is a value of $\theta$ sampled from the posterior. The histogram IS the posterior. Compare the shape to your grid approximation plot from Section 5 — how does the shape compare to your grid approximation plot from Section 5? What's similar? What's different?
+
+## Section 11: Fit with brms — informative prior
+
+Now use a prior that says "most coins are roughly fair." On the logit scale, $\theta = 0.5$ corresponds to logit = 0. A Normal(0, 0.5) prior on the logit scale concentrates $\theta$ near 0.5.
+
+```{r fit_informative, results = "hide", message = FALSE}
+fit_informative <- brm(
+  heads | trials(trials) ~ 1,
+  family = binomial(link = "logit"),
+  data = coin_data,
+  prior = prior(normal(0, 0.5), class = Intercept),  # informative: most coins near fair
+  seed = 504,
+  iter = 4000, warmup = 1000, chains = 4
+)
+```
+
+```{r}
+draws_informative <- as_draws_df(fit_informative) %>%
+  mutate(theta = plogis(b_Intercept))
+
+mean(draws_informative$theta)
+```
+
+### Question 11.1
+
+The posterior mean shifted compared to the flat prior. In which direction? Why? Does this match what happened in Section 4 when you changed the prior by hand?
+
+## Section 12: Overlay both posteriors
+
+```{r}
+bind_rows(
+  draws_flat %>% select(theta) %>% mutate(prior_type = "Wide (≈ flat)"),
+  draws_informative %>% select(theta) %>% mutate(prior_type = "Informative")
+) %>%
+  ggplot(aes(x = theta, fill = prior_type)) +
+  geom_density(alpha = 0.5) +
+  labs(x = expression(theta), y = "Density",
+       fill = "Prior",
+       title = "Same data, different priors → different posteriors") +
+  theme_minimal()
+```
+
+### Question 12.1
+
+With only 5 flips, the prior matters. What would you expect if you had 500 flips? (You can test this: change the data to `heads = 300, trials = 500` and refit both models.)
+
+## Section 13: Fill in the blank
+
+Using your posterior draws, make the probability statements that MLE cannot. Hint: what fraction of your draws satisfy a given condition? Think about what `mean()` returns when applied to a logical vector.
+
+::: {.callout-tip collapse="true" title="Code"}
+```{r}
+# "What's the probability that theta > 0.5?"
+mean(draws_flat$theta > 0.5)
+
+# "What's the probability that theta is between 0.4 and 0.8?"
+mean(draws_flat$theta > 0.4 & draws_flat$theta < 0.8)
+```
+:::
+
+### Question 13.1
+
+In lecture, the blank was: "There's a \_\_\_% chance that $\theta$ is 0.6." With continuous posterior draws, we can't ask about a single point. Instead, we ask about intervals. Compute: "There's a \_\_\_% chance that $\theta$ is between 0.55 and 0.65." How does this compare to the grid approximation posterior at $\theta = 0.6$?
+
+## Section 14: Credible intervals
+
+The 95% credible interval is the central 95% of the posterior draws. This has the interpretation that frequentist confidence intervals don't: "There's a 95% probability that $\theta$ lies within this interval."
+
+```{r}
+# # 95% credible interval
+# quantile(draws_flat$theta, probs = c(0.025, 0.975))
+```
+
+### Question 14.1
+
+Is $\theta = 0.5$ inside the 95% credible interval? What about $\theta = 0.2$? What does this tell you?
+
+# Wrapping up
+
+You just solved the same problem three ways:
+
+1.  **By hand** (5 $\theta_i$ values, a table, multiply and normalize)
+2.  **Grid approximation** (1,000 $\theta$ values, same logic, finer resolution)
+3.  **MCMC via brms** (12,000 draws from the posterior, no grid needed)
+
+All three gave you the same answer. The first two don't scale to real models with many parameters. The third does. That's why we use `brms`.
+
+### Final reflection
+
+In your own words, explain the connection between the posterior table from Section 3 and the histogram from Section 10. What's the same? What's different?
+
+## References
+
+Kurz, A. S. (2025). *Statistical rethinking with brms, ggplot2, and the tidyverse: Second edition* (Version 1.2.0). <https://bookdown.org/content/4857/>
+
+McElreath, R. (2020). *Statistical rethinking: A Bayesian course with examples in R and Stan* (Second Edition). CRC Press.
+
+## Session information
+
+```{r}
+sessionInfo()
+```

@@ -62,6 +62,7 @@ options(scipen=999)
 -   QMD available in: <https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts>
 
 # Today
+
 -   A gentle introduction to Bayesian inference
 
 -   Fit, interpret, and report a Bayesian regression with `brms`
@@ -78,11 +79,11 @@ Last semester: every simulation you wrote was a DGP.
 
 Steps:
 
-- Pick a distribution.
+-   Pick a distribution.
 
-- Pick parameters.
+-   Pick parameters.
 
-- Generate data.
+-   Generate data.
 
 . . .
 
@@ -104,7 +105,6 @@ $$Y_i \sim \text{Normal}(\mu_i, \sigma), \quad \mu_i = \beta_0 + \beta_1 X_i$$
 
 -   $\beta_0 = 50, \beta_1 = 0.3, \sigma = 10$ → one member
 -   $\beta_0 = 40, \beta_1 = 0.8, \sigma = 5$ → another member
-
 
 ## Two families you already know
 
@@ -173,10 +173,10 @@ Now you can ask questions like "If $\theta = 0.6$ — what data/outcomes are pos
 
 . . .
 
-
 ``` r
 dbinom(0:5, size = 5, prob = 0.6)
 ```
+
 These sum to 1.
 . . .
 
@@ -228,7 +228,8 @@ Can you answer, "Which $\theta$ produced the data?"
 
 . . .
 
-In reality, you don't know. But you're making an educated guess. 
+In reality, you don't know.
+But you're making an educated guess.
 
 . . .
 
@@ -278,7 +279,7 @@ $\theta = 0.2$ → score: 0.051
 
 . . .
 
-Higher score => that row explains the data better.
+Higher score =\> that row explains the data better.
 
 ## Inference : Data (column) is fixed
 
@@ -311,7 +312,6 @@ The column is not a distribution!
 
 You might also have observed 4 heads in 5 tosses
 
-
 |                | **4 heads** |
 |----------------|-------------|
 | $\theta = 0.2$ | .006        |
@@ -334,7 +334,6 @@ The best-scoring $\theta$ isn't necessarily the true $\theta$.
 
 ## Inference : Data (column) is fixed
 
-
 Try to make a statement:
 
 . . .
@@ -353,7 +352,7 @@ The scores don't add to 1.
 
 . . .
 
-We are looking for  $p(\theta \mid \text{data})$.
+We are looking for $p(\theta \mid \text{data})$.
 
 ## The likelihood is not enough
 
@@ -367,8 +366,6 @@ That's MLE.
 . . .
 
 But it can't fill in the blank: "\_\_\_% chance $\theta$ is between 0.4 and 0.8."
-
-
 
 ## You know things before seeing data
 
@@ -575,9 +572,7 @@ The denominator integrates over **every possible** $\theta$.
 . . .
 
 Solution: don't compute it.
-**Sample from it.**
-. . .
-Probabilistic programming languages let you do this more easily.
+**Sample from it.** . . . Probabilistic programming languages let you do this more easily.
 
 ## What does "sample from it" mean?
 
@@ -601,7 +596,6 @@ Imagine drawing 10,000 values of $\theta$ from the posterior:
 The histogram of those draws **is** the posterior.
 
 We can compute probabilities now without the formula/ without knowing the likelihood function!
-
 
 ## What Bayes gives you that MLE doesn't
 
@@ -1123,7 +1117,6 @@ The model describes cognition.
 :::
 :::::
 
-
 You can use Bayesian data analysis without committing to the Bayesian Brian hypothesis!
 
 ## Bayesian models as psychological theory
@@ -1145,7 +1138,6 @@ The claim: people behave **as if** they do Bayesian inference.
 . . .
 
 -   **Motor control:** You catch a ball by combining visual uncertainty with learned priors (Körding & Wolpert, 2004)
-
 
 # Implementation in R {.center}
 

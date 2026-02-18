@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>PSY 504: Bayes Lab 1 — From Tables to MCMC – PSY 504, Spring 2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-17272e19d34237b4445191b00a44da21.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-169522303b7bc79663207a91790de262.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="robots" content="noindex, nofollow">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">PSY 504, Spring 2026</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Lectures</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://docs.google.com/document/d/1mXjcFA67TXVNmGNlOfn11-vb5wBbP5yJ8LPKqMjoweM/edit" target="_blank"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://docs.google.com/document/d/1fZhqADwjg8B8YvxYaPCOVUBOh3ounTP8L2g5p31fp18/edit" target="_blank"> 
+<span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">PSY 504: Bayes Lab 1 — From Tables to MCMC</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Consider the following setting: A factory produces coins, each with a different bias <span class="math inline">\(\theta_i\)</span>. You don’t know which coin you received. You have prior beliefs about which coins the factory is likely to produce — <span class="math inline">\(p(\theta_i)\)</span>. You flip the coin <span class="math inline">\(N\)</span> times, observe <span class="math inline">\(Y\)</span> heads, and use that data to figure out which coin you probably got — <span class="math inline">\(p(\theta_i \mid \text{data})\)</span>.</p>
+<p>In Monday’s lecture, you saw a setting like this play out with a table of probabilities:</p>
+<ul>
+<li><p>each row was a different coin (a different <span class="math inline">\(\theta_i\)</span>), showing what it could produce — <span class="math inline">\(p(\text{data} \mid \theta_i)\)</span> — with one column for each possible outcome (0 heads, 1 head, … <span class="math inline">\(N\)</span> heads)</p></li>
+<li><p>you then observed <span class="math inline">\(Y\)</span> heads out of <span class="math inline">\(N\)</span> tosses</p></li>
+<li><p>you fixed the data (the <span class="math inline">\(\text{data} = Y\)</span> column) and scored each coin on how well it explained your observation — that’s the likelihood, <span class="math inline">\(p(\text{data} = Y \mid \theta_i)\)</span></p></li>
+<li><p>then you multiplied each cell of this column by your prior on <span class="math inline">\(\theta_i\)</span>, and divided by the column sum:</p></li>
+</ul>
+<p><span class="math display">\[\frac{p(\text{data} = Y \mid \theta_i) \times p(\theta_i)}{\sum_i p(\text{data} = Y \mid \theta_i) \times p(\theta_i)}\]</span></p>
+<ul>
+<li>this is the posterior — you just applied Bayes’ rule!</li>
+</ul>
+<p>In this lab, you’ll do all of this in R — first by hand, then with <code>brms</code>. The entire lab uses coins. But you’ll be using three different methods to obtain your posterior — a table, grid approximation, and MCMC.</p>
+<p><strong><em>A note on how to work through this lab:</em></strong> Throughout this lab, you’ll find that some code is commented out, and some is left for you to write yourself. You can uncomment the commented code to run it (CMD + Shift + C on selected lines). But before doing so, take a moment to think about how you’d write this yourself. What functions would you use? What inputs are needed, etc? Then uncomment the code, and make sure you understand each line / contrast with your approach before moving on. For the blanks marked # Your code here: that’s your turn — write the code, run it, and check that the output makes sense before continuing.</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="part-1-the-lecture-table-in-r" class="level1">
+<h1>Part 1: The lecture table — in R</h1>
+<p>In lecture, we built a table with 5 coins (<span class="math inline">\(\theta_i\)</span> = 0.2, 0.4, 0.5, 0.6, 0.8) and <span class="math inline">\(N = 5\)</span> flips, giving 6 possible outcomes (0 through 5 heads). Let’s recreate it, and then observe <span class="math inline">\(Y = 3\)</span> heads.</p>
+<section id="exercise-1-build-the-probability-table" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1-build-the-probability-table">Exercise 1: Build the probability table</h2>
+<p>Use <code>dbinom()</code> to compute the probability of each outcome for each coin. (This is reading <strong>across a row</strong> — <span class="math inline">\(p(\text{data} \mid \theta_i)\)</span> with <span class="math inline">\(\theta_i\)</span> fixed.)</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define our coins</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>theta_values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For each theta_i, compute the probability of 0, 1, 2, 3, 4, 5 heads</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>prob_table <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">theta =</span> theta_values) <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">probs =</span> <span class="fu">list</span>(<span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> theta))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(probs, <span class="at">names_sep =</span> <span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">"heads_"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>), <span class="fu">starts_with</span>(<span class="st">"probs_"</span>))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>prob_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  theta  heads_0 heads_1 heads_2 heads_3 heads_4 heads_5
+  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1   0.2 0.328     0.410   0.205   0.0512 0.00640 0.00032
+2   0.4 0.0778    0.259   0.346   0.230  0.0768  0.0102 
+3   0.5 0.0312    0.156   0.312   0.312  0.156   0.0312 
+4   0.6 0.0102    0.0768  0.230   0.346  0.259   0.0778 
+5   0.8 0.000320  0.0064  0.0512  0.205  0.410   0.328  </code></pre>
+</div>
+</div>
+<section id="question-1.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-1.1">Question 1.1</h3>
+<p>Verify that each row sums to 1. What does this tell you?</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here: compute row sums (excluding the theta column)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="exercise-2-read-the-table-the-other-way" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2-read-the-table-the-other-way">Exercise 2: Read the table the other way</h2>
+<p>Now fix the data at 3 heads (Y = 3) and read <strong>down the column</strong>. This gives you the likelihood function for Y = 3 — <span class="math inline">\(p(\text{data} = 3 \mid \theta_i)\)</span> — which scores each coin on how well it explains your observation.</p>
+<p>Hint: you used <code>dbinom()</code> in Exercise 1 across outcomes — now use it across <span class="math inline">\(\theta_i\)</span> values, fixing the number of heads at 3.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Code">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Code
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Score each coin on how well they explain 3 heads out of 5 (Y = 3, N = 5)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>likelihood_table <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta =</span> theta_values,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">likelihood =</span> <span class="fu">dbinom</span>(<span class="dv">3</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> theta_values)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>likelihood_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  theta likelihood
+  &lt;dbl&gt;      &lt;dbl&gt;
+1   0.2     0.0512
+2   0.4     0.230 
+3   0.5     0.312 
+4   0.6     0.346 
+5   0.8     0.205 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="question-2.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-2.1">Question 2.1</h3>
+<p>Does the likelihood column sum to 1? Compute it. What does this tell you about the likelihood?</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="question-2.2" class="level3">
+<h3 class="anchored" data-anchor-id="question-2.2">Question 2.2</h3>
+<p>Which <span class="math inline">\(\theta_i\)</span> has the highest likelihood score? That’s the MLE. Can you call it a probability? Why or why not?</p>
+</section>
+</section>
+<section id="exercise-3-compute-the-posterior-with-a-flat-prior" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-3-compute-the-posterior-with-a-flat-prior">Exercise 3: Compute the posterior with a flat prior</h2>
+<p>Now do what Bayes’ rule does: multiply each likelihood by a prior, then normalize so it sums to 1.</p>
+<p>Start with a flat prior — each <span class="math inline">\(\theta_i\)</span> is equally plausible before seeing data. You have the <code>likelihood_table</code> from Exercise 2. Add columns for the prior, the product of prior × likelihood, and the normalized posterior.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Code">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Code
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>posterior_table <span class="ot">&lt;-</span> likelihood_table <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">prior =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">n</span>(),                          <span class="co"># flat prior: each theta_i gets equal weight</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">prior_x_likelihood =</span> prior <span class="sc">*</span> likelihood,   <span class="co"># numerator of Bayes' rule</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">posterior =</span> prior_x_likelihood <span class="sc">/</span> <span class="fu">sum</span>(prior_x_likelihood)  <span class="co"># normalize</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>posterior_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  theta likelihood prior prior_x_likelihood posterior
+  &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;              &lt;dbl&gt;     &lt;dbl&gt;
+1   0.2     0.0512   0.2             0.0102    0.0447
+2   0.4     0.230    0.2             0.0461    0.201 
+3   0.5     0.312    0.2             0.0625    0.273 
+4   0.6     0.346    0.2             0.0691    0.302 
+5   0.8     0.205    0.2             0.0410    0.179 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="question-3.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-3.1">Question 3.1</h3>
+<p>Verify that the posterior column sums to 1. You just created a probability distribution over <span class="math inline">\(\theta\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="question-3.2" class="level3">
+<h3 class="anchored" data-anchor-id="question-3.2">Question 3.2</h3>
+<p>In lecture, we asked: “There’s a ___% chance that <span class="math inline">\(\theta\)</span> is 0.6.” Fill in the blank using your posterior table. Can you also state: “There’s a ___% chance that <span class="math inline">\(\theta\)</span> is 0.5 or 0.6”?</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>You just did something that the likelihood alone could not do — you made a probability statement about a parameter.</p>
+</section>
+</section>
+<section id="exercise-4-change-the-prior" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-4-change-the-prior">Exercise 4: Change the prior</h2>
+<p>Now use an informative prior — “most coins are roughly fair.”</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>posterior_informative <span class="ot">&lt;-</span> likelihood_table <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Prior peaked at 0.5, lower at extremes</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">prior =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.20</span>, <span class="fl">0.50</span>, <span class="fl">0.20</span>, <span class="fl">0.05</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">prior_x_likelihood =</span> prior <span class="sc">*</span> likelihood,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">posterior =</span> prior_x_likelihood <span class="sc">/</span> <span class="fu">sum</span>(prior_x_likelihood)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>posterior_informative</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  theta likelihood prior prior_x_likelihood posterior
+  &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;              &lt;dbl&gt;     &lt;dbl&gt;
+1   0.2     0.0512  0.05            0.00256   0.00901
+2   0.4     0.230   0.2             0.0461    0.162  
+3   0.5     0.312   0.5             0.156     0.550  
+4   0.6     0.346   0.2             0.0691    0.243  
+5   0.8     0.205   0.05            0.0102    0.0360 </code></pre>
+</div>
+</div>
+<section id="question-4.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-4.1">Question 4.1</h3>
+<p>Compare this posterior to the flat-prior posterior. Which <span class="math inline">\(\theta\)</span> is most probable now? Did the prior pull the estimate? In which direction?</p>
+</section>
+<section id="question-4.2" class="level3">
+<h3 class="anchored" data-anchor-id="question-4.2">Question 4.2</h3>
+<p>Plot both posteriors side by side.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the two posteriors for plotting</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  posterior_table <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">prior_type =</span> <span class="st">"Flat prior"</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  posterior_informative <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">prior_type =</span> <span class="st">"Informative prior"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(theta), <span class="at">y =</span> posterior, <span class="at">fill =</span> prior_type)) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Posterior probability"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Prior"</span>) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Bayes_Lab_1_Coins_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="question-4.3" class="level3">
+<h3 class="anchored" data-anchor-id="question-4.3">Question 4.3</h3>
+<p>The data are the same (3 heads out of 5). Only the prior changed. Why did the posterior shift? When would this matter more — with 5 flips or 500 flips?</p>
+</section>
+</section>
+</section>
+<section id="part-2-grid-approximation-finer-resolution" class="level1">
+<h1>Part 2: Grid approximation — finer resolution</h1>
+<p>With only 5 values of <span class="math inline">\(\theta_i\)</span>, we got a rough picture. What if we tried 1,000 values between 0 and 1? That’s grid approximation — the same logic, just with a much finer grid. Now <span class="math inline">\(\theta\)</span> becomes effectively continuous.</p>
+<section id="exercise-5-grid-approximation-with-a-flat-prior" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-5-grid-approximation-with-a-flat-prior">Exercise 5: Grid approximation with a flat prior</h2>
+<p>Replace the 5 <span class="math inline">\(\theta_i\)</span> values with <code>seq(0, 1, length.out = 1000)</code> and repeat the same multiply-and-normalize steps from Exercise 3. Then plot the posterior.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Code">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Code
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a fine grid of theta values</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">prior =</span> <span class="dv">1</span>,                                           <span class="co"># flat prior (unnormalized is fine)</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">likelihood =</span> <span class="fu">dbinom</span>(<span class="dv">3</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> theta),      <span class="co"># score each theta</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">unstd_posterior =</span> prior <span class="sc">*</span> likelihood,                 <span class="co"># prior × likelihood</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">posterior =</span> unstd_posterior <span class="sc">/</span> <span class="fu">sum</span>(unstd_posterior)     <span class="co"># normalize</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the posterior</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grid, <span class="fu">aes</span>(<span class="at">x =</span> theta, <span class="at">y =</span> posterior)) <span class="sc">+</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Posterior probability"</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Posterior: 3 heads out of 5 (Y = 3, N = 5), flat prior"</span>) <span class="sc">+</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Bayes_Lab_1_Coins_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="question-5.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-5.1">Question 5.1</h3>
+<p>Where is the peak of the posterior? Does this match the MLE from Exercise 2?</p>
+</section>
+</section>
+<section id="exercise-6-grid-approximation-with-an-informative-prior" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-6-grid-approximation-with-an-informative-prior">Exercise 6: Grid approximation with an informative prior</h2>
+<p>Now replace the flat prior with a Beta(10, 10) distribution — peaked near 0.5, skeptical of extreme values.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>grid_informative <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">theta =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">prior =</span> <span class="fu">dbeta</span>(theta, <span class="dv">10</span>, <span class="dv">10</span>),                        <span class="co"># peaked near 0.5</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">likelihood =</span> <span class="fu">dbinom</span>(<span class="dv">3</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> theta),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">unstd_posterior =</span> prior <span class="sc">*</span> likelihood,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">posterior =</span> unstd_posterior <span class="sc">/</span> <span class="fu">sum</span>(unstd_posterior)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot prior, likelihood (rescaled), and posterior together</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>grid_informative <span class="sc">%&gt;%</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">likelihood_scaled =</span> likelihood <span class="sc">/</span> <span class="fu">max</span>(likelihood) <span class="sc">*</span> <span class="fu">max</span>(posterior)  <span class="co"># rescale for visibility</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> theta)) <span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> posterior), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> prior <span class="sc">/</span> <span class="fu">sum</span>(prior)), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> likelihood_scaled), <span class="at">color =</span> <span class="st">"gray50"</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density (rescaled)"</span>,</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Blue = Posterior, Red = Prior, Gray = Likelihood"</span>) <span class="sc">+</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Bayes_Lab_1_Coins_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="question-6.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-6.1">Question 6.1</h3>
+<p>The posterior (blue) sits between the prior (red) and the likelihood (gray). Why? What would happen to the posterior if you had <span class="math inline">\(Y = 300\)</span> heads out of <span class="math inline">\(N = 500\)</span> instead of <span class="math inline">\(Y = 3\)</span> out of <span class="math inline">\(N = 5\)</span>?</p>
+</section>
+</section>
+<section id="exercise-7-watch-the-prior-wash-out" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-7-watch-the-prior-wash-out">Exercise 7: Watch the prior wash out</h2>
+<p>Increase the sample size while keeping the same proportion of heads (60%).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Same proportion (60% heads), increasing sample sizes</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">200</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>heads_observed <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fl">0.6</span> <span class="sc">*</span> sample_sizes)  <span class="co"># Y = 3, 12, 30, 120</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>grid_by_n <span class="ot">&lt;-</span> <span class="fu">map2_dfr</span>(sample_sizes, heads_observed, <span class="cf">function</span>(n, k) {</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">theta =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">1000</span>),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> n,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">prior =</span> <span class="fu">dbeta</span>(theta, <span class="dv">10</span>, <span class="dv">10</span>),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">likelihood =</span> <span class="fu">dbinom</span>(k, <span class="at">size =</span> n, <span class="at">prob =</span> theta),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">unstd_posterior =</span> prior <span class="sc">*</span> likelihood,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">posterior =</span> unstd_posterior <span class="sc">/</span> <span class="fu">sum</span>(unstd_posterior)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grid_by_n, <span class="fu">aes</span>(<span class="at">x =</span> theta, <span class="at">y =</span> posterior)) <span class="sc">+</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> prior <span class="sc">/</span> <span class="fu">sum</span>(prior)), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> grid_by_n <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n <span class="sc">==</span> <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">"n = "</span>, n), <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Posterior probability"</span>,</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Same prior, more data → posterior concentrates"</span>) <span class="sc">+</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Bayes_Lab_1_Coins_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="question-7.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-7.1">Question 7.1</h3>
+<p>What happens to the posterior as n increases? Does the prior still matter at n = 200? This is what the “Three ingredients” slide was about: “With lots of data — likelihood dominates.”</p>
+</section>
+</section>
+</section>
+<section id="part-3-let-brms-do-it" class="level1">
+<h1>Part 3: Let brms do it</h1>
+<p>Grid approximation works beautifully for one parameter. But your regression models have <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\sigma\)</span> — three parameters. A 3D grid with 1000 points per dimension means _______(fill in the blank) cells. That’s why we need MCMC. Let’s fit the same coin problem with <code>brms</code> and see that it gives us the same answer.</p>
+<section id="exercise-8-set-up-the-coin-data" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-8-set-up-the-coin-data">Exercise 8: Set up the coin data</h2>
+<p><code>brms</code> needs data in a data frame. For a binomial model, we tell it how many successes and how many trials.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Our coin data: Y = 3 heads out of N = 5 flips</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>coin_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">heads =</span> <span class="dv">3</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trials =</span> <span class="dv">5</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="exercise-9-fit-with-brms-flat-prior" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-9-fit-with-brms-flat-prior">Exercise 9: Fit with brms — flat prior</h2>
+<p>We’ll use <code>family = binomial</code> and a very wide prior on the intercept (which is on the logit scale). A wide prior on the logit scale approximates a flat prior on the probability scale.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fit_flat <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  heads <span class="sc">|</span> <span class="fu">trials</span>(trials) <span class="sc">~</span> <span class="dv">1</span>,     <span class="co"># intercept-only binomial model</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> coin_data,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">class =</span> Intercept),  <span class="co"># wide prior ≈ flat on prob scale</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">504</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">4000</span>, <span class="at">warmup =</span> <span class="dv">1000</span>, <span class="at">chains =</span> <span class="dv">4</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_flat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: binomial 
+  Links: mu = logit 
+Formula: heads | trials(trials) ~ 1 
+   Data: coin_data (Number of observations: 1) 
+  Draws: 4 chains, each with iter = 4000; warmup = 1000; thin = 1;
+         total post-warmup draws = 12000
+
+Regression Coefficients:
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept     0.49      1.02    -1.43     2.61 1.00     4317     4029
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<section id="question-9.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-9.1">Question 9.1</h3>
+<p>The intercept is on the logit scale. To convert to <span class="math inline">\(\theta\)</span> (probability scale), apply the inverse logit: <code>plogis()</code>. What’s the posterior mean of <span class="math inline">\(\theta\)</span>?</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract posterior draws of the intercept</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>draws_flat <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(fit_flat) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">theta =</span> <span class="fu">plogis</span>(b_Intercept))  <span class="co"># convert logit → probability</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior mean of theta</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(draws_flat<span class="sc">$</span>theta)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5981253</code></pre>
+</div>
+</div>
+</section>
+<section id="question-9.2" class="level3">
+<h3 class="anchored" data-anchor-id="question-9.2">Question 9.2</h3>
+<p>How does this compare to your grid approximation result from Exercise 5? They should be very close.</p>
+</section>
+</section>
+<section id="exercise-10-plot-the-posterior-from-mcmc-draws" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-10-plot-the-posterior-from-mcmc-draws">Exercise 10: Plot the posterior from MCMC draws</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(draws_flat, <span class="fu">aes</span>(<span class="at">x =</span> theta)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">50</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"MCMC posterior: 3 heads out of 5 (Y = 3, N = 5), approximately flat prior"</span>) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Bayes_Lab_1_Coins_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="question-10.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-10.1">Question 10.1</h3>
+<p>This histogram is made from 12,000 draws (4 chains × 3000 post-warmup). Each draw is a value of <span class="math inline">\(\theta\)</span> sampled from the posterior. The histogram IS the posterior. Compare the shape to your grid approximation plot from Exercise 5.</p>
+</section>
+</section>
+<section id="exercise-11-fit-with-brms-informative-prior" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-11-fit-with-brms-informative-prior">Exercise 11: Fit with brms — informative prior</h2>
+<p>Now use a prior that says “most coins are roughly fair.” On the logit scale, <span class="math inline">\(\theta = 0.5\)</span> corresponds to logit = 0. A Normal(0, 0.5) prior on the logit scale concentrates <span class="math inline">\(\theta\)</span> near 0.5.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fit_informative <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  heads <span class="sc">|</span> <span class="fu">trials</span>(trials) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> coin_data,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">class =</span> Intercept),  <span class="co"># informative: most coins near fair</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">504</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">4000</span>, <span class="at">warmup =</span> <span class="dv">1000</span>, <span class="at">chains =</span> <span class="dv">4</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>draws_informative <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(fit_informative) <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">theta =</span> <span class="fu">plogis</span>(b_Intercept))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(draws_informative<span class="sc">$</span>theta)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5215703</code></pre>
+</div>
+</div>
+<section id="question-11.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-11.1">Question 11.1</h3>
+<p>The posterior mean shifted compared to the flat prior. In which direction? Why? Does this match what happened in Exercise 4 when you changed the prior by hand?</p>
+</section>
+</section>
+<section id="exercise-12-overlay-both-posteriors" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-12-overlay-both-posteriors">Exercise 12: Overlay both posteriors</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  draws_flat <span class="sc">%&gt;%</span> <span class="fu">select</span>(theta) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">prior_type =</span> <span class="st">"Wide (≈ flat)"</span>),</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  draws_informative <span class="sc">%&gt;%</span> <span class="fu">select</span>(theta) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">prior_type =</span> <span class="st">"Informative"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> theta, <span class="at">fill =</span> prior_type)) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(theta), <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Prior"</span>,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Same data, different priors → different posteriors"</span>) <span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Dropping 'draws_df' class as required metadata was removed.
+Warning: Dropping 'draws_df' class as required metadata was removed.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Bayes_Lab_1_Coins_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="question-12.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-12.1">Question 12.1</h3>
+<p>With only 5 flips, the prior matters. What would you expect if you had 500 flips? (You can test this: change the data to <code>heads = 300, trials = 500</code> and refit both models.)</p>
+</section>
+</section>
+<section id="exercise-13-fill-in-the-blank" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-13-fill-in-the-blank">Exercise 13: Fill in the blank</h2>
+<p>Using your posterior draws, make the probability statements that MLE cannot. Hint: what fraction of your draws satisfy a given condition? Think about what <code>mean()</code> returns when applied to a logical vector.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Code">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Code
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># "What's the probability that theta &gt; 0.5?"</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(draws_flat<span class="sc">$</span>theta <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6805833</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># "What's the probability that theta is between 0.4 and 0.8?"</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(draws_flat<span class="sc">$</span>theta <span class="sc">&gt;</span> <span class="fl">0.4</span> <span class="sc">&amp;</span> draws_flat<span class="sc">$</span>theta <span class="sc">&lt;</span> <span class="fl">0.8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6275833</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="question-13.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-13.1">Question 13.1</h3>
+<p>In lecture, the blank was: “There’s a ___% chance that <span class="math inline">\(\theta\)</span> is 0.6.” With continuous posterior draws, we can’t ask about a single point. Instead, we ask about intervals. Compute: “There’s a ___% chance that <span class="math inline">\(\theta\)</span> is between 0.55 and 0.65.” How does this compare to the grid approximation posterior at <span class="math inline">\(\theta = 0.6\)</span>?</p>
+</section>
+</section>
+<section id="exercise-14-credible-intervals" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-14-credible-intervals">Exercise 14: Credible intervals</h2>
+<p>The 95% credible interval is the central 95% of the posterior draws. This has the interpretation that frequentist confidence intervals don’t: “There’s a 95% probability that <span class="math inline">\(\theta\)</span> lies within this interval.”</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% credible interval</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(draws_flat<span class="sc">$</span>theta, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     2.5%     97.5% 
+0.1937958 0.9312402 </code></pre>
+</div>
+</div>
+<section id="question-14.1" class="level3">
+<h3 class="anchored" data-anchor-id="question-14.1">Question 14.1</h3>
+<p>Is <span class="math inline">\(\theta = 0.5\)</span> inside the 95% credible interval? What about <span class="math inline">\(\theta = 0.2\)</span>? What does this tell you?</p>
+</section>
+</section>
+</section>
+<section id="wrapping-up" class="level1">
+<h1>Wrapping up</h1>
+<p>You just solved the same problem three ways:</p>
+<ol type="1">
+<li><strong>By hand</strong> (5 <span class="math inline">\(\theta_i\)</span> values, a table, multiply and normalize)</li>
+<li><strong>Grid approximation</strong> (1,000 <span class="math inline">\(\theta\)</span> values, same logic, finer resolution)</li>
+<li><strong>MCMC via brms</strong> (12,000 draws from the posterior, no grid needed)</li>
+</ol>
+<p>All three gave you the same answer. The first two don’t scale to real models with many parameters. The third does. That’s why we use <code>brms</code>.</p>
+<section id="final-reflection" class="level3">
+<h3 class="anchored" data-anchor-id="final-reflection">Final reflection</h3>
+<p>In your own words, explain the connection between the posterior table from Exercise 3 and the histogram from Exercise 10. What’s the same? What’s different?</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>Kurz, A. S. (2025). <em>Statistical rethinking with brms, ggplot2, and the tidyverse: Second edition</em> (Version 1.2.0). <a href="https://bookdown.org/content/4857/" class="uri">https://bookdown.org/content/4857/</a></p>
+<p>McElreath, R. (2020). <em>Statistical rethinking: A Bayesian course with examples in R and Stan</em> (Second Edition). CRC Press.</p>
+</section>
+<section id="session-information" class="level2">
+<h2 class="anchored" data-anchor-id="session-information">Session information</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.2 (2024-10-31)
+Platform: aarch64-apple-darwin20
+Running under: macOS 26.2
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/New_York
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggdist_3.3.2    tidybayes_3.0.7 brms_2.23.0     Rcpp_1.1.1     
+ [5] lubridate_1.9.4 forcats_1.0.0   stringr_1.5.1   dplyr_1.2.0    
+ [9] purrr_1.2.1     readr_2.1.5     tidyr_1.3.2     tibble_3.3.1   
+[13] ggplot2_4.0.2   tidyverse_2.0.0
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.1     svUnit_1.0.6         farver_2.1.2        
+ [4] loo_2.8.0            S7_0.2.1             fastmap_1.2.0       
+ [7] TH.data_1.1-5        tensorA_0.36.2.1     digest_0.6.37       
+[10] estimability_1.5.1   timechange_0.3.0     lifecycle_1.0.5     
+[13] StanHeaders_2.32.10  processx_3.8.4       survival_3.7-0      
+[16] magrittr_2.0.4       posterior_1.6.0      compiler_4.4.2      
+[19] rlang_1.1.7          tools_4.4.2          yaml_2.3.10         
+[22] knitr_1.51           labeling_0.4.3       bridgesampling_1.1-2
+[25] htmlwidgets_1.6.4    pkgbuild_1.4.5       curl_7.0.0          
+[28] plyr_1.8.9           RColorBrewer_1.1-3   multcomp_1.4-29     
+[31] abind_1.4-8          withr_3.0.2          grid_4.4.2          
+[34] stats4_4.4.2         xtable_1.8-4         colorspace_2.1-1    
+[37] inline_0.3.21        emmeans_1.10.6       scales_1.4.0        
+[40] MASS_7.3-61          cli_3.6.5            mvtnorm_1.3-3       
+[43] rmarkdown_2.29       generics_0.1.3       RcppParallel_5.1.9  
+[46] rstudioapi_0.17.1    reshape2_1.4.4       tzdb_0.5.0          
+[49] rstan_2.32.6         splines_4.4.2        bayesplot_1.15.0    
+[52] parallel_4.4.2       matrixStats_1.5.0    vctrs_0.7.1         
+[55] V8_8.0.1             Matrix_1.7-1         sandwich_3.1-1      
+[58] jsonlite_2.0.0       callr_3.7.6          hms_1.1.3           
+[61] arrayhelpers_1.1-0   glue_1.8.0           ps_1.8.1            
+[64] codetools_0.2-20     distributional_0.5.0 stringi_1.8.7       
+[67] gtable_0.3.6         QuickJSR_1.5.1       pillar_1.11.1       
+[70] htmltools_0.5.8.1    Brobdingnag_1.2-9    R6_2.6.1            
+[73] evaluate_1.0.5       lattice_0.22-6       backports_1.5.0     
+[76] rstantools_2.6.0     coda_0.19-4.1        gridExtra_2.3       
+[79] nlme_3.1-166         checkmate_2.3.2      xfun_0.56           
+[82] zoo_1.8-15           pkgconfig_2.0.3     </code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
