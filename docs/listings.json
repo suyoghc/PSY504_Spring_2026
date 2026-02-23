@@ -3,10 +3,15 @@
     "listing": "/index.html",
     "items": [
       "/posts/Bayes Intro/Bayes_Lab_1_Coins.html",
+      "/posts/Ordinal Regression/Readme.html",
+      "/posts/Ordinal Regression/ord_lab_q.html",
+      "/posts/Ordinal Regression/05-ordinal-regression-narrated-J.html",
+      "/posts/Ordinal Regression/ordinal-regression-lecture.html",
       "/posts/Bayes Intro/Bayes_Intro_2026_Lecture.html",
       "/posts/Logistic Regression/logistic_Feb11_clean.html",
       "/posts/Logistic Regression/logistic_Feb9_clean.html",
-      "/posts/Multiple Regression/Mul_Reg.html"
+      "/posts/Multiple Regression/Mul_Reg.html",
+      "/posts/Ordinal Regression/05-ordinal-regression.html"
     ]
   },
   {
