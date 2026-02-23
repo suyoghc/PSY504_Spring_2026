@@ -1,5 +1,5 @@
 ---
-title: "I Don't Likert You: Ordinal Regression"
+title: "Ordinal Regression"
 subtitle: "Princeton University"
 author: "Suyog Chandramouli"
 date: '2026-02-21'

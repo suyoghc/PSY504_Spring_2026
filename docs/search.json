@@ -1600,7 +1600,7 @@
     "href": "index.html#lecture-slides",
     "title": "PSY 504 Advanced Statistics for Psychology",
     "section": "Lecture Slides",
-    "text": "Lecture Slides\n\n\n\n\n\nPSY 504 2026: Bayes Lab 1 — From Tables to MCMC\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nOrdinal Regression Lab Questions\n\n\n\n\n\n\n\n\n\n\n\n\n\nI Don’t Likert You: Ordinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 21\n\n\n\n\n\n\n\nI Don’t Likert You: Ordinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 21\n\n\n\n\n\n\n\nIntroduction to Bayesian Inference\n\n\n\nBayes\n\n\n\n\n\n\n\n\n\nFeb 16\n\n\n\n\n\n\n\nGLM & Logistic Regression (updated)\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 11\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 09\n\n\n\n\n\n\n\nMultiple Regression\n\n\n\nLinear Models\n\n\n\n\n\n\n\n\n\nFeb 04\n\n\n\n\n\n\n\nI Dont Likert You: Ordinal Regression\n\n\n\n\n\n\n\n\nInvalid Date\n\n\n\n\n\nNo matching items"
+    "text": "Lecture Slides\n\n\n\n\n\nPSY 504 2026: Bayes Lab 1 — From Tables to MCMC\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nOrdinal Regression Lab Questions\n\n\n\n\n\n\n\n\n\n\n\n\n\nI Don’t Likert You: Ordinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 21\n\n\n\n\n\n\n\nOrdinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 21\n\n\n\n\n\n\n\nIntroduction to Bayesian Inference\n\n\n\nBayes\n\n\n\n\n\n\n\n\n\nFeb 16\n\n\n\n\n\n\n\nGLM & Logistic Regression (updated)\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 11\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 09\n\n\n\n\n\n\n\nMultiple Regression\n\n\n\nLinear Models\n\n\n\n\n\n\n\n\n\nFeb 04\n\n\n\n\n\n\n\nI Dont Likert You: Ordinal Regression\n\n\n\n\n\n\n\n\nInvalid Date\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/Logistic Regression/logistic_Feb9_clean.html",
@@ -3187,140 +3187,140 @@
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#packages",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#packages",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Packages",
     "text": "Packages\n\nlibrary(tidyverse)\nlibrary(easystats)\nlibrary(marginaleffects)\nlibrary(effects)\nlibrary(ordinal)\nlibrary(ggeffects)\nlibrary(emmeans)\nlibrary(car)\nlibrary(knitr)\nlibrary(patchwork)\nlibrary(MASS)\nlibrary(broom)\nlibrary(modelsummary)\n\noptions(scipen = 999)\n\n\nAccess the .qmd document here: https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#announcements",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#announcements",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Announcements",
     "text": "Announcements"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#today",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#today",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Today",
     "text": "Today\n\n\n\nFrom logistic to ordinal\nMotivating simulation: Loaded dice\n\nWhy not just use OLS?\nThe latent variable idea\nCumulative logit link\nThresholds and slopes\n\n\n\n\nApplication: Graduate school\n\nModel fitting\nParameter interpretation\nProportional odds assumption\nModel comparisons\nVisualizing\nReporting"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#last-time-logistic-regression",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#last-time-logistic-regression",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Last time: Logistic regression",
     "text": "Last time: Logistic regression\n\nBinary outcomes: 0 or 1\nWe modeled P(Y = 1) using the logit link\n\n\\[\\text{logit}(p) = \\log\\frac{p}{1-p} = \\beta_0 + \\beta_1 X\\]\n\nThe logit mapped probabilities \\((0, 1)\\) → log-odds \\((-\\infty, +\\infty)\\), allowing a linear model\n\n\n\n\n\n\n\n\nNote\n\n\nToday we extend this idea. What happens when your outcome has more than two ordered categories?"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordinal-response-variables",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordinal-response-variables",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Ordinal Response Variables",
     "text": "Ordinal Response Variables\n\nIn psychology many variables have a natural ordering\n\nGrades (e.g., A, B, C)\nEducation level (e.g., BA, MS, PhD)\nCompetitions (e.g., 1st, 2nd, 3rd)\nEconomic status (e.g., wealthy, middle class, poor)\n\nMost common are Likert scale (“Lick-ert”) items"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#this-is-a-cat-not-a-dog",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#this-is-a-cat-not-a-dog",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "This is a cat, not a dog?",
     "text": "This is a cat, not a dog?\n\n\nVery likely to be a cat\nSomewhat likely to be a cat\nAs likely to be cat or dog\nSomewhat likely to be a dog\nVery likely to be a dog"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#methods-for-analysis",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#methods-for-analysis",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Methods for analysis",
     "text": "Methods for analysis\n\nMetric models (e.g., t-test, OLS)\n\nOverestimate information in data; common & “simple”\n\nNonparametric (e.g., signed ranks)\n\nUnderestimate information; don’t scale well\n\nOrdinal models ← today\n\nTreat outcomes appropriately as ordered categories"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-could-possibly-go-wrong",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-could-possibly-go-wrong",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "“What could possibly go wrong?”",
     "text": "“What could possibly go wrong?”\nLiddell and Kruschke (2018) surveyed 68 Psychology articles and found that every article used metric models on ordinal data.\n\nThree main problems:\n\nResponse categories may not be (psychologically) equidistant\nResponses can be non-normally distributed\nDifferences in variances of the underlying variable are treated inappropriately\n\n\n\n\n\n\n\n\n\nWarning\n\n\nUsing metric models on ordinal data can lead to false alarms, failures to detect true effects, distorted effect sizes, and even inversions of effects."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-loaded-dice",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-loaded-dice",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "The Loaded Dice",
     "text": "The Loaded Dice\nEasier to understand ordinal regression if we simulate it from scratch and watch the steps unfold.\nJust like our weighted coins helped us understand logistic regression."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#simulation-with-a-data-generating-process",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#simulation-with-a-data-generating-process",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Simulation with a Data Generating Process",
     "text": "Simulation with a Data Generating Process\n6 dice. 30 rolls each.\nEach die has a lead weight. More lead → the die tends to produce higher scores on a continuous latent “quality” scale.\nWe then bin these latent scores into three ordered categories: Low, Medium, High.\n\nset.seed(504)\n\n# --- DATA GENERATING PROCESS ---\n# Lead weight determines each die's latent mean\ndice &lt;- tibble(\n  die         = 1:6,\n  lead_weight = 1:6,\n  latent_mean = c(-1.5, -0.5, 0, 0.5, 1.0, 2.0)\n)\n\n# TRUE thresholds (students will try to recover these)\ntau1 &lt;- -0.5   # boundary between Low and Medium\ntau2 &lt;-  1.0   # boundary between Medium and High\n\n# Roll each die 30 times → continuous latent score → categorize\nrolls &lt;- dice %&gt;%\n  rowwise() %&gt;%\n  mutate(latent = list(rnorm(30, mean = latent_mean, sd = 1))) %&gt;%\n  unnest(latent) %&gt;%\n  ungroup() %&gt;%\n  group_by(die) %&gt;%\n  mutate(roll = row_number()) %&gt;%\n  ungroup() %&gt;%\n  mutate(\n    category = case_when(\n      latent &lt;= tau1 ~ \"Low\",\n      latent &lt;= tau2 ~ \"Medium\",\n      TRUE           ~ \"High\"\n    ),\n    category = ordered(category, levels = c(\"Low\", \"Medium\", \"High\"))\n  )"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-truth-you-normally-never-see",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-truth-you-normally-never-see",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "The truth you normally never see",
     "text": "The truth you normally never see\nEach point is a roll. The dashed lines are the true thresholds. Color = the category it falls into.\n\n\n\n\n\n\n\n\nImportant\n\n\nIn real life, you never see this plot. You only see the colors — the categories. The y-axis is hidden from you. Ordinal regression’s job is to recover the thresholds and the effect of lead weight using only the categories."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-you-actually-observe",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-you-actually-observe",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "What you actually observe",
     "text": "What you actually observe\n\n\nMore weight → more “High” and fewer “Low.” The pattern is clear. How do we model it?"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-if-we-just-use-ols",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-if-we-just-use-ols",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "What if we just use OLS?",
     "text": "What if we just use OLS?\nCode the categories as numbers (Low = 1, Medium = 2, High = 3) and fit a linear regression.\n\nrolls_numeric &lt;- rolls %&gt;%\n  mutate(y_numeric = as.numeric(category))\n\nols_bad &lt;- lm(y_numeric ~ lead_weight, data = rolls_numeric)\n\nggplot(rolls_numeric, aes(x = lead_weight, y = y_numeric)) +\n  geom_jitter(aes(color = category), width = 0.15, height = 0.1, alpha = 0.4, size = 2) +\n  geom_smooth(method = \"lm\", se = TRUE, color = \"red\", linewidth = 1.2, fullrange = TRUE) +\n  scale_color_manual(values = c(\"Low\" = color_low, \"Medium\" = color_med, \"High\" = color_high),\n                     guide = \"none\") +\n  scale_x_continuous(limits = c(-1, 9)) +\n  scale_y_continuous(breaks = 1:3, labels = c(\"Low\", \"Medium\", \"High\")) +\n  geom_hline(yintercept = c(0.5, 3.5), linetype = \"dashed\", color = \"grey50\") +\n  annotate(\"text\", x = 8, y = 3.4, label = \"Impossible!\", color = \"red\", size = 5) +\n  annotate(\"text\", x = -0.5, y = 0.6, label = \"Impossible!\", color = \"red\", size = 5) +\n  labs(x = \"Lead weight (grams)\", y = \"Response\",\n       title = \"OLS on ordinal data: looks fine, isn't\") +\n  theme_lucid(base_size = 16)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#problems-with-the-treat-it-as-numeric-approach",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#problems-with-the-treat-it-as-numeric-approach",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Problems with the “treat it as numeric” approach",
     "text": "Problems with the “treat it as numeric” approach\n\n\n\n\n\n\nThree things went wrong\n\n\n\nAssumes equal spacing — is the jump from Low → Medium the same as Medium → High? We don’t know, but OLS assumes it is.\nPredicts impossible values — the line escapes the range of the data.\nWrong distributional assumptions — residuals are not normal, variance is not constant.\n\n\n\n\n\nWe need a model that respects the ordered nature of the outcome without assuming it’s metric."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-key-idea-cumulative-splits",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-key-idea-cumulative-splits",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "The key idea: Cumulative splits",
     "text": "The key idea: Cumulative splits\nWith binary logistic regression, we modeled one split:\n\\[\\text{logit}(P(Y = 1)) = \\beta_0 + \\beta_1 X\\]\n\nWith ordinal regression, we model multiple cumulative splits:\n\nSplit 1: P(Low) vs. P(Medium or High)\nSplit 2: P(Low or Medium) vs. P(High)\n\n\n\nEach split is its own logistic regression — but they all share the same slope.\n\n\n\n\n\n\n🔗 The connection\n\n\nWith 2 categories, ordinal regression is logistic regression. There’s 1 threshold, 1 slope.\nWith K categories, you get K − 1 thresholds but still just 1 slope per predictor. Think of it as running K − 1 logistic regressions simultaneously, forced to have the same slope."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-latent-variable-interpretation",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-latent-variable-interpretation",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "The latent variable interpretation",
     "text": "The latent variable interpretation\n\n\n\nThere is a continuous latent variable \\(\\tilde{Y}\\) (the “true score”) that gets categorized into bins by thresholds: \\(\\tau_1, \\tau_2, \\dots, \\tau_{K-1}\\)\nIn our dice simulation:\n\n\\(\\tilde{Y}\\) = the latent score\n\\(\\tau_1 = -0.5\\), \\(\\tau_2 = 1.0\\)\nCategories = Low, Medium, High"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordered-cumulative",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordered-cumulative",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Ordered = Cumulative",
     "text": "Ordered = Cumulative\n\n\n\nWe use the cumulative distribution to model ordered categories\nCumulative probability: \\(P(Y \\leq k)\\)\n\nPreserves the natural ordering\nAlways increasing: \\(P(Y \\leq 1) \\leq P(Y \\leq 2) \\leq \\dots\\)\n\n\n\n\n\n\n\nRichard McElreath"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-1",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-1",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Cumulative logit model",
     "text": "Cumulative logit model\n\nRichard McElreath"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-2",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-2",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Cumulative logit model",
     "text": "Cumulative logit model\n\nRichard McElreath"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-3",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-3",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Cumulative logit model",
     "text": "Cumulative logit model\n\nRichard McElreath"
   },
@@ -3334,14 +3334,14 @@
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-model-equation",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#the-model-equation",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "The model equation",
     "text": "The model equation\n\\[\\log \\left(\\frac{P(Y \\leq k)}{P(Y &gt; k)}\\right) = \\alpha_k - \\beta X\\]\n\\[\\begin{array}{rcl} L_1 &=& \\alpha_1 - \\beta_1 x_1 - \\cdots - \\beta_p X_p\\\\ L_2 &=& \\alpha_2 - \\beta_1 x_1 - \\cdots - \\beta_p X_p \\\\ L_{J-1} &=& \\alpha_{J-1} - \\beta_1 x_1 - \\cdots - \\beta_p X_p \\end{array}\\]\n\nWe estimate J − 1 equations simultaneously\nEach equation has a different intercept \\(\\alpha_k\\) (the thresholds/cut points)\nBut a common slope \\(\\beta\\) ← this is the proportional odds assumption\nIntercepts are always ordered: \\(\\alpha_1 &lt; \\alpha_2 &lt; \\dots\\)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-do-the-pieces-mean",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-do-the-pieces-mean",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "What do the pieces mean?",
     "text": "What do the pieces mean?\n\n\\(\\alpha_k\\) (thresholds/intercepts/cut-offs):\n\nLog-odds of falling at or below category \\(k\\) when all predictors = 0\nThese are the ordinal equivalent of \\(\\beta_0\\) in logistic regression\n\n\\(\\beta\\) (slopes):\n\nEffect of the predictor on the log-odds of being in a higher category\nShared across all cumulative splits\n\nThe \\(-\\) sign:\n\nConvention so that a positive \\(\\beta\\) means higher X → higher category\n\n\nThresholds are where the latent variable gets cut into categories.\n\n\nClose thresholds → few people land in the middle category. Far-apart thresholds → the middle category captures a wide range."
   },
@@ -3355,287 +3355,287 @@
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-the-slope-does",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#what-the-slope-does",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "What the slope does",
     "text": "What the slope does\nThe slope \\(\\beta\\) shifts the entire latent distribution along the x-axis — the thresholds stay put.\n\n\nA positive \\(\\beta\\) shifts the distribution right, increasing P(higher categories). The thresholds \\(\\alpha_k\\) don’t move — they’re properties of the response scale, not the predictor."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#parametrization-note",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#parametrization-note",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Parametrization note",
     "text": "Parametrization note\n\n\n\nWith subtraction convention (\\(\\alpha_k - \\beta X\\)):\n\nPositive \\(\\beta\\) → higher probability of being in higher categories\n\n\n\n\n\n\n\n\n\nWith addition convention (\\(\\alpha_k + \\beta X\\)):\n\nPositive \\(\\beta\\) → higher probability of being in lower categories\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\nordinal::clm() uses subtraction by default (positive = higher). MASS::polr() also uses subtraction. Just check the documentation for whatever package you use."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#fitting-our-dice-data",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#fitting-our-dice-data",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Fitting our dice data",
     "text": "Fitting our dice data\n\nlibrary(ordinal)\n\n# Fit the ordinal model\ndice_fit &lt;- clm(category ~ lead_weight, data = rolls, link = \"logit\")\n\nsummary(dice_fit)\n\nformula: category ~ lead_weight\ndata:    rolls\n\n link  threshold nobs logLik  AIC    niter max.grad cond.H \n logit flexible  180  -142.92 291.84 5(0)  1.02e-07 2.7e+02\n\nCoefficients:\n            Estimate Std. Error z value            Pr(&gt;|z|)    \nlead_weight   1.0517     0.1215   8.653 &lt;0.0000000000000002 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nThreshold coefficients:\n            Estimate Std. Error z value\nLow|Medium    2.2662     0.3863   5.866\nMedium|High   4.9409     0.5507   8.973"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#interpreting-the-output",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#interpreting-the-output",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Interpreting the output",
     "text": "Interpreting the output\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\ncoef.type\n\n\n\n\nLow|Medium\n2.266\n0.386\n5.866\n0\nNA\nNA\nintercept\n\n\nMedium|High\n4.941\n0.551\n8.973\n0\nNA\nNA\nintercept\n\n\nlead_weight\n1.052\n0.122\n8.653\n0\n0.824\n1.302\nlocation\n\n\n\n\n\n\nTwo parts:\n\nThresholds (intercepts for each cumulative split)\n\nLow|Medium: log-odds of \\(Y \\leq\\) Low when lead_weight = 0\nMedium|High: log-odds of \\(Y \\leq\\) Medium when lead_weight = 0\n\nSlope (shared across splits)\n\nlead_weight: effect on log-odds of being in a higher category\n\n\n\n\n\n\n\n\n\n\nCan we recover the truth?\n\n\nTrue thresholds: \\(\\tau_1\\) = -0.5, \\(\\tau_2\\) = 1. Compare to the estimated thresholds above. True slope of the latent mean was roughly 0.7 per gram. How close did we get?"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#from-log-odds-to-odds-ratios",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#from-log-odds-to-odds-ratios",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "From log-odds to odds ratios",
     "text": "From log-odds to odds ratios\n\n# Exponentiate to get cumulative odds ratios\nbroom::tidy(dice_fit, exponentiate = TRUE, conf.int = TRUE) %&gt;%\n  filter(coef.type == \"location\") %&gt;%\n  kable(digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\ncoef.type\n\n\n\n\nlead_weight\n2.863\n0.122\n8.653\n0\n2.28\n3.677\nlocation\n\n\n\n\n\n\n\nInterpretation: Each additional gram of lead multiplies the odds of being in a higher category by the OR"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#from-log-odds-to-probabilities",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#from-log-odds-to-probabilities",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "From log-odds to probabilities",
     "text": "From log-odds to probabilities\n\n# Predicted probabilities for each die\npredictions(dice_fit, newdata = datagrid(lead_weight = 1:6)) %&gt;%\n  kable(digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nrowid\ngroup\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\nlead_weight\ncategory\n\n\n\n\n1\nLow\n0.771\n0.051\n15.098\n0.000\n168.680\n0.671\n0.871\n1\nLow\n\n\n2\nLow\n0.541\n0.054\n9.962\n0.000\n75.249\n0.434\n0.647\n2\nLow\n\n\n3\nLow\n0.291\n0.042\n6.943\n0.000\n37.921\n0.209\n0.374\n3\nLow\n\n\n4\nLow\n0.126\n0.028\n4.506\n0.000\n17.206\n0.071\n0.180\n4\nLow\n\n\n5\nLow\n0.048\n0.016\n3.069\n0.002\n8.864\n0.017\n0.078\n5\nLow\n\n\n6\nLow\n0.017\n0.008\n2.279\n0.023\n5.465\n0.002\n0.032\n6\nLow\n\n\n1\nMedium\n0.209\n0.045\n4.604\n0.000\n17.878\n0.120\n0.298\n1\nLow\n\n\n2\nMedium\n0.404\n0.049\n8.204\n0.000\n51.932\n0.308\n0.501\n2\nLow\n\n\n3\nMedium\n0.565\n0.050\n11.222\n0.000\n94.666\n0.466\n0.664\n3\nLow\n\n\n4\nMedium\n0.550\n0.050\n10.935\n0.000\n90.050\n0.452\n0.649\n4\nLow\n\n\n5\nMedium\n0.373\n0.049\n7.658\n0.000\n45.592\n0.278\n0.469\n5\nLow\n\n\n6\nMedium\n0.185\n0.042\n4.370\n0.000\n16.299\n0.102\n0.269\n6\nLow\n\n\n1\nHigh\n0.020\n0.009\n2.321\n0.020\n5.624\n0.003\n0.037\n1\nLow\n\n\n2\nHigh\n0.055\n0.018\n3.151\n0.002\n9.266\n0.021\n0.090\n2\nLow\n\n\n3\nHigh\n0.144\n0.031\n4.692\n0.000\n18.493\n0.084\n0.204\n3\nLow\n\n\n4\nHigh\n0.324\n0.044\n7.345\n0.000\n42.142\n0.238\n0.411\n4\nLow\n\n\n5\nHigh\n0.579\n0.054\n10.746\n0.000\n87.063\n0.473\n0.684\n5\nLow\n\n\n6\nHigh\n0.797\n0.048\n16.769\n0.000\n207.233\n0.704\n0.890\n6\nLow"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#visualizing-the-dice-model",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#visualizing-the-dice-model",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Visualizing the dice model",
     "text": "Visualizing the dice model\n\nplot_predictions(dice_fit, condition = \"lead_weight\", type = \"prob\") +\n  facet_wrap(~group) +\n  scale_fill_manual(values = c(color_low, color_med, color_high)) +\n  labs(x = \"Lead weight (grams)\", y = \"Predicted probability\") +\n  theme_lucid(base_size = 16)\n\n\n\nAs weight increases: P(Low) decreases, P(High) increases. The S-curves are the same shape (proportional odds!) — just shifted."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#proportional-odds-assumption",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#proportional-odds-assumption",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Proportional odds assumption",
     "text": "Proportional odds assumption\n\nThe key assumption: the slope is equal across all cumulative splits\nIn our dice model: the effect of lead weight on the log-odds of \\(Y \\leq\\) Low vs. \\(Y &gt;\\) Low is the same as the effect on \\(Y \\leq\\) Medium vs. \\(Y &gt;\\) Medium\n\n\n\n\n\n\n\n\n\nNote\n\n\nIf this assumption holds, you only need one slope per predictor — massive parsimony. If it doesn’t hold, consider partial proportional odds or multinomial models."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#fyi-partial-proportional-odds-model",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#fyi-partial-proportional-odds-model",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "FYI: Partial proportional odds model",
     "text": "FYI: Partial proportional odds model\n\nIs it fair to say the effect of your predictor stays the same across all category transitions?\n\n\n\nExamples of when this breaks down:\n\nTest prep might help more for moving from F → D than from A− → A\nAge might strongly affect moving from “poor” → “fair” health but less so from “good” → “excellent”\nCeiling effects\n\n\n\n\n\nHow to know?\n\nLikelihood ratio test comparing the two types of models\nBig difference ⇒ the proportional assumption is probably wrong"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#dice-simulation-recap",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#dice-simulation-recap",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Dice simulation: Recap",
     "text": "Dice simulation: Recap\n\n\n\n\n\n\n\n\nStep\nWhat we did\nWhat it teaches\n\n\n\n\nGenerate latent scores\nrnorm() per die\nLatent variable concept\n\n\nApply thresholds\ncase_when() with \\(\\tau_1\\), \\(\\tau_2\\)\nHow categories arise from a continuum\n\n\nFit OLS\nlm(y_numeric ~ lead_weight)\nWhy treating ordinal as numeric fails\n\n\nFit ordinal model\nclm(category ~ lead_weight)\nHow cumulative logit works\n\n\nCheck estimates vs. truth\nCompare \\(\\hat{\\alpha}\\) to \\(\\tau\\), \\(\\hat{\\beta}\\) to true slope\nModel recovers the generating process\n\n\n\n\n\n\n\n\n\n\nNote\n\n\nNow let’s apply this to real data — where we don’t know the truth."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#data-postgraduate-school-applications",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#data-postgraduate-school-applications",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Data: Postgraduate school applications",
     "text": "Data: Postgraduate school applications\n\nUndergraduate students report how likely they were to apply to graduate school (apply): “Unlikely”, “Somewhat Likely”, “Very Likely”\nAdditional information: GPA (gpa), parent education (pared) (college vs. no college), type of schooling (public) (public vs. private)\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\n\n\n\napply\nn\nproportion\n\n\n\n\nsomewhat likely\n140\n0.35\n\n\nunlikely\n220\n0.55\n\n\nvery likely\n40\n0.10"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#data-preparation",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#data-preparation",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Data preparation",
     "text": "Data preparation\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\n\n\n\n\n\nTip\n\n\nAlways use ordered() to explicitly set the level ordering. R won’t guess correctly — it defaults to alphabetical."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#exploratory-data-analysis",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#exploratory-data-analysis",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Exploratory data analysis",
     "text": "Exploratory data analysis"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-1-parent-education-only",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-1-parent-education-only",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model 1: Parent education only",
     "text": "Model 1: Parent education only\n\\[\\text{logit}(P(Y_i \\leq j)) = \\alpha_j - \\beta_1 \\cdot \\text{pared}_i\\]\n\nFit the model with ordinal::clm (can also use MASS::polr)\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#interpreting-output",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#interpreting-output",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Interpreting output",
     "text": "Interpreting output\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\ncoef.type\n\n\n\n\nunlikely|somewhat likely\n0.377\n0.110\n3.415\n0.001\nNA\nNA\nintercept\n\n\nsomewhat likely|very likely\n2.452\n0.183\n13.430\n0.000\nNA\nNA\nintercept\n\n\npared1\n1.127\n0.263\n4.280\n0.000\n0.613\n1.648\nlocation\n\n\n\n\n\n\n\nThresholds (2 thresholds for 3 categories)\n\nunlikely|somewhat likely: log-odds of being Unlikely vs. higher, when pared = 0\nsomewhat likely|very likely: log-odds of being ≤ Somewhat Likely vs. Very Likely, when pared = 0\n\nSlope\n\npared1: Students with a college-educated parent have higher log-odds of being in a higher application category\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-odds-ratios",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-odds-ratios",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Cumulative odds ratios",
     "text": "Cumulative odds ratios\n\nbroom::tidy(ols1, exponentiate = TRUE, conf.int = TRUE) %&gt;%\n  filter(coef.type == \"location\") %&gt;%\n  kable(digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\nconf.low\nconf.high\ncoef.type\n\n\n\n\npared1\n3.088\n0.263\n4.28\n0\n1.846\n5.196\nlocation\n\n\n\n\n\n\nExponentiate the log cumulative odds to get odds ratios\nStudents with college-educated parents have roughly 3× the odds of applying to graduate school"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#probabilities",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#probabilities",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Probabilities",
     "text": "Probabilities\n\\[P(Y \\leq k) = \\frac{\\exp(\\alpha_k - \\beta X)}{1 + \\exp(\\alpha_k - \\beta X)}\\]\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#predicted-probabilities",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#predicted-probabilities",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Predicted probabilities",
     "text": "Predicted probabilities\n\npredictions(ols1, newdata = datagrid(pared = c(\"0\", \"1\"))) %&gt;%\n  kable(digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nrowid\ngroup\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\npared\napply\n\n\n\n\n1\nunlikely\n0.593\n0.027\n22.273\n0\n362.664\n0.541\n0.645\n0\nvery likely\n\n\n2\nunlikely\n0.321\n0.053\n6.019\n0\n29.089\n0.216\n0.425\n1\nvery likely\n\n\n1\nsomewhat likely\n0.328\n0.024\n13.688\n0\n139.259\n0.281\n0.374\n0\nvery likely\n\n\n2\nsomewhat likely\n0.469\n0.033\n14.070\n0\n146.949\n0.404\n0.535\n1\nvery likely\n\n\n1\nvery likely\n0.079\n0.013\n5.949\n0\n28.469\n0.053\n0.105\n0\nvery likely\n\n\n2\nvery likely\n0.210\n0.042\n4.944\n0\n20.316\n0.127\n0.293\n1\nvery likely"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-1-visualization",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-1-visualization",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model 1 visualization",
     "text": "Model 1 visualization\n\nplot_predictions(ols1, condition = \"pared\", type = \"prob\") +\n  facet_wrap(~group) +\n  labs(x = \"Parent Education\", y = \"Predicted probability\") +\n  scale_y_continuous(labels = scales::percent) +\n  theme_lucid(base_size = 20)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#marginal-effects",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#marginal-effects",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Marginal effects",
     "text": "Marginal effects\n\navg_comparisons(ols1) %&gt;%\n  kable(digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\ngroup\ncontrast\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\n\n\n\n\npared\nunlikely\n1 - 0\n-0.272\n0.058\n-4.664\n0.000\n18.301\n-0.387\n-0.158\n\n\npared\nsomewhat likely\n1 - 0\n0.142\n0.027\n5.257\n0.000\n22.700\n0.089\n0.194\n\n\npared\nvery likely\n1 - 0\n0.131\n0.040\n3.243\n0.001\n9.726\n0.052\n0.210\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\nMarginal effects tell you the change in probability for each category — much easier to interpret than odds ratios."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#testing-proportional-odds-assumption",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#testing-proportional-odds-assumption",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Testing proportional odds assumption",
     "text": "Testing proportional odds assumption\n\nbrant test: compares the full proportional odds model to one that relaxes the assumption\n\nYou want a non-significant \\(\\chi^2\\) test\n\n\n\nlibrary(gofcat)\nbrant.test(ols1)\n\n\nBrant Test:\n           chi-sq   df   pr(&gt;chi)\nOmnibus     0.017    1        0.9\npared1      0.017    1        0.9\n\nH0: Proportional odds assumption holds"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#if-the-proportional-odds-test-is-violated",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#if-the-proportional-odds-test-is-violated",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "If the proportional odds test is violated",
     "text": "If the proportional odds test is violated\nSeveral options:\n\nMultinomial regression — use lowest level as reference; no ordering assumed\nAdjacent category model — model transitions between neighboring categories\nNon-proportional odds (NPO) model — allow slopes to vary by split\n\n\n# In VGAM: NPO model\nlibrary(VGAM)\nols_npo &lt;- vglm(apply ~ pared, family = cumulative(parallel = FALSE, reverse = TRUE), data = dat)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-2-add-public-school-gpa",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-2-add-public-school-gpa",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model 2: Add public school + GPA",
     "text": "Model 2: Add public school + GPA\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#test-proportional-odds-model-2",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#test-proportional-odds-model-2",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Test proportional odds: Model 2",
     "text": "Test proportional odds: Model 2\n\nbrant.test(ols2)\n\n\nBrant Test:\n           chi-sq   df   pr(&gt;chi)  \nOmnibus     4.343    3      0.227  \npared1      0.132    1      0.716  \npublic1     3.443    1      0.064 .\ngpa         0.179    1      0.672  \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nH0: Proportional odds assumption holds"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#visualization-stacked-area-plots",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#visualization-stacked-area-plots",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Visualization: Stacked area plots",
     "text": "Visualization: Stacked area plots\n\nContinuous (GPA)Categorical (Public)\n\n\n\nlibrary(effects)\nplot(effect(\"gpa\", ols2), style = \"stacked\")\n\n\n\n\n\n\n\n\n\n\n\nplot(effect(\"public\", ols2), style = \"stacked\")"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-3-add-interaction-pared-gpa",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-3-add-interaction-pared-gpa",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model 3: Add interaction (pared × GPA)",
     "text": "Model 3: Add interaction (pared × GPA)\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-comparisons",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-comparisons",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model comparisons",
     "text": "Model comparisons\n\nLikelihood ratio test (LRT)\n\n\n# Main effects model vs. interaction\nols_test &lt;- anova(ols2, ols3)\nkable(ols_test)\n\n\n\n\n\nno.par\nAIC\nlogLik\nLR.stat\ndf\nPr(&gt;Chisq)\n\n\n\n\nols2\n5\n727.0249\n-358.5124\nNA\nNA\nNA\n\n\nols3\n6\n728.9774\n-358.4887\n0.0474444\n1\n0.8275715"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#testing-significance",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#testing-significance",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Testing significance",
     "text": "Testing significance\n\n# Use Type III if interactions are important\nols_test3 &lt;- anova(ols3, type = \"III\")\nkable(ols_test3)\n\n\n\n\n\nDf\nChisq\nPr(&gt;Chisq)\n\n\n\n\npublic\n1\n0.0433179\n0.8351278\n\n\npared\n1\n0.0760440\n0.7827319\n\n\ngpa\n1\n4.3838466\n0.0362810\n\n\npared:gpa\n1\n0.0473770\n0.8276920"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-comparison-table",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-comparison-table",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model comparison table",
     "text": "Model comparison table\n\nmodelsummary(\n  list(\"Parent Ed\" = ols1,\n       \"Main Effects\" = ols2,\n       \"Interaction\" = ols3),\n  exponentiate = TRUE,\n  stars = TRUE,\n  title = \"Ordinal Regression: Model Comparison\"\n)\n\n\n\n    \n\n    \n    \n      \n        \n        Ordinal Regression: Model Comparison\n              \n                 \n                Parent Ed\n                Main Effects\n                Interaction\n              \n        \n        + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001\n        \n                \n                  unlikely|somewhat likely\n                  1.458***\n                  9.055**\n                  8.424*\n                \n                \n                  \n                  (0.161)\n                  (7.059)\n                  (7.130)\n                \n                \n                  somewhat likely|very likely\n                  11.610***\n                  73.609***\n                  68.570***\n                \n                \n                  \n                  (2.120)\n                  (59.205)\n                  (59.450)\n                \n                \n                  pared1\n                  3.088***\n                  2.851***\n                  1.799\n                \n                \n                  \n                  (0.813)\n                  (0.758)\n                  (3.834)\n                \n                \n                  public1\n                  \n                  0.943\n                  0.940\n                \n                \n                  \n                  \n                  (0.281)\n                  (0.280)\n                \n                \n                  gpa\n                  \n                  1.851*\n                  1.807*\n                \n                \n                  \n                  \n                  (0.482)\n                  (0.511)\n                \n                \n                  pared1 × gpa\n                  \n                  \n                  1.160\n                \n                \n                  \n                  \n                  \n                  (0.791)\n                \n                \n                  Num.Obs.\n                  400\n                  400\n                  400\n                \n                \n                  AIC\n                  728.8\n                  727.0\n                  729.0\n                \n                \n                  BIC\n                  740.8\n                  747.0\n                  752.9\n                \n                \n                  RMSE\n                  1.37\n                  1.37\n                  1.37"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#visualization-interaction",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#visualization-interaction",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Visualization: Interaction",
     "text": "Visualization: Interaction\n\nplot_predictions(ols3, condition = c(\"gpa\", \"pared\"), type = \"prob\") +\n  facet_grid(~group) +\n  theme_lucid(base_size = 14)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#pairwise-comparisons",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#pairwise-comparisons",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Pairwise comparisons",
     "text": "Pairwise comparisons\n\nResults are on the logit (latent scale) by default\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#simple-slopes",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#simple-slopes",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Simple slopes",
     "text": "Simple slopes\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#latent-scale",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#latent-scale",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Latent scale",
     "text": "Latent scale\n\nplot(effect(\"pared:gpa\", ols3, latent = TRUE))"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#marginal-effects-1",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#marginal-effects-1",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Marginal effects",
     "text": "Marginal effects\n\navg_comparisons(ols3) %&gt;%\n  kable(digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nterm\ngroup\ncontrast\nestimate\nstd.error\nstatistic\np.value\ns.value\nconf.low\nconf.high\n\n\n\n\ngpa\nunlikely\n+1\n-0.143\n0.059\n-2.430\n0.015\n6.049\n-0.258\n-0.028\n\n\ngpa\nsomewhat likely\n+1\n0.074\n0.031\n2.350\n0.019\n5.735\n0.012\n0.135\n\n\ngpa\nvery likely\n+1\n0.069\n0.036\n1.906\n0.057\n4.143\n-0.002\n0.141\n\n\npared\nunlikely\n1 - 0\n-0.247\n0.063\n-3.928\n0.000\n13.510\n-0.370\n-0.124\n\n\npared\nsomewhat likely\n1 - 0\n0.130\n0.032\n4.071\n0.000\n14.383\n0.068\n0.193\n\n\npared\nvery likely\n1 - 0\n0.117\n0.039\n3.034\n0.002\n8.697\n0.041\n0.193\n\n\npublic\nunlikely\n1 - 0\n0.014\n0.069\n0.209\n0.835\n0.261\n-0.122\n0.151\n\n\npublic\nsomewhat likely\n1 - 0\n-0.009\n0.044\n-0.207\n0.836\n0.259\n-0.096\n0.077\n\n\npublic\nvery likely\n1 - 0\n-0.005\n0.025\n-0.212\n0.832\n0.265\n-0.055\n0.044"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-fit",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-fit",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model fit",
     "text": "Model fit\n\nPseudo-\\(R^2\\)\n\n\nr2_mcfadden(ols2)\n\n# R2 for Generalized Linear Regression\n       R2: 0.033\n  adj. R2: 0.030\n\n\n\n\nNot “explained variance” — but a ratio indicating how much better the model fits than an intercept-only model"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-diagnostics",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#model-diagnostics",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Model diagnostics",
     "text": "Model diagnostics\n\nNo easystats functions for ordinal models :(\nsure package: surrogate residuals — based on continuous residuals\n\nCheck normality, linearity, homoscedasticity\n\n\n\nlibrary(sure)\n\nset.seed(1225)\n\ngridExtra::grid.arrange(\n  autoplot.clm(ols2, nsim = 100, what = \"qq\"),\n  autoplot.clm(ols2, nsim = 100, what = \"fitted\", alpha = 0.5),\n  ncol = 2\n)\n\n\n\n\n\n\n\n\nNote\n\n\nFor multicollinearity, check correlations between predictor variables directly."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordinal-regression-assumptions",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordinal-regression-assumptions",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Ordinal regression assumptions",
     "text": "Ordinal regression assumptions\n\nOutcome is ordinal (ordered categories)\nObservations are independent\nProportional odds (parallel slopes across cumulative splits)\nLinearity in the log-odds (for continuous predictors)\nNo normality assumptions for residuals\nHomogeneity of variance"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#multilevel-ordinal-regressions",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#multilevel-ordinal-regressions",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Multilevel ordinal regressions",
     "text": "Multilevel ordinal regressions\n\nFor repeated measures or clustered/nested designs:\n\n\n# Use clmm() from the ordinal package\nols_multilevel &lt;- ordinal::clmm(\n  apply ~ pared + gpa + (1 | school_id),\n  data = dat\n)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#sample-write-up",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#sample-write-up",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Sample write-up",
     "text": "Sample write-up\n\n\n\n\n\n\nTip\n\n\nA proportional odds model with a logit link (estimated using ML) was used to investigate factors influencing undergraduates’ likelihood of applying to graduate school (“unlikely,” “somewhat likely,” “very likely”). The overall model fit was modest, McFadden’s pseudo-\\(R^2\\) = .03. Parent education significantly predicted application likelihood, b = 1.05, z = 3.94, p &lt; .001, OR = 2.85, 95% CI [1.55, 5.28]. Students with college-educated parents had roughly 185% higher odds of applying. Whether students attended public or private school did not significantly predict application likelihood, b = −0.06, z = −0.20, p = .844, OR = 0.94. GPA was also a significant predictor, b = 0.62, z = 2.36, p = .018, OR = 1.85. Each one-point increase in GPA was associated with 85% higher odds of applying."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#reporting-checklist",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#reporting-checklist",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Reporting checklist",
     "text": "Reporting checklist\n\nReport the model type (proportional odds / cumulative logit) and estimation method\nReport log-odds coefficients and odds ratios with 95% CIs\nReport thresholds (or note they are available)\nReport a measure of model fit (McFadden pseudo-\\(R^2\\))\nTest and report the proportional odds assumption (Brant test or LRT)\nConsider reporting marginal effects / predicted probabilities for each category\nInclude sample size and distribution across response categories\nMention diagnostics (surrogate residuals, multicollinearity)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#common-mistakes",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#common-mistakes",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Common Mistakes",
     "text": "Common Mistakes\n\nTreating ordinal data as continuous — running OLS or t-tests on Likert scales\nForgetting that coefficients are in cumulative log-odds, not probabilities\nConfusing thresholds with slopes — thresholds are intercepts for each cumulative split, not effects of predictors\nIgnoring the proportional odds assumption\n\nAlways test it; if it fails, consider partial proportional odds or multinomial\n\nInterpreting odds ratios as probability ratios\n\nOR = 3 means 3× the odds, not 3× the probability\n\nNot visualizing predicted probabilities per category\n\nLog-odds and ORs are hard to interpret; always plot plot_predictions()"
   },
@@ -4125,49 +4125,49 @@
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#rm-from-counts-to-cumulative-log-odds",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#rm-from-counts-to-cumulative-log-odds",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "RM: From counts to cumulative log-odds",
     "text": "RM: From counts to cumulative log-odds\nBefore we model anything, let’s do the arithmetic ourselves. Pick the 3-gram die (30 rolls):\n\ndie3 &lt;- rolls %&gt;% filter(lead_weight == 3)\n\n# Step 1: Category counts and proportions\ndie3_counts &lt;- die3 %&gt;%\n  count(category) %&gt;%\n  mutate(\n    prop         = n / sum(n),\n    cum_prop     = cumsum(prop),\n    cum_odds     = cum_prop / (1 - cum_prop),\n    log_cum_odds = log(cum_odds)\n  )\n\nkable(die3_counts, digits = 3)\n\n\n\n\ncategory\nn\nprop\ncum_prop\ncum_odds\nlog_cum_odds\n\n\n\n\nLow\n12\n0.4\n0.4\n0.667\n-0.405\n\n\nMedium\n15\n0.5\n0.9\n9.000\n2.197\n\n\nHigh\n3\n0.1\n1.0\nInf\nInf\n\n\n\n\n\n\n\n\n\n\n\n\n🔗 Connection to the model\n\n\nThose log-cumulative-odds you just computed? They’re exactly what the model’s thresholds estimate when there’s no predictor. You just did ordinal regression by hand.\n\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#thresholds-matter-ols-cant-see-them",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#thresholds-matter-ols-cant-see-them",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Thresholds matter — OLS can’t see them",
     "text": "Thresholds matter — OLS can’t see them\nSame latent scores, two different threshold placements. OLS treats both identically.\n\nObserved distributionsOLS on bothOrdinal model recovers both\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n# Ordinal model on original thresholds\nfit_orig &lt;- clm(category ~ lead_weight, data = rolls, link = \"logit\")\n\n# Ordinal model on squeezed thresholds\nfit_alt &lt;- clm(category_alt ~ lead_weight, data = rolls_alt, link = \"logit\")\n\nbind_rows(\n  tibble(thresholds = \"Original (−0.5, 1.0)\", term = names(coef(fit_orig)), estimate = coef(fit_orig)),\n  tibble(thresholds = \"Squeezed (0.0, 0.5)\",  term = names(coef(fit_alt)),  estimate = coef(fit_alt))\n) %&gt;%\n  kable(digits = 3)\n\n\n\n\nthresholds\nterm\nestimate\n\n\n\n\nOriginal (−0.5, 1.0)\nLow|Medium\n2.266\n\n\nOriginal (−0.5, 1.0)\nMedium|High\n4.941\n\n\nOriginal (−0.5, 1.0)\nlead_weight\n1.052\n\n\nSqueezed (0.0, 0.5)\nLow|Medium\n3.625\n\n\nSqueezed (0.0, 0.5)\nMedium|High\n4.470\n\n\nSqueezed (0.0, 0.5)\nlead_weight\n1.216\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe point\n\n\nThe distributions look completely different. OLS gives nearly the same answer for both. The ordinal model recovers the different thresholds — it knows the measurement scales differ."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#generalized-linear-model",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#generalized-linear-model",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Generalized linear model",
     "text": "Generalized linear model\nYou saw this in the logistic regression lecture. Same skeleton — three components:\n\\[\\begin{align*}\n  Y_i & \\sim \\mathrm{Dist}(\\mu_i, \\tau) & \\quad & \\text{← Random component} \\\\\n  g(\\mu_i) & = \\eta_i & \\quad & \\text{← Link function} \\\\\n  \\eta_i & = \\beta_0 + \\beta_1 X_{1i} + \\beta_2 X_{2i} + \\ldots & \\quad & \\text{← Linear predictor}\n\\end{align*}\\]\n\nLast time we filled in: Bernoulli distribution, logit link, linear predictor with one intercept and slopes.\n\n\nWhat changes for ordinal data?"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordinal-regression-filling-in-the-glm",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#ordinal-regression-filling-in-the-glm",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Ordinal regression: Filling in the GLM",
     "text": "Ordinal regression: Filling in the GLM\n\\[\\begin{align*}\n  Y_i & \\sim \\color{#d63031}{\\mathrm{Cumulative}}(\\pi_1, \\ldots, \\pi_K) & \\quad & \\color{#d63031}{\\text{← Ordinal outcome (K ordered categories)}} \\\\[8pt]\n  \\color{#2d3436}{g(\\mu_i)} & = \\color{#0984e3}{\\mathrm{logit}} & \\quad & \\color{#0984e3}{\\text{← Same link as logistic regression}} \\\\[8pt]\n  \\eta_i & = \\color{#00b894}{\\alpha_k - (\\beta_1 X_{1i} + \\beta_2 X_{2i} + \\ldots)} & \\quad & \\color{#00b894}{\\text{← Thresholds + slopes}}\n\\end{align*}\\]\n\n\n\nDistribution\nModels cumulative probability \\(P(Y \\leq k)\\) — preserves the ordering\n\nLink\nLogit — identical to logistic regression. Nothing new here.\n\nLinear predictor\n\\(K-1\\) thresholds \\(\\alpha_k\\) (one per split) + shared slopes \\(\\beta\\) (proportional odds)"
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-notation",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#cumulative-logit-model-notation",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "Cumulative logit model (notation)",
     "text": "Cumulative logit model (notation)\n\n\n\n\n\n\n\nSymbol\nMeaning\n\n\n\n\n\\(P_k\\)\nProbability of being in category k\n\n\n\\(C_{pk}\\)\nCumulative probability of being in category k or lower\n\n\n1 − \\(C_{pk}\\)\nProbability of being above category k\n\n\n\n\\[\\textrm{Cumulative Odds} = \\frac{P(Y \\leq k)}{P(Y &gt; k)} = \\frac{C_{pk}}{1-C_{pk}}\\]\n\nTake the log to get the cumulative logit:\n\\[\\log\\left(\\frac{C_{pk}}{1-C_{pk}}\\right)\\]\n\n\n\n\n\n\n\n\n🏷️ Jargon Alert\n\n\nCumulative logit = cumulative log-odds = the same logit link you already know, just applied to cumulative probabilities."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#rm-the-intercept-only-model",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#rm-the-intercept-only-model",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "RM: The intercept-only model",
     "text": "RM: The intercept-only model\nBefore adding predictors, fit a model with no predictor at all — just the thresholds.\n\n# Intercept-only model: just thresholds, no slope\ndice_null &lt;- clm(category ~ 1, data = rolls, link = \"logit\")\n\nbroom::tidy(dice_null) %&gt;%\n  kable(digits = 3)\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\ncoef.type\n\n\n\n\nLow|Medium\n-0.847\n0.163\n-5.209\n0\nintercept\n\n\nMedium|High\n0.744\n0.159\n4.662\n0\nintercept\n\n\n\n\n\n\n\n\n\n\n\n\n🔗 Recognize these?\n\n\nThese threshold estimates are the log-cumulative-odds pooled across all six dice — the same quantity you just computed by hand, but now averaged over the whole dataset. When we add lead_weight as a predictor next, watch how the thresholds and model fit change."
   },
   {
     "objectID": "posts/Ordinal Regression/ordinal-regression-lecture.html#rm-seeing-the-full-redistribution",
     "href": "posts/Ordinal Regression/ordinal-regression-lecture.html#rm-seeing-the-full-redistribution",
-    "title": "I Don’t Likert You: Ordinal Regression",
+    "title": "Ordinal Regression",
     "section": "RM: Seeing the full redistribution",
     "text": "RM: Seeing the full redistribution\nA predictor doesn’t push someone into a specific category — it shifts their latent score, which redistributes probability across all categories simultaneously.\n\npredictions(ols2, \n            newdata = datagrid(gpa = c(2.5, 3.0, 3.5, 4.0), \n                               pared = \"0\", public = \"0\")) %&gt;%\n  mutate(gpa_label = paste0(\"GPA = \", gpa)) %&gt;%\n  ggplot(aes(x = group, y = estimate, fill = group)) +\n  geom_col(width = 0.7) +\n  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) +\n  facet_wrap(~gpa_label, nrow = 1) +\n  scale_fill_manual(values = c(\"unlikely\" = color_low, \n                                \"somewhat likely\" = color_med, \n                                \"very likely\" = color_high),\n                    guide = \"none\") +\n  scale_y_continuous(labels = scales::percent) +\n  labs(x = \"Response category\", y = \"Predicted probability\",\n       title = \"How probability mass redistributes as GPA increases\",\n       subtitle = \"Non-college-educated parent, private school\") +\n  theme_lucid(base_size = 14) +\n  theme(axis.text.x = element_text(angle = 20, hjust = 1))\n\n\n\n\n\n\n\n\n\nTip\n\n\nThis is what the model predicts, not the raw data. As GPA rises, probability drains from “unlikely” and flows into “somewhat likely” and “very likely.” All three categories change simultaneously — that’s the ordinal redistribution."
   }
