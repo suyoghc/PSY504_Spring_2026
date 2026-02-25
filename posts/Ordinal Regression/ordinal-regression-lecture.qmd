@@ -2,7 +2,7 @@
 title: "Ordinal Regression"
 subtitle: "Princeton University"
 author: "Suyog Chandramouli"
-date: '2026-02-21'
+date: '2026-02-23'
 categories: [GLM]
 footer: "PSY 504: Advanced Statistics"
 format: 
@@ -901,7 +901,7 @@ If this assumption holds, you only need **one slope** per predictor — massive 
 ## Dice simulation: Recap {.smaller}
 
 | Step | What we did | What it teaches |
-|-----------------|-----------------------|---------------------------------|
+|------------------|----------------------|--------------------------------|
 | Generate latent scores | `rnorm()` per die | Latent variable concept |
 | Apply thresholds | `case_when()` with $\tau_1$, $\tau_2$ | How categories arise from a continuum |
 | Fit OLS | `lm(y_numeric ~ lead_weight)` | Why treating ordinal as numeric fails |
