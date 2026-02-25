@@ -1,0 +1,519 @@
+---
+title: "Lab 3: Ordinal Regression"
+subtitle: "PSY 504: Advanced Statistics"
+author: "Your Name"
+date: today
+format: 
+  html:
+    code-fold: true
+    code-overflow: wrap
+    toc: true
+    toc-depth: 2
+    code-tools:
+      source: true
+execute: 
+  message: false
+  warning: false
+engine: knitr
+---
+
+[{{< fa download >}} Download the .qmd](https://raw.githubusercontent.com/your-repo/path/lab3-ordinal-regression.qmd)
+
+## Instructions
+
+-   If you are fitting a model, display the model output in a neatly formatted table. (The `tidy()` and `kable()` functions can help!)
+-   If you are creating a plot, use clear labels for all axes, titles, etc.
+-   Commit and push your work to GitHub regularly, at least after each exercise. Write short and informative commit messages.
+-   When you're done, we should be able to knit the final version of the QMD in your GitHub as an HTML.
+
+## Setup
+
+```{r}
+#| code-fold: false
+library(tidyverse)
+library(ordinal)
+library(marginaleffects)
+library(emmeans)
+library(car)
+library(ggeffects)
+library(knitr)
+library(modelsummary)
+library(patchwork)
+library(gofcat)
+library(sure)
+library(MASS)
+
+options(scipen = 999)
+```
+
+------------------------------------------------------------------------
+
+# Part 1: Understanding Thresholds Through Simulation
+
+## The Setup
+
+A university has 10 instructors who are **cross-listed** — they each teach one course in the Psychology department and one in Computer Science. At the end of the semester, students in both departments rate these instructors on a 4-point scale: **Poor / Fair / Good / Excellent**.
+
+Each instructor has a latent (hidden) "teaching effectiveness" score that we never observe. We only see the ordinal rating. Now, **both departments evaluate the same instructors**, but their evaluation forms use **different descriptions** for the rating categories.
+
+**Psychology's form:**
+
+-   Poor = "Did not meet basic expectations"
+-   Fair = "Meets minimum expectations"
+-   Good = "Consistently above average"
+-   Excellent = "Outstanding in all respects"
+
+**Computer Science's form:**
+
+-   Poor = "Did not meet basic expectations"
+-   Fair = "Meets minimum expectations"
+-   Good = "Solid and competent"
+-   Excellent = "Solid and competent, with minor distinction"
+
+Notice that in CS, students have to split hairs between "Good" and "Excellent" as the descriptions barely differ. This compresses the top two categories together. Consequently almost everyone who would be "Good" in Psychology ends up rated "Excellent" in CS, not because the teaching improved, but because the **scale changed**.
+
+Here's the simulation code. **Read it carefully before running it.**
+
+```{r}
+#| code-fold: false
+set.seed(504)
+
+# 10 cross-listed instructors with latent teaching effectiveness
+instructors <- tibble(
+  id = 1:10,
+  effectiveness = rnorm(10, mean = 0, sd = 1.2)
+)
+
+# Each instructor rated by 20 students per department
+ratings_latent <- instructors %>%
+  rowwise() %>%
+  mutate(latent = list(rnorm(20, mean = effectiveness, sd = 1))) %>%
+  unnest(latent) %>%
+  ungroup()
+
+# --- THREE THRESHOLDS PRODUCE FOUR CATEGORIES ---
+
+# Psychology: balanced scale
+tau_psych <- c(-1.0, 0.0, 1.0)
+
+# Computer Science: compressed top end
+tau_cs <- c(-1.0, 0.0, 0.3)
+
+ratings <- ratings_latent %>%
+  mutate(
+    eval_psych = case_when(
+      latent <= tau_psych[1] ~ "Poor",
+      latent <= tau_psych[2] ~ "Fair",
+      latent <= tau_psych[3] ~ "Good",
+      TRUE                   ~ "Excellent"
+    ),
+    eval_psych = ordered(eval_psych, levels = c("Poor", "Fair", "Good", "Excellent")),
+    
+    eval_cs = case_when(
+      latent <= tau_cs[1] ~ "Poor",
+      latent <= tau_cs[2] ~ "Fair",
+      latent <= tau_cs[3] ~ "Good",
+      TRUE                ~ "Excellent"
+    ),
+    eval_cs = ordered(eval_cs, levels = c("Poor", "Fair", "Good", "Excellent"))
+  )
+```
+
+### Exercise 1.1: Visualize the latent distribution {.unnumbered}
+
+Create a density plot of the latent scores with vertical dashed lines for Psychology's thresholds ($\tau_1 = -1$, $\tau_2 = 0$, $\tau_3 = 1$). Label the four regions (Poor, Fair, Good, Excellent) on the plot.
+
+::: {.callout-tip collapse="true" title="Hint: Key geoms"}
+`geom_density()` for the curve, `geom_vline()` for the thresholds, `annotate("text", ...)` for the labels.
+:::
+
+### Question 1.2: Identical instructors, different scales {.unnumbered}
+
+Create side-by-side stacked bar charts showing the observed rating distributions for Psychology and CS.
+
+The instructors didn't change, so what did? What does this tell you about what thresholds control?
+
+::: {.callout-tip collapse="true" title="Hint: Data wrangling"}
+Use `bind_rows()` to combine frequency tables from both departments, then `geom_col(position = "stack")` with `fill = category`.
+:::
+
+### Exercise 1.3: What does tau live on? {.unnumbered}
+
+The thresholds $\tau_1 = -1$, $\tau_2 = 0$, $\tau_3 = 1$ are on the latent "teaching effectiveness" scale — the continuous axis you generated but would never observe in real data. The model re-expresses these same cut points as **log-cumulative-odds** — a transformation of the latent scale that makes the math linear. Convert between them:
+
+a)  Convert the Psychology Dept thresholds to cumulative probabilities using `plogis()`. What does each value mean?
+
+::: {.callout-tip collapse="true" title="Hint: What does plogis() do?"}
+`plogis()` is the inverse logit. It converts log-cumulative-odds back to a probability: $\text{plogis}(\tau) = \frac{e^\tau}{1 + e^\tau} = P(Y \leq k)$
+:::
+
+b)  Suppose you want a rating distribution where 10% are Poor, 30% Fair, 40% Good, and 20% Excellent. What thresholds would produce this? Use `qlogis()`. ::: {.callout-tip collapse="true" title="Hint: What does qlogis() do?"} `qlogis()` is the logit function, which goes the other direction. Give it a cumulative probability and it returns the threshold: $\text{qlogis}(p) = \log\frac{p}{1-p} = \tau$ ::: ::: {.panel-tabset} \## Your turn
+
+```{r}
+#| eval: false
+
+# (a) Thresholds to cumulative probabilities
+thresholds <- c(-1.0, 0.0, 1.0)
+cumul_probs <- plogis(___)
+
+# Then get category-specific probabilities
+cat_probs <- diff(c(0, ___, 1))
+
+# (b) Desired split to thresholds
+desired_split <- c(0.10, 0.30, 0.40, 0.20)
+cumul_desired <- cumsum(desired_split[___])  # which elements?
+needed_thresholds <- qlogis(___)
+```
+
+## Expected output
+
+(a) Cumulative probs: 0.269, 0.500, 0.731 Category probs: 0.269, 0.231, 0.231, 0.269
+
+(b) Cumulative at cuts: 0.10, 0.40, 0.80 Required thresholds: -2.197, -0.405, 1.386
+
+:::
+
+------------------------------------------------------------------------
+
+# Part 2: Manual Calculation — From Counts to Log-Cumulative-Odds
+
+The goal of this section is to **demystify model output**. When you later see `Poor|Fair = -1.23` in a `clm()` summary, you'll think: "that's the log-cumulative-odds I already computed by hand."
+
+### Exercise 2.1: Build the table {.unnumbered}
+
+Using Psychology Dept's ratings, compute the following for each category: the count, proportion, cumulative proportion, cumulative odds, and log-cumulative-odds.
+
+Display the result as a table using `kable()`.
+
+::: panel-tabset
+## Your turn
+
+```{r}
+#| eval: false
+
+hand_calc <- ratings %>%
+  count(___) %>%
+  rename(category = eval_psych) %>%
+  mutate(
+    proportion     = n / ___,
+    cumul_proportion = ___(proportion),
+    cumul_odds       = cumul_proportion / (1 - ___),
+    log_cumul_odds   = ___(cumul_odds)
+  )
+
+hand_calc %>% kable(digits = 3)
+```
+
+## Hint: What's cumulative odds?
+
+Cumulative odds = $\frac{P(Y \leq k)}{P(Y > k)} = \frac{\text{cum\_proportion}}{1 - \text{cum\_proportion}}$
+
+Then take `log()` (natural log, not log10).
+
+The last category (Excellent) will be `Inf`. This is because $P(Y \leq \text{Excellent}) = 1$, so the odds are $1/0 = \infty$.
+:::
+
+### Question 2.2: Compare to model output {.unnumbered}
+
+Fit an intercept-only ordinal model on the Psychology Dept data: `clm(eval_psych ~ 1, data = ratings)`.
+
+Compare the model's threshold estimates to your hand-calculated log-cumulative-odds. How do they compare, and what does this tell you about what the model is doing?
+
+### Question 2.3: Cumulative probability plot {.unnumbered}
+
+Run the code below. It visualizes the numbers you computed in Exercise 2.1, with gray bars showing cumulative probabilities and blue segments showing category-specific probabilities.
+
+```{r}
+#| code-fold: false
+
+freq_table <- ratings %>%
+  count(eval_psych) %>%
+  rename(category = eval_psych) %>%
+  mutate(
+    prop = n / sum(n),
+    cumul_prop = cumsum(prop),
+    cumul_prop_lag = lag(cumul_prop, default = 0)
+  )
+
+ggplot(freq_table) +
+  geom_col(aes(x = category, y = cumul_prop), 
+           fill = "gray70", width = 0.5) +
+  geom_segment(aes(x = as.numeric(category) + 0.15, 
+                   xend = as.numeric(category) + 0.15,
+                   y = cumul_prop_lag, yend = cumul_prop),
+               color = "steelblue", linewidth = 3) +
+  geom_text(aes(x = as.numeric(category) + 0.3,
+                y = (cumul_prop + cumul_prop_lag) / 2,
+                label = round(prop, 2)),
+            color = "steelblue", size = 5, fontface = "bold") +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) +
+  labs(
+    title = "Cumulative vs. category-specific probabilities",
+    subtitle = "Gray = cumulative P(Y ≤ k)   Blue = category P(Y = k)",
+    x = "Rating", y = "Probability"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+Answer these questions:
+
+What do the gray bar and blue segment for "Fair" represent? Write them as probability statements.
+
+------------------------------------------------------------------------
+
+# Part 3: Conceptual Questions
+
+### Question 3.1 {.unnumbered}
+
+How does the **cumulative logit** link function differ from the ordinary logit link used in binary logistic regression?
+
+The cumulative logit is: $\log\frac{P(Y \leq k)}{P(Y > k)}$
+
+For an outcome with $K$ categories, how many equations does this produce? Answer in 2--3 sentences.
+
+### Question 3.2: Why not just use linear regression (aka metric models)? {.unnumbered}
+
+Linear regression, ANOVA, and t-tests are all metric models. Metric models assume the numbers you assign to categories have equal spacing and meaningful distances, where you're treating your scale like a ruler with evenly spaced tick marks.
+
+Using the simulation data, code Psychology Dept ratings as numbers: Poor = 1, Fair = 2, Good = 3, Excellent = 4. Fit `lm(rating_numeric ~ effectiveness)`. Then recode as Poor = 1, Fair = 2, Good = 3, Excellent = 10. Fit the model again.
+
+Report both slopes. In one sentence, explain why they differ and what this reveals about metric models.
+
+------------------------------------------------------------------------
+
+# Part 4: Modeling the GBBO Data
+
+The data comes from the Great British Bake Off (GBBO). In each episode, bakers face a "technical challenge" where they receive a recipe with minimal instructions and are judged blind. The judges rank every baker from best to worst.
+
+We will focus on the **top 3 finishers**. Rank is ordinal, as 1st is better than 2nd and 2nd is better than 3rd, but we cannot say the gap between 1st and 2nd equals the gap between 2nd and 3rd. This is the kind of data that ordinal regression is suited for.
+
+Do Gender and Age predict how bakers rank in the technical?
+
+```{r}
+#| code-fold: false
+gbbo <- read_csv("https://raw.githubusercontent.com/suyoghc/PSY-504_Spring-2025/refs/heads/main/Ordinal%20Regression/data/GBBO.csv")
+```
+
+### Exercise 4.1: Prepare the data {.unnumbered}
+
+Filter to only top 3 ranks. Convert `Rank` to an ordered factor (1 = best, so think about the ordering). Convert `Gender` to a factor.
+
+::: {.callout-tip collapse="true" title="Hint: Factor ordering"}
+The column is called `Technical Rank` (with a space), so rename it first with `rename(Rank = \`Technical Rank\`)\`.
+
+What does "higher" mean here? Rank 1 is best. You need to decide whether your ordered factor goes 1 \< 2 \< 3 (best to worst) or 3 \< 2 \< 1 (worst to best). The model interprets higher factor levels as "more" of the outcome. Think about what direction makes sense for your interpretation.
+:::
+
+```{r}
+#| code-fold: false
+gb <- gbbo %>%
+  rename(Rank = `Technical Rank`) %>%   # fix column name
+  filter(Rank %in% c(1, 2, 3)) %>%
+  drop_na() %>%
+  mutate(
+    Rank = ordered(Rank, levels = c(3, 2, 1)),  # 3 < 2 < 1, so "higher" = better rank
+    Gender = factor(Gender)
+  )
+
+head(gb)
+table(gb$Rank)
+```
+
+### Exercise 4.2: Explore {.unnumbered}
+
+Create two visualizations:
+
+a)  A bar chart showing the proportion of bakers in each rank by Gender.
+b)  A bar chart showing the proportion of bakers in each rank by Age (bin Age into groups using `cut()`).
+
+### Question 4.3: Build models {.unnumbered}
+
+Fit the following models using `clm()` from the `ordinal` package:
+
+-   **Model 0:** Intercept only — `Rank ~ 1`
+-   **Model 1:** `Rank ~ Gender`
+-   **Model 2:** `Rank ~ Gender + Age`
+-   **Model 3:** `Rank ~ Gender * Age`
+
+For Model 2:
+
+a)  Report the threshold estimates. What do they represent?
+b)  Exponentiate the coefficients. Interpret the odds ratio for `Age` in one sentence.
+c)  Using Model 2, what is the predicted probability of Rank 1 for a 30-year-old female? Use `predictions()` from the `marginaleffects` package.
+
+::: {.callout-tip collapse="true" title="Hint: Interpreting thresholds"}
+The thresholds are the log-cumulative-odds of $P(Y \leq k)$ when all predictors are zero. They define the baseline distribution — where the cuts fall before any predictor shifts the distribution.
+:::
+
+```{r}
+#| code-fold: false
+m0 <- clm(Rank ~ 1, data = gb)
+m1 <- clm(Rank ~ Gender, data = gb)
+m2 <- clm(Rank ~ Gender + Age, data = gb)
+m3 <- clm(Rank ~ Gender * Age, data = gb)
+```
+
+------------------------------------------------------------------------
+
+# Part 5: Model Comparison
+
+### Question 5.1 {.unnumbered}
+
+Use `anova()` to compare Model 2 (no interaction) with Model 3 (interaction). Is the interaction warranted?
+
+::: {.callout-tip collapse="true" title="Hint: What is anova() doing here?"}
+Each model's parameters are estimated by maximizing its likelihood function, finding the parameter values that make the observed data as probable as possible. `anova()` performs a likelihood ratio test. It computes:
+
+$$LR = -2 \log\left(\frac{L_{\text{simple}}}{L_{\text{complex}}}\right)$$
+
+This statistic follows a chi-square distribution. A significant p-value means the complex model fits meaningfully better, so the interaction is worth keeping. A non-significant p-value means the extra parameters aren't earning their keep, so you should prefer the simpler model.
+:::
+
+### Exercise 5.2 {.unnumbered}
+
+Create a publication-quality comparison table of all four models using `modelsummary()`. Exponentiate the coefficients so they display as odds ratios.
+
+::: {.callout-tip collapse="true" title="Hint"}
+`modelsummary(list("Intercept only" = m0, "Gender" = m1, ...), exponentiate = TRUE)`
+:::
+
+------------------------------------------------------------------------
+
+# Part 6: Predicted Probabilities
+
+## Mini-tutorial: `marginaleffects::predictions()`
+
+The `predictions()` function computes predicted probabilities for specific covariate profiles. Here's a worked example:
+
+```{r}
+#| code-fold: false
+
+# Predicted probabilities for a 30-year-old female
+predictions(m2, 
+            newdata = datagrid(Gender = "F", Age = 30),
+            type = "prob") %>%
+  kable(digits = 3, caption = "Predicted P(Rank) for a 30-year-old female")
+```
+
+### Question 6.1 {.unnumbered}
+
+Compare the predicted probabilities for a 25-year-old female vs. a 25-year-old male. Which gender has a higher predicted probability of Rank 1?
+
+### Exercise 6.2: Verify by hand {.unnumbered}
+
+Compute the predicted probability of Rank 3 for a 25-year-old female using the formula:
+
+$$P(Y \leq k) = \text{plogis}(\alpha_k - \beta_1 X_1 - \beta_2 X_2)$$
+
+Use the threshold and coefficient values from `coef(m2)`. Confirm that your manually calculated value matches the model output.
+
+::: {.callout-tip collapse="true" title="Hint: The subtraction"}
+Remember the model uses subtraction: $\eta = \alpha_k - \beta X$. So it's `plogis(threshold - (beta_gender * 0 + beta_age * 25))`. Gender = 0 if the reference level is female.
+:::
+
+------------------------------------------------------------------------
+
+# Part 7: Marginal Effects
+
+## Mini-tutorial: `avg_comparisons()`
+
+Marginal effects answer the question: "How much does the predicted probability of each category change when I shift one predictor, holding everything else constant?"
+
+In OLS, the slope *is* the marginal effect, because one unit of X always produces β units of change in Y. That's because the model predicts Y directly, with no transformation.
+
+In any GLM with a nonlinear link (logistic regression, Poisson, ordinal, ...), the slope and the marginal effect come apart. The model estimates β on a transformed scale (log-odds, log-counts), but the relationship between that scale and probability is a curve, not a line. The same β of 0.5 might shift a probability from 0.10 to 0.15 (a 5-point change) near the tails, but from 0.45 to 0.57 (a 12-point change) near the middle. The coefficient is identical in both cases, but its impact differs because the curve is steepest in the center and flat at the extremes.
+
+For ordinal regression specifically, there's an added wrinkle: the marginal effect is different for **each category**. Age might increase P(Rank 1) while simultaneously decreasing P(Rank 3), because probability must redistribute.
+
+`avg_comparisons()` handles all of this. It computes the probability-scale effect at every observation, then averages — giving you one summary per category in percentage points.
+
+Here's a worked example interpreting the effect of Gender:
+
+```{r}
+#| code-fold: false
+
+avg_comparisons(m2, variables = "Gender", type = "prob") %>%
+  kable(digits = 3, caption = "Average marginal effect of Gender on each rank")
+```
+
+**Interpretation example:** *"Switching from female to male changes the probability of achieving Rank 1 by \[estimate\] percentage points, on average. This means males are \[more/less\] likely to finish first in the technical challenge than females."*
+
+### Question 7.1 {.unnumbered}
+
+Compute the average marginal effect of `Age` on each rank category using `avg_comparisons()`.
+
+Translate the marginal effect for **Rank 1** into a sentence that a non-statistician would understand.
+
+------------------------------------------------------------------------
+
+# Part 8: Estimated Marginal Means
+
+## Mini-tutorial: `emmeans()`
+
+`emmeans()` computes estimated marginal means, which are the model's best guess for each group, averaged across other predictors. For ordinal models, we need `mode = "prob"` to get predicted probabilities.
+
+```{r}
+#| code-fold: false
+
+emmeans(m2, ~ Gender, mode = "prob") %>%
+  kable(digits = 3, caption = "Estimated probabilities by Gender")
+```
+
+### Exercise 8.1 {.unnumbered}
+
+Use `ggemmeans()` from the `ggeffects` package to plot predicted probabilities across Age, colored by Gender. The output should show how the probability of each rank category changes with age for each gender.
+
+::: {.callout-tip collapse="true" title="Hint"}
+`ggemmeans(m2, terms = c("Age", "Gender"))` will generate predictions. Pipe to `plot()` or use the returned data with `ggplot()`.
+:::
+
+------------------------------------------------------------------------
+
+# Part 9: Assumption Checking
+
+### Question 9.1: Proportional odds {.unnumbered}
+
+The proportional odds assumption says the effect of a predictor is the same at every threshold — the slope doesn't change depending on where you split the outcome.
+
+Use the Brant test to check this assumption. State your conclusion.
+
+::: {.callout-tip collapse="true" title="Hint: Which package and model object?"}
+`brant.test()` from the `gofcat` package requires a `polr()` model, not a `clm()` model. Refit using `MASS::polr()` first.
+:::
+
+```{r}
+#| code-fold: false
+m2_polr <- polr(Rank ~ Gender + Age, data = gb)
+```
+
+### Question 9.2: Surrogate residuals {.unnumbered}
+
+Use the `sure` package to create a QQ plot of surrogate residuals. Does the latent normality assumption appear to hold?
+
+------------------------------------------------------------------------
+
+# Part 10: Write-Up
+
+### Question 10.1 {.unnumbered}
+
+Write a **1-paragraph results section** for your final model. Your paragraph must include:
+
+-   The model type and link function
+-   Sample size
+-   The proportional odds test result
+-   At least one key coefficient reported as an odds ratio with a confidence interval
+-   At least one marginal effect translated into probability terms
+
+::: {.callout-warning collapse="true" title="Example write-up"}
+*We used a cumulative logit model (proportional odds) to predict technical rank (1st, 2nd, 3rd) from gender and age (N = \[n\]). A Brant test supported the proportional odds assumption (χ² = \[value\], p = \[value\]). Gender was \[not\] a significant predictor of rank (OR = \[value\], 95% CI \[\[lower\], \[upper\]\], p = \[value\]). Each additional year of age was associated with \[an increase/decrease\] in the odds of achieving a better rank (OR = \[value\], 95% CI \[\[lower\], \[upper\]\]). In terms of predicted probabilities, switching from female to male \[increased/decreased\] the probability of achieving rank 1 by approximately \[X\] percentage points.*
+:::
+
+------------------------------------------------------------------------
+
+# Bonus: Probit vs. Logit
+
+### Question B.1 (optional) {.unnumbered}
+
+Refit Model 2 using a probit link: `clm(Rank ~ Gender + Age, data = gb, link = "probit")`.
+
+Compare the coefficients to the logit version. Are the numbers different? Are the substantive conclusions different? In 2-3 sentences, explain why the numbers differ but the story stays the same.

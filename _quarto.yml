@@ -10,6 +10,7 @@ project:
     - "!**/*-narrated-J.qmd"
     - "!**/*Bayes_Lab_1_Coins.qmd"
     - "!**/*_narrative.qmd"
+    - "!**/*Key.qmd"
 
 website:
   title: "PSY 504, Spring 2026"

@@ -10,6 +10,9 @@
 **/*-narrated-J.qmd
 **/*Bayes_Lab_1_Coins.qmd
 **/*_narrative.qmd
+**/*Key.qmd
+*Key_files/
+*Key.html
 
 /.quarto/
 **/*.quarto_ipynb
