@@ -9,8 +9,6 @@ format:
     code-overflow: wrap
     toc: true
     toc-depth: 2
-    code-tools:
-      source: true
 execute: 
   message: false
   warning: false
@@ -58,17 +56,17 @@ Each instructor has a latent (hidden) "teaching effectiveness" score that we nev
 
 **Psychology's form:**
 
--   Poor = "Did not meet basic expectations"
--   Fair = "Meets minimum expectations"
--   Good = "Consistently above average"
--   Excellent = "Outstanding in all respects"
+- Poor = "Did not meet basic expectations"
+- Fair = "Meets minimum expectations"
+- Good = "Consistently above average"
+- Excellent = "Outstanding in all respects"
 
 **Computer Science's form:**
 
--   Poor = "Did not meet basic expectations"
--   Fair = "Meets minimum expectations"
--   Good = "Solid and competent"
--   Excellent = "Solid and competent, with minor distinction"
+- Poor = "Did not meet basic expectations"
+- Fair = "Meets minimum expectations"
+- Good = "Solid and competent"
+- Excellent = "Solid and competent, with minor distinction"
 
 Notice that in CS, students have to split hairs between "Good" and "Excellent" as the descriptions barely differ. This compresses the top two categories together. Consequently almost everyone who would be "Good" in Psychology ends up rated "Excellent" in CS, not because the teaching improved, but because the **scale changed**.
 
@@ -119,13 +117,14 @@ ratings <- ratings_latent %>%
   )
 ```
 
-### Exercise 1.1: Visualize the latent distribution {.unnumbered}
+### Question 1.1: Visualize the latent distribution {.unnumbered}
 
 Create a density plot of the latent scores with vertical dashed lines for Psychology's thresholds ($\tau_1 = -1$, $\tau_2 = 0$, $\tau_3 = 1$). Label the four regions (Poor, Fair, Good, Excellent) on the plot.
 
 ::: {.callout-tip collapse="true" title="Hint: Key geoms"}
-`geom_density()` for the curve, `geom_vline()` for the thresholds, `annotate("text", ...)` for the labels.
+`geom_density()` for the curve, `geom_vline(xintercept = ...)` for the thresholds (use `linetype = "dashed"`), and `annotate("text", x = ..., y = ..., label = ...)` to place category labels in each region. You'll need one `annotate()` call per label.
 :::
+
 
 ### Question 1.2: Identical instructors, different scales {.unnumbered}
 
@@ -137,6 +136,7 @@ The instructors didn't change, so what did? What does this tell you about what t
 Use `bind_rows()` to combine frequency tables from both departments, then `geom_col(position = "stack")` with `fill = category`.
 :::
 
+
 ### Exercise 1.3: What does tau live on? {.unnumbered}
 
 The thresholds $\tau_1 = -1$, $\tau_2 = 0$, $\tau_3 = 1$ are on the latent "teaching effectiveness" scale — the continuous axis you generated but would never observe in real data. The model re-expresses these same cut points as **log-cumulative-odds** — a transformation of the latent scale that makes the math linear. Convert between them:
@@ -147,7 +147,12 @@ a)  Convert the Psychology Dept thresholds to cumulative probabilities using `pl
 `plogis()` is the inverse logit. It converts log-cumulative-odds back to a probability: $\text{plogis}(\tau) = \frac{e^\tau}{1 + e^\tau} = P(Y \leq k)$
 :::
 
-b)  Suppose you want a rating distribution where 10% are Poor, 30% Fair, 40% Good, and 20% Excellent. What thresholds would produce this? Use `qlogis()`. ::: {.callout-tip collapse="true" title="Hint: What does qlogis() do?"} `qlogis()` is the logit function, which goes the other direction. Give it a cumulative probability and it returns the threshold: $\text{qlogis}(p) = \log\frac{p}{1-p} = \tau$ ::: ::: {.panel-tabset} \## Your turn
+b)  Suppose you want a rating distribution where 10% are Poor, 30% Fair, 40% Good, and 20% Excellent. What thresholds would produce this? Use `qlogis()`.
+::: {.callout-tip collapse="true" title="Hint: What does qlogis() do?"}
+`qlogis()` is the logit function, which goes the other direction. Give it a cumulative probability and it returns the threshold: $\text{qlogis}(p) = \log\frac{p}{1-p} = \tau$
+:::
+::: {.panel-tabset}
+## Your turn
 
 ```{r}
 #| eval: false
@@ -167,9 +172,11 @@ needed_thresholds <- qlogis(___)
 
 ## Expected output
 
-(a) Cumulative probs: 0.269, 0.500, 0.731 Category probs: 0.269, 0.231, 0.231, 0.269
+(a) Cumulative probs: 0.269, 0.500, 0.731
+Category probs: 0.269, 0.231, 0.231, 0.269
 
-(b) Cumulative at cuts: 0.10, 0.40, 0.80 Required thresholds: -2.197, -0.405, 1.386
+(b) Cumulative at cuts: 0.10, 0.40, 0.80
+Required thresholds: -2.197, -0.405, 1.386
 
 :::
 
@@ -185,7 +192,7 @@ Using Psychology Dept's ratings, compute the following for each category: the co
 
 Display the result as a table using `kable()`.
 
-::: panel-tabset
+::: {.panel-tabset}
 ## Your turn
 
 ```{r}
@@ -211,6 +218,7 @@ Cumulative odds = $\frac{P(Y \leq k)}{P(Y > k)} = \frac{\text{cum\_proportion}}{
 Then take `log()` (natural log, not log10).
 
 The last category (Excellent) will be `Inf`. This is because $P(Y \leq \text{Excellent}) = 1$, so the odds are $1/0 = \infty$.
+
 :::
 
 ### Question 2.2: Compare to model output {.unnumbered}
@@ -218,6 +226,7 @@ The last category (Excellent) will be `Inf`. This is because $P(Y \leq \text{Exc
 Fit an intercept-only ordinal model on the Psychology Dept data: `clm(eval_psych ~ 1, data = ratings)`.
 
 Compare the model's threshold estimates to your hand-calculated log-cumulative-odds. How do they compare, and what does this tell you about what the model is doing?
+
 
 ### Question 2.3: Cumulative probability plot {.unnumbered}
 
@@ -265,11 +274,12 @@ What do the gray bar and blue segment for "Fair" represent? Write them as probab
 
 ### Question 3.1 {.unnumbered}
 
-How does the **cumulative logit** link function differ from the ordinary logit link used in binary logistic regression?
+How does the **cumulative logit** link function differ from the ordinary logit link used in binary logistic regression? 
 
 The cumulative logit is: $\log\frac{P(Y \leq k)}{P(Y > k)}$
 
 For an outcome with $K$ categories, how many equations does this produce? Answer in 2--3 sentences.
+
 
 ### Question 3.2: Why not just use linear regression (aka metric models)? {.unnumbered}
 
@@ -279,9 +289,11 @@ Using the simulation data, code Psychology Dept ratings as numbers: Poor = 1, Fa
 
 Report both slopes. In one sentence, explain why they differ and what this reveals about metric models.
 
+
 ------------------------------------------------------------------------
 
 # Part 4: Modeling the GBBO Data
+
 
 The data comes from the Great British Bake Off (GBBO). In each episode, bakers face a "technical challenge" where they receive a recipe with minimal instructions and are judged blind. The judges rank every baker from best to worst.
 
@@ -299,7 +311,7 @@ gbbo <- read_csv("https://raw.githubusercontent.com/suyoghc/PSY-504_Spring-2025/
 Filter to only top 3 ranks. Convert `Rank` to an ordered factor (1 = best, so think about the ordering). Convert `Gender` to a factor.
 
 ::: {.callout-tip collapse="true" title="Hint: Factor ordering"}
-The column is called `Technical Rank` (with a space), so rename it first with `rename(Rank = \`Technical Rank\`)\`.
+The column is called `Technical Rank` (with a space), so rename it first with `rename(Rank = \`Technical Rank\`)`.
 
 What does "higher" mean here? Rank 1 is best. You need to decide whether your ordered factor goes 1 \< 2 \< 3 (best to worst) or 3 \< 2 \< 1 (worst to best). The model interprets higher factor levels as "more" of the outcome. Think about what direction makes sense for your interpretation.
 :::
@@ -319,12 +331,17 @@ head(gb)
 table(gb$Rank)
 ```
 
-### Exercise 4.2: Explore {.unnumbered}
+### Question 4.2: Explore {.unnumbered}
 
 Create two visualizations:
 
 a)  A bar chart showing the proportion of bakers in each rank by Gender.
 b)  A bar chart showing the proportion of bakers in each rank by Age (bin Age into groups using `cut()`).
+
+::: {.callout-tip collapse="true" title="Hint: Proportional bar charts"}
+`geom_bar(position = "fill")` gives proportions instead of counts. Map `x = Gender` (or your age groups) and `fill = Rank`. For part (b), create age bins with something like `cut(Age, breaks = c(15, 25, 35, 45, 55, 75))` inside a `mutate()` before plotting.
+:::
+
 
 ### Question 4.3: Build models {.unnumbered}
 
@@ -353,6 +370,7 @@ m2 <- clm(Rank ~ Gender + Age, data = gb)
 m3 <- clm(Rank ~ Gender * Age, data = gb)
 ```
 
+
 ------------------------------------------------------------------------
 
 # Part 5: Model Comparison
@@ -369,13 +387,15 @@ $$LR = -2 \log\left(\frac{L_{\text{simple}}}{L_{\text{complex}}}\right)$$
 This statistic follows a chi-square distribution. A significant p-value means the complex model fits meaningfully better, so the interaction is worth keeping. A non-significant p-value means the extra parameters aren't earning their keep, so you should prefer the simpler model.
 :::
 
-### Exercise 5.2 {.unnumbered}
+
+### Question 5.2 {.unnumbered}
 
 Create a publication-quality comparison table of all four models using `modelsummary()`. Exponentiate the coefficients so they display as odds ratios.
 
 ::: {.callout-tip collapse="true" title="Hint"}
-`modelsummary(list("Intercept only" = m0, "Gender" = m1, ...), exponentiate = TRUE)`
+Put all four models in a named list: `list("Intercept only" = m0, "Gender" = m1, "Gender + Age" = m2, "Gender × Age" = m3)`. Pass it to `modelsummary()` with `exponentiate = TRUE` to display odds ratios and `stars = TRUE` to add significance stars.
 :::
+
 
 ------------------------------------------------------------------------
 
@@ -399,6 +419,7 @@ predictions(m2,
 
 Compare the predicted probabilities for a 25-year-old female vs. a 25-year-old male. Which gender has a higher predicted probability of Rank 1?
 
+
 ### Exercise 6.2: Verify by hand {.unnumbered}
 
 Compute the predicted probability of Rank 3 for a 25-year-old female using the formula:
@@ -410,6 +431,7 @@ Use the threshold and coefficient values from `coef(m2)`. Confirm that your manu
 ::: {.callout-tip collapse="true" title="Hint: The subtraction"}
 Remember the model uses subtraction: $\eta = \alpha_k - \beta X$. So it's `plogis(threshold - (beta_gender * 0 + beta_age * 25))`. Gender = 0 if the reference level is female.
 :::
+
 
 ------------------------------------------------------------------------
 
@@ -436,13 +458,14 @@ avg_comparisons(m2, variables = "Gender", type = "prob") %>%
   kable(digits = 3, caption = "Average marginal effect of Gender on each rank")
 ```
 
-**Interpretation example:** *"Switching from female to male changes the probability of achieving Rank 1 by \[estimate\] percentage points, on average. This means males are \[more/less\] likely to finish first in the technical challenge than females."*
+**Interpretation example:** *"Switching from female to male changes the probability of achieving Rank 1 by [estimate] percentage points, on average. This means males are [more/less] likely to finish first in the technical challenge than females."*
 
 ### Question 7.1 {.unnumbered}
 
 Compute the average marginal effect of `Age` on each rank category using `avg_comparisons()`.
 
 Translate the marginal effect for **Rank 1** into a sentence that a non-statistician would understand.
+
 
 ------------------------------------------------------------------------
 
@@ -459,13 +482,14 @@ emmeans(m2, ~ Gender, mode = "prob") %>%
   kable(digits = 3, caption = "Estimated probabilities by Gender")
 ```
 
-### Exercise 8.1 {.unnumbered}
+### Question 8.1 {.unnumbered}
 
 Use `ggemmeans()` from the `ggeffects` package to plot predicted probabilities across Age, colored by Gender. The output should show how the probability of each rank category changes with age for each gender.
 
 ::: {.callout-tip collapse="true" title="Hint"}
-`ggemmeans(m2, terms = c("Age", "Gender"))` will generate predictions. Pipe to `plot()` or use the returned data with `ggplot()`.
+`ggemmeans(m2, terms = c("Age", "Gender"))` returns a data frame of predicted probabilities. You can pipe it directly to `plot()` for a quick visualization, or use the returned data with `ggplot()` for more control over the appearance.
 :::
+
 
 ------------------------------------------------------------------------
 
@@ -486,9 +510,11 @@ Use the Brant test to check this assumption. State your conclusion.
 m2_polr <- polr(Rank ~ Gender + Age, data = gb)
 ```
 
+
 ### Question 9.2: Surrogate residuals {.unnumbered}
 
 Use the `sure` package to create a QQ plot of surrogate residuals. Does the latent normality assumption appear to hold?
+
 
 ------------------------------------------------------------------------
 
@@ -505,7 +531,7 @@ Write a **1-paragraph results section** for your final model. Your paragraph mus
 -   At least one marginal effect translated into probability terms
 
 ::: {.callout-warning collapse="true" title="Example write-up"}
-*We used a cumulative logit model (proportional odds) to predict technical rank (1st, 2nd, 3rd) from gender and age (N = \[n\]). A Brant test supported the proportional odds assumption (χ² = \[value\], p = \[value\]). Gender was \[not\] a significant predictor of rank (OR = \[value\], 95% CI \[\[lower\], \[upper\]\], p = \[value\]). Each additional year of age was associated with \[an increase/decrease\] in the odds of achieving a better rank (OR = \[value\], 95% CI \[\[lower\], \[upper\]\]). In terms of predicted probabilities, switching from female to male \[increased/decreased\] the probability of achieving rank 1 by approximately \[X\] percentage points.*
+*We used a cumulative logit model (proportional odds) to predict technical rank (1st, 2nd, 3rd) from gender and age (N = [n]). A Brant test supported the proportional odds assumption (χ² = [value], p = [value]). Gender was [not] a significant predictor of rank (OR = [value], 95% CI [[lower], [upper]], p = [value]). Each additional year of age was associated with [an increase/decrease] in the odds of achieving a better rank (OR = [value], 95% CI [[lower], [upper]]). In terms of predicted probabilities, switching from female to male [increased/decreased] the probability of achieving rank 1 by approximately [X] percentage points.*
 :::
 
 ------------------------------------------------------------------------
@@ -517,3 +543,4 @@ Write a **1-paragraph results section** for your final model. Your paragraph mus
 Refit Model 2 using a probit link: `clm(Rank ~ Gender + Age, data = gb, link = "probit")`.
 
 Compare the coefficients to the logit version. Are the numbers different? Are the substantive conclusions different? In 2-3 sentences, explain why the numbers differ but the story stays the same.
+
