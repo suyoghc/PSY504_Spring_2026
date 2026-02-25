@@ -17,7 +17,7 @@ execute:
 engine: knitr
 ---
 
-[{{< fa download >}} Download the .qmd](https://raw.githubusercontent.com/your-repo/path/lab3-ordinal-regression.qmd)
+⬇️ [Download the .qmd](https://github.com/suyoghc/PSY504_Spring_2026/raw/main/posts/Ordinal%20Regression/Lab3%20-%20ordinal%20regression%20-%20Q.qmd)
 
 ## Instructions
 
