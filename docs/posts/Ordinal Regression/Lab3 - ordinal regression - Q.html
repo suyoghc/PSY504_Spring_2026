@@ -349,8 +349,8 @@ window.Quarto = {
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">eval_cs =</span> <span class="fu">ordered</span>(eval_cs, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Poor"</span>, <span class="st">"Fair"</span>, <span class="st">"Good"</span>, <span class="st">"Excellent"</span>))</span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="exercise-1.1-visualize-the-latent-distribution" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="exercise-1.1-visualize-the-latent-distribution">Exercise 1.1: Visualize the latent distribution</h3>
+<section id="question-1.1-visualize-the-latent-distribution" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-1.1-visualize-the-latent-distribution">Question 1.1: Visualize the latent distribution</h3>
 <p>Create a density plot of the latent scores with vertical dashed lines for Psychology’s thresholds (<span class="math inline">\(\tau_1 = -1\)</span>, <span class="math inline">\(\tau_2 = 0\)</span>, <span class="math inline">\(\tau_3 = 1\)</span>). Label the four regions (Poor, Fair, Good, Excellent) on the plot.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Hint: Key geoms">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -364,7 +364,7 @@ window.Quarto = {
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>geom_density()</code> for the curve, <code>geom_vline()</code> for the thresholds, <code>annotate("text", ...)</code> for the labels.</p>
+<p><code>geom_density()</code> for the curve, <code>geom_vline(xintercept = ...)</code> for the thresholds (use <code>linetype = "dashed"</code>), and <code>annotate("text", x = ..., y = ..., label = ...)</code> to place category labels in each region. You’ll need one <code>annotate()</code> call per label.</p>
 </div>
 </div>
 </div>
@@ -385,7 +385,7 @@ window.Quarto = {
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Use <code>bind_rows()</code> to combine frequency tables from both departments, then <code>geom_col(position = "stack")</code> with <code>fill = category</code>.</p>
+<p>First, create a frequency table for each department using <code>count()</code>, rename the rating column to a shared name like <code>category</code>, and add a <code>dept</code> label column. Then <code>bind_rows()</code> them together. Compute proportions with <code>mutate(prop = n / sum(n))</code> grouped by department. Plot with <code>geom_col(position = "stack")</code> mapping <code>x = dept</code>, <code>y = prop</code>, and <code>fill = category</code>.</p>
 </div>
 </div>
 </div>
@@ -602,13 +602,29 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="exercise-4.2-explore" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="exercise-4.2-explore">Exercise 4.2: Explore</h3>
+<section id="question-4.2-explore" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-4.2-explore">Question 4.2: Explore</h3>
 <p>Create two visualizations:</p>
 <ol type="a">
 <li>A bar chart showing the proportion of bakers in each rank by Gender.</li>
 <li>A bar chart showing the proportion of bakers in each rank by Age (bin Age into groups using <code>cut()</code>).</li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: Proportional bar charts">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: Proportional bar charts
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>geom_bar(position = "fill")</code> gives proportions instead of counts. Map <code>x = Gender</code> (or your age groups) and <code>fill = Rank</code>. For part (b), create age bins with something like <code>cut(Age, breaks = c(15, 25, 35, 45, 55, 75))</code> inside a <code>mutate()</code> before plotting.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="question-4.3-build-models" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="question-4.3-build-models">Question 4.3: Build models</h3>
@@ -626,7 +642,7 @@ window.Quarto = {
 <li>Using Model 2, what is the predicted probability of Rank 1 for a 30-year-old female? Use <code>predictions()</code> from the <code>marginaleffects</code> package.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled" title="Hint: Interpreting thresholds">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -635,7 +651,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The thresholds are the log-cumulative-odds of <span class="math inline">\(P(Y \leq k)\)</span> when all predictors are zero. They define the baseline distribution — where the cuts fall before any predictor shifts the distribution.</p>
 </div>
@@ -656,7 +672,7 @@ window.Quarto = {
 <h3 class="unnumbered anchored" data-anchor-id="question-5.1">Question 5.1</h3>
 <p>Use <code>anova()</code> to compare Model 2 (no interaction) with Model 3 (interaction). Is the interaction warranted?</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Hint: What is anova() doing here?">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -665,7 +681,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Each model’s parameters are estimated by maximizing its likelihood function, finding the parameter values that make the observed data as probable as possible. <code>anova()</code> performs a likelihood ratio test. It computes:</p>
 <p><span class="math display">\[LR = -2 \log\left(\frac{L_{\text{simple}}}{L_{\text{complex}}}\right)\]</span></p>
@@ -674,11 +690,11 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="exercise-5.2" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="exercise-5.2">Exercise 5.2</h3>
+<section id="question-5.2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-5.2">Question 5.2</h3>
 <p>Create a publication-quality comparison table of all four models using <code>modelsummary()</code>. Exponentiate the coefficients so they display as odds ratios.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Hint">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -687,9 +703,9 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>modelsummary(list("Intercept only" = m0, "Gender" = m1, ...), exponentiate = TRUE)</code></p>
+<p>Put all four models in a named list: <code>list("Intercept only" = m0, "Gender" = m1, "Gender + Age" = m2, "Gender × Age" = m3)</code>. Pass it to <code>modelsummary()</code> with <code>exponentiate = TRUE</code> to display odds ratios and <code>stars = TRUE</code> to add significance stars.</p>
 </div>
 </div>
 </div>
@@ -797,7 +813,7 @@ window.Quarto = {
 <p><span class="math display">\[P(Y \leq k) = \text{plogis}(\alpha_k - \beta_1 X_1 - \beta_2 X_2)\]</span></p>
 <p>Use the threshold and coefficient values from <code>coef(m2)</code>. Confirm that your manually calculated value matches the model output.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Hint: The subtraction">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -806,7 +822,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Remember the model uses subtraction: <span class="math inline">\(\eta = \alpha_k - \beta X\)</span>. So it’s <code>plogis(threshold - (beta_gender * 0 + beta_age * 25))</code>. Gender = 0 if the reference level is female.</p>
 </div>
@@ -950,11 +966,11 @@ window.Quarto = {
 </table>
 </div>
 </div>
-<section id="exercise-8.1" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="exercise-8.1">Exercise 8.1</h3>
+<section id="question-8.1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-8.1">Question 8.1</h3>
 <p>Use <code>ggemmeans()</code> from the <code>ggeffects</code> package to plot predicted probabilities across Age, colored by Gender. The output should show how the probability of each rank category changes with age for each gender.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Hint">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -963,9 +979,9 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>ggemmeans(m2, terms = c("Age", "Gender"))</code> will generate predictions. Pipe to <code>plot()</code> or use the returned data with <code>ggplot()</code>.</p>
+<p><code>ggemmeans(m2, terms = c("Age", "Gender"))</code> returns a data frame of predicted probabilities. You can pipe it directly to <code>plot()</code> for a quick visualization, or use the returned data with <code>ggplot()</code> for more control over the appearance.</p>
 </div>
 </div>
 </div>
@@ -980,7 +996,7 @@ window.Quarto = {
 <p>The proportional odds assumption says the effect of a predictor is the same at every threshold — the slope doesn’t change depending on where you split the outcome.</p>
 <p>Use the Brant test to check this assumption. State your conclusion.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Hint: Which package and model object?">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -989,7 +1005,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>brant.test()</code> from the <code>gofcat</code> package requires a <code>polr()</code> model, not a <code>clm()</code> model. Refit using <code>MASS::polr()</code> first.</p>
 </div>
@@ -1018,7 +1034,7 @@ window.Quarto = {
 <li>At least one marginal effect translated into probability terms</li>
 </ul>
 <div class="callout callout-style-default callout-warning callout-titled" title="Example write-up">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1027,7 +1043,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><em>We used a cumulative logit model (proportional odds) to predict technical rank (1st, 2nd, 3rd) from gender and age (N = [n]). A Brant test supported the proportional odds assumption (χ² = [value], p = [value]). Gender was [not] a significant predictor of rank (OR = [value], 95% CI [[lower], [upper]], p = [value]). Each additional year of age was associated with [an increase/decrease] in the odds of achieving a better rank (OR = [value], 95% CI [[lower], [upper]]). In terms of predicted probabilities, switching from female to male [increased/decreased] the probability of achieving rank 1 by approximately [X] percentage points.</em></p>
 </div>
