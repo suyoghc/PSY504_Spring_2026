@@ -5,7 +5,7 @@ listing:
   id: lecture-listing
   contents: posts
   sort: "date desc"
-  type: default
+  type: default 
   categories: true
   fields: [date, title, description, categories]
   date-format: "MMM DD"

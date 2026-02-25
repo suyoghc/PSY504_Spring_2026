@@ -1,5 +1,5 @@
 ---
-title: "I Don't Likert You: Ordinal Regression"
+title: "Ordinal Regression"
 subtitle: "Princeton University"
 author: "Suyog Chandramouli"
 date: '2026-02-21'
@@ -440,7 +440,7 @@ The pattern is clear even here.
 
 -   The 6-gram die is mostly green — High.
 
--    **As lead weight increases, the distribution shifts from Low to High.** That's the signal we want to capture.
+-   **As lead weight increases, the distribution shifts from Low to High.** That's the signal we want to capture.
 
 This is exactly what a Likert-scale dataset looks like.
 
@@ -757,15 +757,17 @@ You built these thresholds. You know they're at −0.5 and 1.0 in one case and 0
 
     -   **That's what the threshold parameters buy you.** They let the model see something OLS is blind to.
 
--    **thresholds and a slope.**
+-   **thresholds and a slope.**
 
-    **Thresholds = intercepts.** They answer: when the predictor is zero, where do the cuts fall?\
-    \
-    The point isn't that they're identical — it's that they're **in the same ballpark**, while the thresholds are **dramatically different**: 2.27 vs 3.63 for the first cut, 4.94 vs 4.47 for the second.
+```         
+**Thresholds = intercepts.** They answer: when the predictor is zero, where do the cuts fall?\
+\
+The point isn't that they're identical — it's that they're **in the same ballpark**, while the thresholds are **dramatically different**: 2.27 vs 3.63 for the first cut, 4.94 vs 4.47 for the second.
 
-    The slope wiggles. The thresholds move a lot. OLS only sees something like the slope — it's completely blind to the threshold shift.\
-    \
-    *Let me summarize the problems with OLS before we move on to the right model.*
+The slope wiggles. The thresholds move a lot. OLS only sees something like the slope — it's completely blind to the threshold shift.\
+\
+*Let me summarize the problems with OLS before we move on to the right model.*
+```
 :::
 
 ## Problems with the "treat it as numeric" approach
@@ -1433,7 +1435,7 @@ When it is wrong, you have options: partial proportional odds, multinomial regre
 ## Dice simulation: Recap {.smaller}
 
 | Step | What we did | What it teaches |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | Generate latent scores | `rnorm()` per die | Latent variable concept |
 | Apply thresholds | `case_when()` with $\tau_1$, $\tau_2$ | How categories arise from a continuum |
 | Fit OLS | `lm(y_numeric ~ lead_weight)` | Why treating ordinal as numeric fails |

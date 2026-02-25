@@ -1,6 +1,15 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "index.qmd"
+    - "about.qmd"
+    - "**/*.qmd"
+    - "!**/ord_lab_q.qmd"
+    - "!**/*ordinal-regression.qmd"
+    - "!**/*-narrated-J.qmd"
+    - "!**/*Bayes_Lab_1_Coins.qmd"
+    - "!**/*_narrative.qmd"
 
 website:
   title: "PSY 504, Spring 2026"

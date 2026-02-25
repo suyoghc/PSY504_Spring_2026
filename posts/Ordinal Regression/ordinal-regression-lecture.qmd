@@ -12,7 +12,7 @@ format:
     transition: fade
     slide-number: true
     incremental: false 
-    chalkboard: true
+    chalkboard: true 
     fontsize: "25pt"
 webr:
   packages: ["tidyverse", "easystats", "broom", "knitr", "emmeans", "ordinal", "ggeffects", "marginaleffects"]
@@ -56,7 +56,6 @@ options(scipen = 999)
 
 -   Access the .qmd document here: <https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts>
 
-
 ## Announcements
 
 ## Today
@@ -85,7 +84,6 @@ options(scipen = 999)
 :::
 :::::
 
-
 ## Last time: Logistic regression
 
 -   Binary outcomes: 0 or 1
@@ -102,7 +100,6 @@ $$\text{logit}(p) = \log\frac{p}{1-p} = \beta_0 + \beta_1 X$$
 Today we extend this idea. What happens when your outcome has **more than two** ordered categories?
 :::
 
-
 ## Ordinal Response Variables
 
 -   In psychology many variables have a natural ordering
@@ -113,7 +110,6 @@ Today we extend this idea. What happens when your outcome has **more than two** 
     -   Economic status (e.g., wealthy, middle class, poor)
 
 -   Most common are Likert scale ("Lick-ert") items
-
 
 ## This is a cat, not a dog?
 
@@ -127,7 +123,6 @@ knitr::include_graphics("images/Idli.JPG")
 4.  Somewhat likely to be a dog
 5.  Very likely to be a dog
 
-
 ## Methods for analysis
 
 -   **Metric models** (e.g., t-test, OLS)
@@ -136,7 +131,6 @@ knitr::include_graphics("images/Idli.JPG")
     -   Underestimate information; don't scale well
 -   **Ordinal models** ← today
     -   Treat outcomes appropriately as ordered categories
-
 
 ## "What could possibly go wrong?" {.smaller}
 
@@ -158,16 +152,13 @@ Three main problems:
 Using metric models on ordinal data can lead to false alarms, failures to detect true effects, distorted effect sizes, and even inversions of effects.
 :::
 
-
 # Under the Hood: The Loaded Dice
-
 
 ## The Loaded Dice {.center}
 
 Easier to understand ordinal regression if we **simulate it from scratch** and watch the steps unfold.
 
 Just like our weighted coins helped us understand logistic regression.
-
 
 ## Simulation with a Data Generating Process {.smaller}
 
@@ -213,7 +204,6 @@ rolls <- dice %>%
   )
 ```
 
-
 ## The truth you normally never see {.smaller}
 
 Each point is a roll. The **dashed lines** are the true thresholds. Color = the category it falls into.
@@ -249,7 +239,6 @@ ggplot(rolls, aes(x = lead_weight, y = latent)) +
 In real life, you **never see this plot**. You only see the colors — the categories. The y-axis is hidden from you. Ordinal regression's job is to recover the thresholds and the effect of lead weight **using only the categories**.
 :::
 
-
 ## What you actually observe
 
 ```{r}
@@ -275,7 +264,6 @@ rolls %>%
 . . .
 
 More weight → more "High" and fewer "Low." The pattern is clear. How do we model it?
-
 
 ## RM: From counts to cumulative log-odds {.smaller}
 
@@ -321,7 +309,6 @@ my_die %>%
   )
 ```
 
-
 ## What if we just use OLS? {.smaller}
 
 Code the categories as numbers (Low = 1, Medium = 2, High = 3) and fit a linear regression.
@@ -350,7 +337,6 @@ ggplot(rolls_numeric, aes(x = lead_weight, y = y_numeric)) +
        title = "OLS on ordinal data: looks fine, isn't") +
   theme_lucid(base_size = 16)
 ```
-
 
 ## Thresholds matter — OLS can't see them {.smaller}
 
@@ -476,7 +462,6 @@ bind_rows(
 The distributions look completely different. OLS gives nearly the same answer for both. The ordinal model **recovers the different thresholds** — it knows the measurement scales differ.
 :::
 
-
 ## Problems with the "treat it as numeric" approach
 
 ::: callout-warning
@@ -493,9 +478,7 @@ The distributions look completely different. OLS gives nearly the same answer fo
 
 We need a model that respects the **ordered** nature of the outcome without assuming it's metric.
 
-
 # Cumulative Logit Model
-
 
 ## The key idea: Cumulative splits {.smaller}
 
@@ -522,7 +505,6 @@ With 2 categories, ordinal regression **is** logistic regression. There's 1 thre
 With K categories, you get **K − 1 thresholds** but still just **1 slope** per predictor. Think of it as running K − 1 logistic regressions simultaneously, forced to have the same slope.
 :::
 
-
 ## The latent variable interpretation
 
 ::::: columns
@@ -530,6 +512,7 @@ With K categories, you get **K − 1 thresholds** but still just **1 slope** per
 -   There is a continuous latent variable $\tilde{Y}$ (the "true score") that gets categorized into bins by **thresholds**: $\tau_1, \tau_2, \dots, \tau_{K-1}$
 
 -   In our dice simulation:
+
     -   $\tilde{Y}$ = the latent score
     -   $\tau_1 = -0.5$, $\tau_2 = 1.0$
     -   Categories = Low, Medium, High
@@ -539,7 +522,6 @@ With K categories, you get **K − 1 thresholds** but still just **1 slope** per
 ![](images/ordimage.jpeg){fig-align="center"}
 :::
 :::::
-
 
 ## Ordered = Cumulative
 
@@ -560,7 +542,6 @@ With K categories, you get **K − 1 thresholds** but still just **1 slope** per
 :::
 :::::
 
-
 ## Generalized linear model {.smaller}
 
 You saw this in the logistic regression lecture. Same skeleton — three components:
@@ -579,7 +560,6 @@ Last time we filled in: **Bernoulli** distribution, **logit** link, linear predi
 
 **What changes for ordinal data?**
 
-
 ## Ordinal regression: Filling in the GLM {.smaller}
 
 $$\begin{align*}
@@ -590,32 +570,33 @@ $$\begin{align*}
 
 . . .
 
-::::: columns
+:::::: columns
 ::: {.column width="33%"}
 [**Distribution**]{style="color: #d63031; font-size: 1.1em;"}
 
 Models cumulative probability $P(Y \leq k)$ — preserves the ordering
 :::
+
 ::: {.column width="33%"}
 [**Link**]{style="color: #0984e3; font-size: 1.1em;"}
 
 Logit — identical to logistic regression. Nothing new here.
 :::
+
 ::: {.column width="33%"}
 [**Linear predictor**]{style="color: #00b894; font-size: 1.1em;"}
 
 $K-1$ thresholds $\alpha_k$ (one per split) + shared slopes $\beta$ (proportional odds)
 :::
-:::::
-
+::::::
 
 ## Cumulative logit model (notation) {.smaller}
 
-| Symbol        | Meaning                                                |
-|---------------|--------------------------------------------------------|
-| $P_k$         | Probability of being in category k                     |
-| $C_{pk}$      | Cumulative probability of being in category k or lower |
-| 1 − $C_{pk}$  | Probability of being above category k                  |
+| Symbol       | Meaning                                                |
+|--------------|--------------------------------------------------------|
+| $P_k$        | Probability of being in category k                     |
+| $C_{pk}$     | Cumulative probability of being in category k or lower |
+| 1 − $C_{pk}$ | Probability of being above category k                  |
 
 $$\textrm{Cumulative Odds} = \frac{P(Y \leq k)}{P(Y > k)} = \frac{C_{pk}}{1-C_{pk}}$$
 
@@ -633,21 +614,17 @@ $$\log\left(\frac{C_{pk}}{1-C_{pk}}\right)$$
 Cumulative logit = cumulative log-odds = the same logit link you already know, just applied to *cumulative* probabilities.
 :::
 
-
 ## Cumulative logit model
 
 ![Richard McElreath](images/cum_logodds.jpg){fig-align="center"}
-
 
 ## Cumulative logit model
 
 ![Richard McElreath](images/cut.jpg){fig-align="center"}
 
-
 ## Cumulative logit model
 
 ![Richard McElreath](images/cut_outcomes.jpg)
-
 
 ## The model equation {.smaller}
 
@@ -662,7 +639,6 @@ $$\begin{array}{rcl} L_1 &=& \alpha_1 - \beta_1 x_1 - \cdots - \beta_p X_p\\ L_2
 -   But a **common slope** $\beta$ ← this is the proportional odds assumption
 
 -   Intercepts are always ordered: $\alpha_1 < \alpha_2 < \dots$
-
 
 ## What do the pieces mean?
 
@@ -679,7 +655,6 @@ $$\begin{array}{rcl} L_1 &=& \alpha_1 - \beta_1 x_1 - \cdots - \beta_p X_p\\ L_2
 -   The $-$ sign:
 
     -   Convention so that a **positive** $\beta$ means higher X → higher category
-
 
 Thresholds are where the latent variable gets **cut** into categories.
 
@@ -721,7 +696,6 @@ p1 + p2
 
 Close thresholds → few people land in the middle category. Far-apart thresholds → the middle category captures a wide range.
 
-
 ## What the slope does {.smaller}
 
 The slope $\beta$ shifts the **entire latent distribution** along the x-axis — the thresholds stay put.
@@ -759,7 +733,6 @@ p_shift1 + p_shift2
 
 A positive $\beta$ shifts the distribution **right**, increasing P(higher categories). The thresholds $\alpha_k$ don't move — they're properties of the response scale, not the predictor.
 
-
 ## Parametrization note {.smaller}
 
 ::::: columns
@@ -786,7 +759,6 @@ A positive $\beta$ shifts the distribution **right**, increasing P(higher catego
 `ordinal::clm()` uses **subtraction** by default (positive = higher). `MASS::polr()` also uses subtraction. Just check the documentation for whatever package you use.
 :::
 
-
 ## RM: The intercept-only model {.smaller}
 
 Before adding predictors, fit a model with **no predictor at all** — just the thresholds.
@@ -809,7 +781,6 @@ broom::tidy(dice_null) %>%
 These threshold estimates are the **log-cumulative-odds pooled across all six dice** — the same quantity you just computed by hand, but now averaged over the whole dataset. When we add `lead_weight` as a predictor next, watch how the thresholds and model fit change.
 :::
 
-
 ## Fitting our dice data {.smaller}
 
 ```{r}
@@ -822,7 +793,6 @@ dice_fit <- clm(category ~ lead_weight, data = rolls, link = "logit")
 
 summary(dice_fit)
 ```
-
 
 ## Interpreting the output {.smaller}
 
@@ -854,7 +824,6 @@ broom::tidy(dice_fit, conf.int = TRUE) %>%
 True thresholds: $\tau_1$ = `r tau1`, $\tau_2$ = `r tau2`. Compare to the estimated thresholds above. True slope of the latent mean was roughly 0.7 per gram. How close did we get?
 :::
 
-
 ## From log-odds to odds ratios
 
 ```{r}
@@ -870,7 +839,6 @@ broom::tidy(dice_fit, exponentiate = TRUE, conf.int = TRUE) %>%
 
 -   Interpretation: Each additional gram of lead **multiplies** the odds of being in a higher category by the OR
 
-
 ## From log-odds to probabilities
 
 ```{r}
@@ -880,7 +848,6 @@ broom::tidy(dice_fit, exponentiate = TRUE, conf.int = TRUE) %>%
 predictions(dice_fit, newdata = datagrid(lead_weight = 1:6)) %>%
   kable(digits = 3)
 ```
-
 
 ## Visualizing the dice model {.smaller}
 
@@ -900,7 +867,6 @@ plot_predictions(dice_fit, condition = "lead_weight", type = "prob") +
 
 As weight increases: P(Low) decreases, P(High) increases. The S-curves are the same shape (proportional odds!) — just shifted.
 
-
 ## Proportional odds assumption {.smaller}
 
 -   The key assumption: the **slope is equal** across all cumulative splits
@@ -914,7 +880,6 @@ As weight increases: P(Low) decreases, P(High) increases. The S-curves are the s
 ::: callout-note
 If this assumption holds, you only need **one slope** per predictor — massive parsimony. If it doesn't hold, consider partial proportional odds or multinomial models.
 :::
-
 
 ## FYI: Partial proportional odds model {.smaller}
 
@@ -933,11 +898,10 @@ If this assumption holds, you only need **one slope** per predictor — massive 
     -   Likelihood ratio test comparing the two types of models
     -   Big difference ⇒ the proportional assumption is probably wrong
 
-
 ## Dice simulation: Recap {.smaller}
 
 | Step | What we did | What it teaches |
-|------|------------|-----------------|
+|-----------------|-----------------------|---------------------------------|
 | Generate latent scores | `rnorm()` per die | Latent variable concept |
 | Apply thresholds | `case_when()` with $\tau_1$, $\tau_2$ | How categories arise from a continuum |
 | Fit OLS | `lm(y_numeric ~ lead_weight)` | Why treating ordinal as numeric fails |
@@ -950,9 +914,7 @@ If this assumption holds, you only need **one slope** per predictor — massive 
 Now let's apply this to real data — where we don't know the truth.
 :::
 
-
 # Case Study: Applying to Graduate School
-
 
 ## Data: Postgraduate school applications {.smaller}
 
@@ -976,7 +938,6 @@ dat %>%
   mutate(proportion = n / sum(n)) %>%
   kable(digits = 3)
 ```
-
 
 ## Data preparation
 
@@ -1004,7 +965,6 @@ head(dat$apply)  # check to see if ordered
 Always use `ordered()` to explicitly set the level ordering. R won't guess correctly — it defaults to alphabetical.
 :::
 
-
 ## Exploratory data analysis
 
 ```{r}
@@ -1026,7 +986,6 @@ dat %>%
   theme_lucid(base_size = 18)
 ```
 
-
 ## Model 1: Parent education only
 
 $$\text{logit}(P(Y_i \leq j)) = \alpha_j - \beta_1 \cdot \text{pared}_i$$
@@ -1045,7 +1004,6 @@ ols1 <- clm(apply ~ pared, data = dat, link = "logit")
 
 summary(ols1)
 ```
-
 
 ## Interpreting output {.smaller}
 
@@ -1072,7 +1030,6 @@ broom::tidy(ols1, conf.int = TRUE) %>%
 
 ```
 
-
 ## Cumulative odds ratios
 
 ```{r}
@@ -1086,7 +1043,6 @@ broom::tidy(ols1, exponentiate = TRUE, conf.int = TRUE) %>%
 
 -   Students with college-educated parents have roughly 3× the odds of applying to graduate school
 
-
 ## Probabilities
 
 $$P(Y \leq k) = \frac{\exp(\alpha_k - \beta X)}{1 + \exp(\alpha_k - \beta X)}$$
@@ -1098,7 +1054,6 @@ $$P(Y \leq k) = \frac{\exp(\alpha_k - \beta X)}{1 + \exp(\alpha_k - \beta X)}$$
 
 ```
 
-
 ## Predicted probabilities
 
 ```{r}
@@ -1106,7 +1061,6 @@ $$P(Y \leq k) = \frac{\exp(\alpha_k - \beta X)}{1 + \exp(\alpha_k - \beta X)}$$
 predictions(ols1, newdata = datagrid(pared = c("0", "1"))) %>%
   kable(digits = 3)
 ```
-
 
 ## Model 1 visualization
 
@@ -1120,7 +1074,6 @@ plot_predictions(ols1, condition = "pared", type = "prob") +
   scale_y_continuous(labels = scales::percent) +
   theme_lucid(base_size = 20)
 ```
-
 
 ## Marginal effects
 
@@ -1136,7 +1089,6 @@ avg_comparisons(ols1) %>%
 Marginal effects tell you the change in **probability** for each category — much easier to interpret than odds ratios.
 :::
 
-
 ## Testing proportional odds assumption
 
 -   `brant` test: compares the full proportional odds model to one that relaxes the assumption
@@ -1148,7 +1100,6 @@ Marginal effects tell you the change in **probability** for each category — mu
 library(gofcat)
 brant.test(ols1)
 ```
-
 
 ## If the proportional odds test is violated
 
@@ -1167,7 +1118,6 @@ Several options:
 library(VGAM)
 ols_npo <- vglm(apply ~ pared, family = cumulative(parallel = FALSE, reverse = TRUE), data = dat)
 ```
-
 
 ## Model 2: Add public school + GPA
 
@@ -1194,14 +1144,12 @@ broom::tidy(ols2, conf.int = TRUE) %>%
 
 ```
 
-
 ## Test proportional odds: Model 2
 
 ```{r}
 #| echo: true
 brant.test(ols2)
 ```
-
 
 ## Visualization: Stacked area plots
 
@@ -1221,7 +1169,6 @@ plot(effect("gpa", ols2), style = "stacked")
 plot(effect("public", ols2), style = "stacked")
 ```
 :::
-
 
 ## RM: Seeing the full redistribution {.smaller}
 
@@ -1258,7 +1205,6 @@ predictions(ols2,
 This is what the model *predicts*, not the raw data. As GPA rises, probability drains from "unlikely" and flows into "somewhat likely" and "very likely." **All three categories change simultaneously — that's the ordinal redistribution.**
 :::
 
-
 ## Model 3: Add interaction (pared × GPA)
 
 ```{r}
@@ -1274,7 +1220,6 @@ broom::tidy(ols3, conf.int = TRUE) %>%
   kable(digits = 3)
 ```
 
-
 ## Model comparisons
 
 -   Likelihood ratio test (LRT)
@@ -1286,7 +1231,6 @@ ols_test <- anova(ols2, ols3)
 kable(ols_test)
 ```
 
-
 ## Testing significance
 
 ```{r}
@@ -1295,7 +1239,6 @@ kable(ols_test)
 ols_test3 <- anova(ols3, type = "III")
 kable(ols_test3)
 ```
-
 
 ## Model comparison table
 
@@ -1311,7 +1254,6 @@ modelsummary(
 )
 ```
 
-
 ## Visualization: Interaction
 
 ```{r}
@@ -1322,7 +1264,6 @@ plot_predictions(ols3, condition = c("gpa", "pared"), type = "prob") +
   theme_lucid(base_size = 14)
 ```
 
-
 ## Pairwise comparisons
 
 -   Results are on the logit (latent scale) by default
@@ -1331,13 +1272,11 @@ plot_predictions(ols3, condition = c("gpa", "pared"), type = "prob") +
 emmeans(ols3, list(pairwise ~ pared, pairwise ~ public))
 ```
 
-
 ## Simple slopes
 
 ```{webr-r}
 emtrends(ols3, pairwise ~ pared, var = "gpa")
 ```
-
 
 ## Latent scale
 
@@ -1346,7 +1285,6 @@ emtrends(ols3, pairwise ~ pared, var = "gpa")
 plot(effect("pared:gpa", ols3, latent = TRUE))
 ```
 
-
 ## Marginal effects
 
 ```{r}
@@ -1354,7 +1292,6 @@ plot(effect("pared:gpa", ols3, latent = TRUE))
 avg_comparisons(ols3) %>%
   kable(digits = 3)
 ```
-
 
 ## Model fit
 
@@ -1368,7 +1305,6 @@ r2_mcfadden(ols2)
 . . .
 
 -   Not "explained variance" — but a ratio indicating how much better the model fits than an intercept-only model
-
 
 ## Model diagnostics {.smaller}
 
@@ -1398,9 +1334,7 @@ gridExtra::grid.arrange(
 For multicollinearity, check correlations between predictor variables directly.
 :::
 
-
 # Assumptions
-
 
 ## Ordinal regression assumptions
 
@@ -1416,7 +1350,6 @@ For multicollinearity, check correlations between predictor variables directly.
 
 -   ~~Homogeneity of variance~~
 
-
 ## Multilevel ordinal regressions
 
 -   For repeated measures or clustered/nested designs:
@@ -1430,14 +1363,11 @@ ols_multilevel <- ordinal::clmm(
 )
 ```
 
-
-
 ## Sample write-up
 
 ::: callout-tip
-A proportional odds model with a logit link (estimated using ML) was used to investigate factors influencing undergraduates' likelihood of applying to graduate school ("unlikely," "somewhat likely," "very likely"). The overall model fit was modest, McFadden's pseudo-$R^2$ = .03. Parent education significantly predicted application likelihood, *b* = 1.05, *z* = 3.94, *p* < .001, OR = 2.85, 95% CI [1.55, 5.28]. Students with college-educated parents had roughly 185% higher odds of applying. Whether students attended public or private school did not significantly predict application likelihood, *b* = −0.06, *z* = −0.20, *p* = .844, OR = 0.94. GPA was also a significant predictor, *b* = 0.62, *z* = 2.36, *p* = .018, OR = 1.85. Each one-point increase in GPA was associated with 85% higher odds of applying.
+A proportional odds model with a logit link (estimated using ML) was used to investigate factors influencing undergraduates' likelihood of applying to graduate school ("unlikely," "somewhat likely," "very likely"). The overall model fit was modest, McFadden's pseudo-$R^2$ = .03. Parent education significantly predicted application likelihood, *b* = 1.05, *z* = 3.94, *p* \< .001, OR = 2.85, 95% CI \[1.55, 5.28\]. Students with college-educated parents had roughly 185% higher odds of applying. Whether students attended public or private school did not significantly predict application likelihood, *b* = −0.06, *z* = −0.20, *p* = .844, OR = 0.94. GPA was also a significant predictor, *b* = 0.62, *z* = 2.36, *p* = .018, OR = 1.85. Each one-point increase in GPA was associated with 85% higher odds of applying.
 :::
-
 
 ## Reporting checklist
 
@@ -1447,7 +1377,7 @@ A proportional odds model with a logit link (estimated using ML) was used to inv
 
 -   Report thresholds (or note they are available)
 
--   Report a measure of model fit (**McFadden pseudo-$R^2$**)
+-   Report a measure of model fit (**McFadden pseudo-**$R^2$)
 
 -   **Test and report** the proportional odds assumption (Brant test or LRT)
 
@@ -1456,7 +1386,6 @@ A proportional odds model with a logit link (estimated using ML) was used to inv
 -   Include sample size and **distribution across response categories**
 
 -   Mention diagnostics (surrogate residuals, multicollinearity)
-
 
 ## Common Mistakes {.smaller}
 
@@ -1467,11 +1396,13 @@ A proportional odds model with a logit link (estimated using ML) was used to inv
 -   Confusing **thresholds with slopes** — thresholds are intercepts for each cumulative split, not effects of predictors
 
 -   **Ignoring the proportional odds assumption**
+
     -   Always test it; if it fails, consider partial proportional odds or multinomial
 
 -   Interpreting **odds ratios as probability ratios**
+
     -   OR = 3 means 3× the *odds*, not 3× the *probability*
 
 -   **Not visualizing** predicted probabilities per category
-    -   Log-odds and ORs are hard to interpret; always plot `plot_predictions()`
 
+    -   Log-odds and ORs are hard to interpret; always plot `plot_predictions()`

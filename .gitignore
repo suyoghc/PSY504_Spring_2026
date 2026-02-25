@@ -3,5 +3,13 @@
 .RData
 .Ruserdata
 
+.DS_Store
+**/.DS_Store
+**/ord_lab_q.qmd
+**/*ordinal-regression.qmd
+**/*-narrated-J.qmd
+**/*Bayes_Lab_1_Coins.qmd
+**/*_narrative.qmd
+
 /.quarto/
 **/*.quarto_ipynb
