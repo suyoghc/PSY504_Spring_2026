@@ -13,6 +13,9 @@
 **/*Key.qmd
 *Key_files/
 *Key.html
+**/phase*
+**/05-ordinal-regression-narrated*
+**/ordinal_regression_J2*
 
 /.quarto/
 **/*.quarto_ipynb
