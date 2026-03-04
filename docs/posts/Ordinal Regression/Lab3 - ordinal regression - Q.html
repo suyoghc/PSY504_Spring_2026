@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Your Name">
+<meta name="dcterms.date" content="2026-03-04">
+
+<title>Lab 3: Ordinal Regression – PSY 504, Spring 2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-4ddf543e2355fdfec88fa953ceab072a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-987e5cf15b2990621c91ef70b1b2c2c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="robots" content="noindex, nofollow">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">PSY 504, Spring 2026</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Lectures</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://docs.google.com/document/d/1mXjcFA67TXVNmGNlOfn11-vb5wBbP5yJ8LPKqMjoweM/edit" target="_blank"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://docs.google.com/document/d/1fZhqADwjg8B8YvxYaPCOVUBOh3ounTP8L2g5p31fp18/edit" target="_blank"> 
+<span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Lab 3: Ordinal Regression</h1>
+            <p class="subtitle lead">PSY 504: Advanced Statistics</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Your Name </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 4, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#part-1-understanding-thresholds-through-simulation" id="toc-part-1-understanding-thresholds-through-simulation" class="nav-link" data-scroll-target="#part-1-understanding-thresholds-through-simulation">Part 1: Understanding Thresholds Through Simulation</a>
+  <ul class="collapse">
+  <li><a href="#the-setup" id="toc-the-setup" class="nav-link" data-scroll-target="#the-setup">The Setup</a></li>
+  <li><a href="#expected-output" id="toc-expected-output" class="nav-link" data-scroll-target="#expected-output">Expected output</a></li>
+  </ul></li>
+  <li><a href="#part-2-manual-calculation-from-counts-to-log-cumulative-odds" id="toc-part-2-manual-calculation-from-counts-to-log-cumulative-odds" class="nav-link" data-scroll-target="#part-2-manual-calculation-from-counts-to-log-cumulative-odds">Part 2: Manual Calculation — From Counts to Log-Cumulative-Odds</a></li>
+  <li><a href="#part-3-conceptual-questions" id="toc-part-3-conceptual-questions" class="nav-link" data-scroll-target="#part-3-conceptual-questions">Part 3: Conceptual Questions</a></li>
+  <li><a href="#part-4-modeling-the-gbbo-data" id="toc-part-4-modeling-the-gbbo-data" class="nav-link" data-scroll-target="#part-4-modeling-the-gbbo-data">Part 4: Modeling the GBBO Data</a></li>
+  <li><a href="#part-5-model-comparison" id="toc-part-5-model-comparison" class="nav-link" data-scroll-target="#part-5-model-comparison">Part 5: Model Comparison</a></li>
+  <li><a href="#part-6-predicted-probabilities" id="toc-part-6-predicted-probabilities" class="nav-link" data-scroll-target="#part-6-predicted-probabilities">Part 6: Predicted Probabilities</a>
+  <ul class="collapse">
+  <li><a href="#mini-tutorial-marginaleffectspredictions" id="toc-mini-tutorial-marginaleffectspredictions" class="nav-link" data-scroll-target="#mini-tutorial-marginaleffectspredictions">Mini-tutorial: <code>marginaleffects::predictions()</code></a></li>
+  </ul></li>
+  <li><a href="#part-7-marginal-effects" id="toc-part-7-marginal-effects" class="nav-link" data-scroll-target="#part-7-marginal-effects">Part 7: Marginal Effects</a>
+  <ul class="collapse">
+  <li><a href="#mini-tutorial-avg_comparisons" id="toc-mini-tutorial-avg_comparisons" class="nav-link" data-scroll-target="#mini-tutorial-avg_comparisons">Mini-tutorial: <code>avg_comparisons()</code></a></li>
+  </ul></li>
+  <li><a href="#part-8-estimated-marginal-means" id="toc-part-8-estimated-marginal-means" class="nav-link" data-scroll-target="#part-8-estimated-marginal-means">Part 8: Estimated Marginal Means</a>
+  <ul class="collapse">
+  <li><a href="#mini-tutorial-emmeans" id="toc-mini-tutorial-emmeans" class="nav-link" data-scroll-target="#mini-tutorial-emmeans">Mini-tutorial: <code>emmeans()</code></a></li>
+  </ul></li>
+  <li><a href="#part-9-assumption-checking" id="toc-part-9-assumption-checking" class="nav-link" data-scroll-target="#part-9-assumption-checking">Part 9: Assumption Checking</a></li>
+  <li><a href="#part-10-write-up" id="toc-part-10-write-up" class="nav-link" data-scroll-target="#part-10-write-up">Part 10: Write-Up</a></li>
+  <li><a href="#bonus-probit-vs.-logit" id="toc-bonus-probit-vs.-logit" class="nav-link" data-scroll-target="#bonus-probit-vs.-logit">Bonus: Probit vs.&nbsp;Logit</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>⬇️ <a href="https://github.com/suyoghc/PSY504_Spring_2026/raw/main/posts/Ordinal%20Regression/Lab3%20-%20ordinal%20regression%20-%20Q.qmd">Download the .qmd</a></p>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<ul>
+<li>If you are fitting a model, display the model output in a neatly formatted table. (The <code>tidy()</code> and <code>kable()</code> functions can help!)</li>
+<li>If you are creating a plot, use clear labels for all axes, titles, etc.</li>
+<li>Commit and push your work to GitHub regularly, at least after each exercise. Write short and informative commit messages.</li>
+<li>When you’re done, we should be able to knit the final version of the QMD in your GitHub as an HTML.</li>
+</ul>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ordinal)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggeffects)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gofcat)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sure)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+<section id="part-1-understanding-thresholds-through-simulation" class="level1">
+<h1>Part 1: Understanding Thresholds Through Simulation</h1>
+<section id="the-setup" class="level2">
+<h2 class="anchored" data-anchor-id="the-setup">The Setup</h2>
+<p>A university has 10 instructors who are <strong>cross-listed</strong> — they each teach one course in the Psychology department and one in Computer Science. At the end of the semester, students in both departments rate these instructors on a 4-point scale: <strong>Poor / Fair / Good / Excellent</strong>.</p>
+<p>Each instructor has a latent (hidden) “teaching effectiveness” score that we never observe. We only see the ordinal rating. Now, <strong>both departments evaluate the same instructors</strong>, but their evaluation forms use <strong>different descriptions</strong> for the rating categories.</p>
+<p><strong>Psychology’s form:</strong></p>
+<ul>
+<li>Poor = “Did not meet basic expectations”</li>
+<li>Fair = “Meets minimum expectations”</li>
+<li>Good = “Consistently above average”</li>
+<li>Excellent = “Outstanding in all respects”</li>
+</ul>
+<p><strong>Computer Science’s form:</strong></p>
+<ul>
+<li>Poor = “Did not meet basic expectations”</li>
+<li>Fair = “Meets minimum expectations”</li>
+<li>Good = “Solid and competent”</li>
+<li>Excellent = “Solid and competent, with minor distinction”</li>
+</ul>
+<p>Notice that in CS, students have to split hairs between “Good” and “Excellent” as the descriptions barely differ. This compresses the top two categories together. Consequently almost everyone who would be “Good” in Psychology ends up rated “Excellent” in CS, not because the teaching improved, but because the <strong>scale changed</strong>.</p>
+<p>Here’s the simulation code. <strong>Read it carefully before running it.</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">504</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 10 cross-listed instructors with latent teaching effectiveness</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>instructors <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">effectiveness =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">1.2</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Each instructor rated by 20 students per department</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ratings_latent <span class="ot">&lt;-</span> instructors <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">latent =</span> <span class="fu">list</span>(<span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="at">mean =</span> effectiveness, <span class="at">sd =</span> <span class="dv">1</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(latent) <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># --- THREE THRESHOLDS PRODUCE FOUR CATEGORIES ---</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Psychology: balanced scale</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>tau_psych <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Computer Science: compressed top end</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>tau_cs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">0.3</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>ratings <span class="ot">&lt;-</span> ratings_latent <span class="sc">%&gt;%</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">eval_psych =</span> <span class="fu">case_when</span>(</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>      latent <span class="sc">&lt;=</span> tau_psych[<span class="dv">1</span>] <span class="sc">~</span> <span class="st">"Poor"</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>      latent <span class="sc">&lt;=</span> tau_psych[<span class="dv">2</span>] <span class="sc">~</span> <span class="st">"Fair"</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>      latent <span class="sc">&lt;=</span> tau_psych[<span class="dv">3</span>] <span class="sc">~</span> <span class="st">"Good"</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                   <span class="sc">~</span> <span class="st">"Excellent"</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">eval_psych =</span> <span class="fu">ordered</span>(eval_psych, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Poor"</span>, <span class="st">"Fair"</span>, <span class="st">"Good"</span>, <span class="st">"Excellent"</span>)),</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">eval_cs =</span> <span class="fu">case_when</span>(</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>      latent <span class="sc">&lt;=</span> tau_cs[<span class="dv">1</span>] <span class="sc">~</span> <span class="st">"Poor"</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>      latent <span class="sc">&lt;=</span> tau_cs[<span class="dv">2</span>] <span class="sc">~</span> <span class="st">"Fair"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>      latent <span class="sc">&lt;=</span> tau_cs[<span class="dv">3</span>] <span class="sc">~</span> <span class="st">"Good"</span>,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span>                <span class="sc">~</span> <span class="st">"Excellent"</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">eval_cs =</span> <span class="fu">ordered</span>(eval_cs, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Poor"</span>, <span class="st">"Fair"</span>, <span class="st">"Good"</span>, <span class="st">"Excellent"</span>))</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="question-1.1-visualize-the-latent-distribution" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-1.1-visualize-the-latent-distribution">Question 1.1: Visualize the latent distribution</h3>
+<p>Create a density plot of the latent scores with vertical dashed lines for Psychology’s thresholds (<span class="math inline">\(\tau_1 = -1\)</span>, <span class="math inline">\(\tau_2 = 0\)</span>, <span class="math inline">\(\tau_3 = 1\)</span>). Label the four regions (Poor, Fair, Good, Excellent) on the plot.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: Key geoms">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: Key geoms
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>geom_density()</code> for the curve, <code>geom_vline(xintercept = ...)</code> for the thresholds (use <code>linetype = "dashed"</code>), and <code>annotate("text", x = ..., y = ..., label = ...)</code> to place category labels in each region. You’ll need one <code>annotate()</code> call per label.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="question-1.2-identical-instructors-different-scales" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-1.2-identical-instructors-different-scales">Question 1.2: Identical instructors, different scales</h3>
+<p>Create side-by-side stacked bar charts showing the observed rating distributions for Psychology and CS.</p>
+<p>The instructors didn’t change, so what did? What does this tell you about what thresholds control?</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: Data wrangling">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: Data wrangling
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>First, create a frequency table for each department using <code>count()</code>, rename the rating column to a shared name like <code>category</code>, and add a <code>dept</code> label column. Then <code>bind_rows()</code> them together. Compute proportions with <code>mutate(prop = n / sum(n))</code> grouped by department. Plot with <code>geom_col(position = "stack")</code> mapping <code>x = dept</code>, <code>y = prop</code>, and <code>fill = category</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-1.3-what-does-tau-live-on" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="exercise-1.3-what-does-tau-live-on">Exercise 1.3: What does tau live on?</h3>
+<p>The thresholds <span class="math inline">\(\tau_1 = -1\)</span>, <span class="math inline">\(\tau_2 = 0\)</span>, <span class="math inline">\(\tau_3 = 1\)</span> are on the latent “teaching effectiveness” scale — the continuous axis you generated but would never observe in real data. The model re-expresses these same cut points as <strong>log-cumulative-odds</strong> — a transformation of the latent scale that makes the math linear. Convert between them:</p>
+<ol type="a">
+<li>Convert the Psychology Dept thresholds to cumulative probabilities using <code>plogis()</code>. What does each value mean?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: What does plogis() do?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: What does plogis() do?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>plogis()</code> is the inverse logit. It converts log-cumulative-odds back to a probability: <span class="math inline">\(\text{plogis}(\tau) = \frac{e^\tau}{1 + e^\tau} = P(Y \leq k)\)</span></p>
+</div>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Suppose you want a rating distribution where 10% are Poor, 30% Fair, 40% Good, and 20% Excellent. What thresholds would produce this? Use <code>qlogis()</code>. ::: {.callout-tip collapse=“true” title=“Hint: What does qlogis() do?”} <code>qlogis()</code> is the logit function, which goes the other direction. Give it a cumulative probability and it returns the threshold: <span class="math inline">\(\text{qlogis}(p) = \log\frac{p}{1-p} = \tau\)</span> ::: ::: {.panel-tabset} ## Your turn</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (a) Thresholds to cumulative probabilities</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>thresholds <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cumul_probs <span class="ot">&lt;-</span> <span class="fu">plogis</span>(___)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Then get category-specific probabilities</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>cat_probs <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">c</span>(<span class="dv">0</span>, ___, <span class="dv">1</span>))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># (b) Desired split to thresholds</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>desired_split <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.10</span>, <span class="fl">0.30</span>, <span class="fl">0.40</span>, <span class="fl">0.20</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>cumul_desired <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(desired_split[___])  <span class="co"># which elements?</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>needed_thresholds <span class="ot">&lt;-</span> <span class="fu">qlogis</span>(___)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="expected-output" class="level2">
+<h2 class="anchored" data-anchor-id="expected-output">Expected output</h2>
+<ol type="a">
+<li><p>Cumulative probs: 0.269, 0.500, 0.731 Category probs: 0.269, 0.231, 0.231, 0.269</p></li>
+<li><p>Cumulative at cuts: 0.10, 0.40, 0.80 Required thresholds: -2.197, -0.405, 1.386</p></li>
+</ol>
+<p>:::</p>
+<hr>
+</section>
+</section>
+<section id="part-2-manual-calculation-from-counts-to-log-cumulative-odds" class="level1">
+<h1>Part 2: Manual Calculation — From Counts to Log-Cumulative-Odds</h1>
+<p>The goal of this section is to <strong>demystify model output</strong>. When you later see <code>Poor|Fair = -1.23</code> in a <code>clm()</code> summary, you’ll think: “that’s the log-cumulative-odds I already computed by hand.”</p>
+<section id="exercise-2.1-build-the-table" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="exercise-2.1-build-the-table">Exercise 2.1: Build the table</h3>
+<p>Using Psychology Dept’s ratings, compute the following for each category: the count, proportion, cumulative proportion, cumulative odds, and log-cumulative-odds.</p>
+<p>Display the result as a table using <code>kable()</code>.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Your turn</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Hint: What’s cumulative odds?</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hand_calc <span class="ot">&lt;-</span> ratings <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(___) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">category =</span> eval_psych) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion     =</span> n <span class="sc">/</span> ___,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cumul_proportion =</span> <span class="fu">___</span>(proportion),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cumul_odds       =</span> cumul_proportion <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> ___),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_cumul_odds   =</span> <span class="fu">___</span>(cumul_odds)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>hand_calc <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Cumulative odds = <span class="math inline">\(\frac{P(Y \leq k)}{P(Y &gt; k)} = \frac{\text{cum\_proportion}}{1 - \text{cum\_proportion}}\)</span></p>
+<p>Then take <code>log()</code> (natural log, not log10).</p>
+<p>The last category (Excellent) will be <code>Inf</code>. This is because <span class="math inline">\(P(Y \leq \text{Excellent}) = 1\)</span>, so the odds are <span class="math inline">\(1/0 = \infty\)</span>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="question-2.2-compare-to-model-output" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-2.2-compare-to-model-output">Question 2.2: Compare to model output</h3>
+<p>Fit an intercept-only ordinal model on the Psychology Dept data: <code>clm(eval_psych ~ 1, data = ratings)</code>.</p>
+<p>Compare the model’s threshold estimates to your hand-calculated log-cumulative-odds. How do they compare, and what does this tell you about what the model is doing?</p>
+</section>
+<section id="question-2.3-cumulative-probability-plot" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-2.3-cumulative-probability-plot">Question 2.3: Cumulative probability plot</h3>
+<p>Run the code below. It visualizes the numbers you computed in Exercise 2.1, with gray bars showing cumulative probabilities and blue segments showing category-specific probabilities.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>freq_table <span class="ot">&lt;-</span> ratings <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(eval_psych) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">category =</span> eval_psych) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cumul_prop =</span> <span class="fu">cumsum</span>(prop),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cumul_prop_lag =</span> <span class="fu">lag</span>(cumul_prop, <span class="at">default =</span> <span class="dv">0</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(freq_table) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> category, <span class="at">y =</span> cumul_prop), </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">"gray70"</span>, <span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(category) <span class="sc">+</span> <span class="fl">0.15</span>, </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> <span class="fu">as.numeric</span>(category) <span class="sc">+</span> <span class="fl">0.15</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> cumul_prop_lag, <span class="at">yend =</span> cumul_prop),</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">linewidth =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(category) <span class="sc">+</span> <span class="fl">0.3</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> (cumul_prop <span class="sc">+</span> cumul_prop_lag) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">label =</span> <span class="fu">round</span>(prop, <span class="dv">2</span>)),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.25</span>)) <span class="sc">+</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Cumulative vs. category-specific probabilities"</span>,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Gray = cumulative P(Y ≤ k)   Blue = category P(Y = k)"</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Rating"</span>, <span class="at">y =</span> <span class="st">"Probability"</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab3---ordinal-regression---Q_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Answer these questions:</p>
+<p>What do the gray bar and blue segment for “Fair” represent? Write them as probability statements.</p>
+<hr>
+</section>
+</section>
+<section id="part-3-conceptual-questions" class="level1">
+<h1>Part 3: Conceptual Questions</h1>
+<section id="question-3.1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-3.1">Question 3.1</h3>
+<p>How does the <strong>cumulative logit</strong> link function differ from the ordinary logit link used in binary logistic regression?</p>
+<p>The cumulative logit is: <span class="math inline">\(\log\frac{P(Y \leq k)}{P(Y &gt; k)}\)</span></p>
+<p>For an outcome with <span class="math inline">\(K\)</span> categories, how many equations does this produce? Answer in 2–3 sentences.</p>
+</section>
+<section id="question-3.2-why-not-just-use-linear-regression-aka-metric-models" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-3.2-why-not-just-use-linear-regression-aka-metric-models">Question 3.2: Why not just use linear regression (aka metric models)?</h3>
+<p>Linear regression, ANOVA, and t-tests are all metric models. Metric models assume the numbers you assign to categories have equal spacing and meaningful distances, where you’re treating your scale like a ruler with evenly spaced tick marks.</p>
+<p>Using the simulation data, code Psychology Dept ratings as numbers: Poor = 1, Fair = 2, Good = 3, Excellent = 4. Fit <code>lm(rating_numeric ~ effectiveness)</code>. Then recode as Poor = 1, Fair = 2, Good = 3, Excellent = 10. Fit the model again.</p>
+<p>Report both slopes. In one sentence, explain why they differ and what this reveals about metric models.</p>
+<hr>
+</section>
+</section>
+<section id="part-4-modeling-the-gbbo-data" class="level1">
+<h1>Part 4: Modeling the GBBO Data</h1>
+<p>The data comes from the Great British Bake Off (GBBO). In each episode, bakers face a “technical challenge” where they receive a recipe with minimal instructions and are judged blind. The judges rank every baker from best to worst.</p>
+<p>We will focus on the <strong>top 3 finishers</strong>. Rank is ordinal, as 1st is better than 2nd and 2nd is better than 3rd, but we cannot say the gap between 1st and 2nd equals the gap between 2nd and 3rd. This is the kind of data that ordinal regression is suited for.</p>
+<p>Do Gender and Age predict how bakers rank in the technical?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gbbo <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/suyoghc/PSY-504_Spring-2025/refs/heads/main/Ordinal%20Regression/data/GBBO.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="exercise-4.1-prepare-the-data" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="exercise-4.1-prepare-the-data">Exercise 4.1: Prepare the data</h3>
+<p>Filter to only top 3 ranks. Convert <code>Rank</code> to an ordered factor (1 = best, so think about the ordering). Convert <code>Gender</code> to a factor.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: Factor ordering">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: Factor ordering
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The column is called <code>Technical Rank</code> (with a space), so rename it first with <code>rename(Rank = \</code>Technical Rank`)`.</p>
+<p>What does “higher” mean here? Rank 1 is best. You need to decide whether your ordered factor goes 1 &lt; 2 &lt; 3 (best to worst) or 3 &lt; 2 &lt; 1 (worst to best). The model interprets higher factor levels as “more” of the outcome. Think about what direction makes sense for your interpretation.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>gb <span class="ot">&lt;-</span> gbbo <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Rank =</span> <span class="st">`</span><span class="at">Technical Rank</span><span class="st">`</span>) <span class="sc">%&gt;%</span>   <span class="co"># fix column name</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Rank <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Rank =</span> <span class="fu">ordered</span>(Rank, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)),  <span class="co"># 3 &lt; 2 &lt; 1, so "higher" = better rank</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Gender =</span> <span class="fu">factor</span>(Gender)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gb)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Gender   Age Rank 
+  &lt;fct&gt;  &lt;dbl&gt; &lt;ord&gt;
+1 F         30 2    
+2 M         31 3    
+3 M         24 1    
+4 F         45 2    
+5 M         25 1    
+6 F         37 3    </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gb<span class="sc">$</span>Rank)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  3   2   1 
+102 104 103 </code></pre>
+</div>
+</div>
+</section>
+<section id="question-4.2-explore" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-4.2-explore">Question 4.2: Explore</h3>
+<p>Create two visualizations:</p>
+<ol type="a">
+<li>A bar chart showing the proportion of bakers in each rank by Gender.</li>
+<li>A bar chart showing the proportion of bakers in each rank by Age (bin Age into groups using <code>cut()</code>).</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: Proportional bar charts">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: Proportional bar charts
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>geom_bar(position = "fill")</code> gives proportions instead of counts. Map <code>x = Gender</code> (or your age groups) and <code>fill = Rank</code>. For part (b), create age bins with something like <code>cut(Age, breaks = c(15, 25, 35, 45, 55, 75))</code> inside a <code>mutate()</code> before plotting.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="question-4.3-build-models" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-4.3-build-models">Question 4.3: Build models</h3>
+<p>Fit the following models using <code>clm()</code> from the <code>ordinal</code> package:</p>
+<ul>
+<li><strong>Model 0:</strong> Intercept only — <code>Rank ~ 1</code></li>
+<li><strong>Model 1:</strong> <code>Rank ~ Gender</code></li>
+<li><strong>Model 2:</strong> <code>Rank ~ Gender + Age</code></li>
+<li><strong>Model 3:</strong> <code>Rank ~ Gender * Age</code></li>
+</ul>
+<p>For Model 2:</p>
+<ol type="a">
+<li>Report the threshold estimates. What do they represent?</li>
+<li>Exponentiate the coefficients. Interpret the odds ratio for <code>Age</code> in one sentence.</li>
+<li>Using Model 2, what is the predicted probability of Rank 1 for a 30-year-old female? Use <code>predictions()</code> from the <code>marginaleffects</code> package.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: Interpreting thresholds">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: Interpreting thresholds
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The thresholds are the log-cumulative-odds of <span class="math inline">\(P(Y \leq k)\)</span> when all predictors are zero. They define the baseline distribution — where the cuts fall before any predictor shifts the distribution.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">clm</span>(Rank <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> gb)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">clm</span>(Rank <span class="sc">~</span> Gender, <span class="at">data =</span> gb)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">clm</span>(Rank <span class="sc">~</span> Gender <span class="sc">+</span> Age, <span class="at">data =</span> gb)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">clm</span>(Rank <span class="sc">~</span> Gender <span class="sc">*</span> Age, <span class="at">data =</span> gb)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-5-model-comparison" class="level1">
+<h1>Part 5: Model Comparison</h1>
+<section id="question-5.1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-5.1">Question 5.1</h3>
+<p>Use <code>anova()</code> to compare Model 2 (no interaction) with Model 3 (interaction). Is the interaction warranted?</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: What is anova() doing here?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: What is anova() doing here?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Each model’s parameters are estimated by maximizing its likelihood function, finding the parameter values that make the observed data as probable as possible. <code>anova()</code> performs a likelihood ratio test. It computes:</p>
+<p><span class="math display">\[LR = -2 \log\left(\frac{L_{\text{simple}}}{L_{\text{complex}}}\right)\]</span></p>
+<p>This statistic follows a chi-square distribution. A significant p-value means the complex model fits meaningfully better, so the interaction is worth keeping. A non-significant p-value means the extra parameters aren’t earning their keep, so you should prefer the simpler model.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="question-5.2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-5.2">Question 5.2</h3>
+<p>Create a publication-quality comparison table of all four models using <code>modelsummary()</code>. Exponentiate the coefficients so they display as odds ratios.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Put all four models in a named list: <code>list("Intercept only" = m0, "Gender" = m1, "Gender + Age" = m2, "Gender × Age" = m3)</code>. Pass it to <code>modelsummary()</code> with <code>exponentiate = TRUE</code> to display odds ratios and <code>stars = TRUE</code> to add significance stars.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-6-predicted-probabilities" class="level1">
+<h1>Part 6: Predicted Probabilities</h1>
+<section id="mini-tutorial-marginaleffectspredictions" class="level2">
+<h2 class="anchored" data-anchor-id="mini-tutorial-marginaleffectspredictions">Mini-tutorial: <code>marginaleffects::predictions()</code></h2>
+<p>The <code>predictions()</code> function computes predicted probabilities for specific covariate profiles. Here’s a worked example:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted probabilities for a 30-year-old female</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predictions</span>(m2, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">newdata =</span> <span class="fu">datagrid</span>(<span class="at">Gender =</span> <span class="st">"F"</span>, <span class="at">Age =</span> <span class="dv">30</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">"prob"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Predicted P(Rank) for a 30-year-old female"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Predicted P(Rank) for a 30-year-old female</caption>
+<colgroup>
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rowid</th>
+<th style="text-align: left;">group</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">s.value</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+<th style="text-align: left;">Gender</th>
+<th style="text-align: right;">Age</th>
+<th style="text-align: left;">Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">0.317</td>
+<td style="text-align: right;">0.035</td>
+<td style="text-align: right;">9.166</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">64.148</td>
+<td style="text-align: right;">0.249</td>
+<td style="text-align: right;">0.384</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">0.337</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">12.511</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">116.898</td>
+<td style="text-align: right;">0.284</td>
+<td style="text-align: right;">0.390</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.346</td>
+<td style="text-align: right;">0.036</td>
+<td style="text-align: right;">9.703</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">71.539</td>
+<td style="text-align: right;">0.276</td>
+<td style="text-align: right;">0.416</td>
+<td style="text-align: left;">F</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="question-6.1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-6.1">Question 6.1</h3>
+<p>Compare the predicted probabilities for a 25-year-old female vs.&nbsp;a 25-year-old male. Which gender has a higher predicted probability of Rank 1?</p>
+</section>
+<section id="exercise-6.2-verify-by-hand" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="exercise-6.2-verify-by-hand">Exercise 6.2: Verify by hand</h3>
+<p>Compute the predicted probability of Rank 3 for a 25-year-old female using the formula:</p>
+<p><span class="math display">\[P(Y \leq k) = \text{plogis}(\alpha_k - \beta_1 X_1 - \beta_2 X_2)\]</span></p>
+<p>Use the threshold and coefficient values from <code>coef(m2)</code>. Confirm that your manually calculated value matches the model output.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: The subtraction">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: The subtraction
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Remember the model uses subtraction: <span class="math inline">\(\eta = \alpha_k - \beta X\)</span>. So it’s <code>plogis(threshold - (beta_gender * 0 + beta_age * 25))</code>. Gender = 0 if the reference level is female.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="part-7-marginal-effects" class="level1">
+<h1>Part 7: Marginal Effects</h1>
+<section id="mini-tutorial-avg_comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="mini-tutorial-avg_comparisons">Mini-tutorial: <code>avg_comparisons()</code></h2>
+<p>Marginal effects answer the question: “How much does the predicted probability of each category change when I shift one predictor, holding everything else constant?”</p>
+<p>In OLS, the slope <em>is</em> the marginal effect, because one unit of X always produces β units of change in Y. That’s because the model predicts Y directly, with no transformation.</p>
+<p>In any GLM with a nonlinear link (logistic regression, Poisson, ordinal, …), the slope and the marginal effect come apart. The model estimates β on a transformed scale (log-odds, log-counts), but the relationship between that scale and probability is a curve, not a line. The same β of 0.5 might shift a probability from 0.10 to 0.15 (a 5-point change) near the tails, but from 0.45 to 0.57 (a 12-point change) near the middle. The coefficient is identical in both cases, but its impact differs because the curve is steepest in the center and flat at the extremes.</p>
+<p>For ordinal regression specifically, there’s an added wrinkle: the marginal effect is different for <strong>each category</strong>. Age might increase P(Rank 1) while simultaneously decreasing P(Rank 3), because probability must redistribute.</p>
+<p><code>avg_comparisons()</code> handles all of this. It computes the probability-scale effect at every observation, then averages — giving you one summary per category in percentage points.</p>
+<p>Here’s a worked example interpreting the effect of Gender:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_comparisons</span>(m2, <span class="at">variables =</span> <span class="st">"Gender"</span>, <span class="at">type =</span> <span class="st">"prob"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Average marginal effect of Gender on each rank"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Average marginal effect of Gender on each rank</caption>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: left;">group</th>
+<th style="text-align: left;">contrast</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">s.value</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Gender</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">M - F</td>
+<td style="text-align: right;">0.042</td>
+<td style="text-align: right;">0.047</td>
+<td style="text-align: right;">0.904</td>
+<td style="text-align: right;">0.366</td>
+<td style="text-align: right;">1.451</td>
+<td style="text-align: right;">-0.049</td>
+<td style="text-align: right;">0.134</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Gender</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">M - F</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">-0.035</td>
+<td style="text-align: right;">0.972</td>
+<td style="text-align: right;">0.040</td>
+<td style="text-align: right;">-0.006</td>
+<td style="text-align: right;">0.006</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Gender</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">M - F</td>
+<td style="text-align: right;">-0.042</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.911</td>
+<td style="text-align: right;">0.362</td>
+<td style="text-align: right;">1.464</td>
+<td style="text-align: right;">-0.133</td>
+<td style="text-align: right;">0.049</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Interpretation example:</strong> <em>“Switching from female to male changes the probability of achieving Rank 1 by [estimate] percentage points, on average. This means males are [more/less] likely to finish first in the technical challenge than females.”</em></p>
+<section id="question-7.1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-7.1">Question 7.1</h3>
+<p>Compute the average marginal effect of <code>Age</code> on each rank category using <code>avg_comparisons()</code>.</p>
+<p>Translate the marginal effect for <strong>Rank 1</strong> into a sentence that a non-statistician would understand.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="part-8-estimated-marginal-means" class="level1">
+<h1>Part 8: Estimated Marginal Means</h1>
+<section id="mini-tutorial-emmeans" class="level2">
+<h2 class="anchored" data-anchor-id="mini-tutorial-emmeans">Mini-tutorial: <code>emmeans()</code></h2>
+<p><code>emmeans()</code> computes estimated marginal means, which are the model’s best guess for each group, averaged across other predictors. For ordinal models, we need <code>mode = "prob"</code> to get predicted probabilities.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(m2, <span class="sc">~</span> Gender, <span class="at">mode =</span> <span class="st">"prob"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Estimated probabilities by Gender"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Estimated probabilities by Gender</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Gender</th>
+<th style="text-align: right;">prob</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">asymp.LCL</th>
+<th style="text-align: right;">asymp.UCL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">F</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.333</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">Inf</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">0.333</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="question-8.1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-8.1">Question 8.1</h3>
+<p>Use <code>ggemmeans()</code> from the <code>ggeffects</code> package to plot predicted probabilities across Age, colored by Gender. The output should show how the probability of each rank category changes with age for each gender.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>ggemmeans(m2, terms = c("Age", "Gender"))</code> returns a data frame of predicted probabilities. You can pipe it directly to <code>plot()</code> for a quick visualization, or use the returned data with <code>ggplot()</code> for more control over the appearance.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="part-9-assumption-checking" class="level1">
+<h1>Part 9: Assumption Checking</h1>
+<section id="question-9.1-proportional-odds" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-9.1-proportional-odds">Question 9.1: Proportional odds</h3>
+<p>The proportional odds assumption says the effect of a predictor is the same at every threshold — the slope doesn’t change depending on where you split the outcome.</p>
+<p>Use the Brant test to check this assumption. State your conclusion.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Hint: Which package and model object?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint: Which package and model object?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>brant.test()</code> from the <code>gofcat</code> package requires a <code>polr()</code> model, not a <code>clm()</code> model. Refit using <code>MASS::polr()</code> first.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>m2_polr <span class="ot">&lt;-</span> <span class="fu">polr</span>(Rank <span class="sc">~</span> Gender <span class="sc">+</span> Age, <span class="at">data =</span> gb)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="question-9.2-surrogate-residuals" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-9.2-surrogate-residuals">Question 9.2: Surrogate residuals</h3>
+<p>Use the <code>sure</code> package to create a QQ plot of surrogate residuals. Does the latent normality assumption appear to hold?</p>
+<hr>
+</section>
+</section>
+<section id="part-10-write-up" class="level1">
+<h1>Part 10: Write-Up</h1>
+<section id="question-10.1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-10.1">Question 10.1</h3>
+<p>Write a <strong>1-paragraph results section</strong> for your final model. Your paragraph must include:</p>
+<ul>
+<li>The model type and link function</li>
+<li>Sample size</li>
+<li>The proportional odds test result</li>
+<li>At least one key coefficient reported as an odds ratio with a confidence interval</li>
+<li>At least one marginal effect translated into probability terms</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled" title="Example write-up">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Example write-up
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><em>We used a cumulative logit model (proportional odds) to predict technical rank (1st, 2nd, 3rd) from gender and age (N = [n]). A Brant test supported the proportional odds assumption (χ² = [value], p = [value]). Gender was [not] a significant predictor of rank (OR = [value], 95% CI [[lower], [upper]], p = [value]). Each additional year of age was associated with [an increase/decrease] in the odds of achieving a better rank (OR = [value], 95% CI [[lower], [upper]]). In terms of predicted probabilities, switching from female to male [increased/decreased] the probability of achieving rank 1 by approximately [X] percentage points.</em></p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="bonus-probit-vs.-logit" class="level1">
+<h1>Bonus: Probit vs.&nbsp;Logit</h1>
+<section id="question-b.1-optional" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="question-b.1-optional">Question B.1 (optional)</h3>
+<p>Refit Model 2 using a probit link: <code>clm(Rank ~ Gender + Age, data = gb, link = "probit")</code>.</p>
+<p>Compare the coefficients to the logit version. Are the numbers different? Are the substantive conclusions different? In 2-3 sentences, explain why the numbers differ but the story stays the same.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
