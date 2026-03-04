@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.26" />
+<html lang="en"><head>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.26">
 
   <meta name="author" content="Suyog Chandramouli">
   <meta name="dcterms.date" content="2026-03-02">
@@ -92,7 +97,7 @@
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-2b72c7fbb8e60237ab934692455f682f.css">
-  <link rel="stylesheet" href="slide-style.css"/>
+  <link rel="stylesheet" href="slide-style.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -187,11 +192,11 @@
     }
   </style>
 </head>
-<body>
+<body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block">
+<section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Multinomial Regression</h1>
   <p class="subtitle">Princeton University</p>
 
@@ -208,22 +213,22 @@ Suyog Chandramouli
 <section id="packages" class="slide level2">
 <h2>Packages</h2>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(easystats)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(marginaleffects)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(effects)</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(ordinal)</span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(nnet)</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">library</span>(ggeffects)</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">library</span>(emmeans)</span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">library</span>(car)</span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="fu">library</span>(broom)</span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="fu">library</span>(modelsummary)</span>
-<span id="cb1-15"><a href="#cb1-15"></a></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a></a><span class="fu">library</span>(easystats)</span>
+<span id="cb1-3"><a></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb1-4"><a></a><span class="fu">library</span>(effects)</span>
+<span id="cb1-5"><a></a><span class="fu">library</span>(ordinal)</span>
+<span id="cb1-6"><a></a><span class="fu">library</span>(nnet)</span>
+<span id="cb1-7"><a></a><span class="fu">library</span>(ggeffects)</span>
+<span id="cb1-8"><a></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb1-9"><a></a><span class="fu">library</span>(car)</span>
+<span id="cb1-10"><a></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-11"><a></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-12"><a></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-13"><a></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-14"><a></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb1-15"><a></a></span>
+<span id="cb1-16"><a></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Access the .qmd document here: <a href="https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts" class="uri">https://github.com/suyoghc/PSY504_Spring_2026/tree/main/posts</a></li>
@@ -244,7 +249,17 @@ Suyog Chandramouli
 <ul>
 <li><strong>There is a connection between the 2: A single-layer neural net with softmax output is just multinomial logistic regression wearing a different hat!</strong></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -270,8 +285,7 @@ Suyog Chandramouli
 <li>Reporting</li>
 </ul></li>
 </ul>
-</div>
-</div>
+</div></div>
 <aside class="notes">
 <ul>
 <li><p><strong>starting off similar to logistic regression, and ordinal regression,</strong></p></li>
@@ -281,7 +295,17 @@ Suyog Chandramouli
 <li><p><strong>The career roulette simulation is our loaded dice equivalent.</strong></p></li>
 <li><p><strong>Second half is the NHANES application.</strong></p></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="last-week-ordinal-regression" class="slide level2">
 <h2>Last week: Ordinal regression</h2>
@@ -294,33 +318,63 @@ Suyog Chandramouli
 <li><p><strong>Two weeks ago — binary logistic. Yes/no, pass/fail.</strong></p></li>
 <li><p><strong>Last time we extended that to ordered categories. The key move was cumulative probabilities — P of Y less than or equal to k.</strong></p></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <p><span class="math display">\[\text{logit}\big(P(Y \leq k)\big) = \alpha_k - \beta X\]</span></p>
 <aside class="notes">
 <p><em>Quick recap. Two weeks ago — binary logistic. Yes/no, pass/fail. Last time we extended that to ordered categories. The key move was cumulative probabilities — P of Y less than or equal to k.</em></p>
 <p><strong>Alpha-k are thresholds, beta is the slope.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <ul>
-<li>We assumed one shared slope (β) — the proportional odds assumption.<br />
+<li>We assumed one shared slope (β) — the proportional odds assumption.<br>
 (to keep things simple)</li>
 </ul>
 <aside class="notes">
 <p><em>Quick recap. Two weeks ago — binary logistic. Yes/no, pass/fail. Last time we extended that to ordered categories. The key move was cumulative probabilities — P of Y less than or equal to k.</em></p>
 <p><em>Here’s the equation. Same one from last time. Alpha-k are thresholds, beta is the slope.</em></p>
-<p><strong>constraint — proportional odds.<br />
-<br />
+<p><strong>constraint — proportional odds.<br>
+<br>
 One shared slope across all cumulative splits. K minus 1 thresholds but only one beta. That’s what made it parsimonious.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>Note</strong></p>
 </div>
@@ -331,7 +385,17 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 </div>
 <aside class="notes">
 <p><strong>Now we relax that entirely. What if the categories don’t have an order at all?</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="ordinal-response-variables-recap" class="slide level2">
@@ -348,7 +412,17 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <ul>
 <li><strong>These are all from last lecture and the lab. Grad school likelihood — our real data application. Loaded dice — our simulation. Health status — your chapter reading. In every case, there’s a clear ordering. “Unlikely” is less than “somewhat likely” is less than “very likely.”</strong></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <ul>
 <li>Cumulative splits made sense because the categories <em>stack</em></li>
@@ -356,7 +430,17 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <aside class="notes">
 <p><em>These are all from last lecture and the lab. Grad school likelihood — our real data application. Loaded dice — our simulation. Health status — your chapter reading. In every case, there’s a clear ordering. “Unlikely” is less than “somewhat likely” is less than “very likely.”</em></p>
 <p><strong>Cumulative splits respect that stacking — P of Y less than or equal to k. But what happens when you can’t stack?</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="but-not-everything-is-ordered" class="slide level2">
@@ -376,20 +460,29 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <li>Study strategy: space, light cram, heavy cram</li>
 <li>Therapy type: CBT, DBT, psychodynamic</li>
 </ul>
-</div>
-</div>
+</div></div>
 <aside class="notes">
 <ul>
 <li><p><strong>There’s a direction, a ladder.</strong></p></li>
 <li><p><strong>These are just… different.</strong></p></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>The problem</strong></p>
 </div>
@@ -407,8 +500,18 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <ul>
 <li><strong>If there’s no ranking, you can’t do cumulative splits.</strong></li>
 </ul>
-<pre><code>-   **P of Y less than or equal to Republican doesn&#39;t mean anything.**</code></pre>
-</aside>
+<pre><code>-   **P of Y less than or equal to Republican doesn't mean anything.**</code></pre>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="liu-ch-7-reading" class="slide level2">
@@ -416,13 +519,33 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <p>Liu uses <strong>health status</strong> (poor, fair, good, excellent) as the outcome.</p>
 <aside class="notes">
 <p><strong>Liu uses health status — poor, fair, good, excellent — as the outcome in a multinomial model.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <p>Isn’t that ordinal?!</p>
 <aside class="notes">
 <p><em>So here’s a fun tension from your reading. Liu uses health status — poor, fair, good, excellent — as the outcome in a multinomial model.</em></p>
 <p><strong>But wait. We literally just spent an entire lecture modeling that kind of variable with ordinal regression. So why is Liu using multinomial?</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <p>Liu explicitly acknowledges this:</p>
@@ -431,14 +554,24 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 </blockquote>
 <aside class="notes">
 <p><strong>Multinomial is an alternative when proportional odds doesn’t hold.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>Note</strong></p>
 </div>
@@ -455,7 +588,17 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <aside class="notes">
 <p><strong>But I want to be clear. That’s reason two — the fallback. The stronger reason is reason one: the outcome is genuinely unordered. That’s where multinomial isn’t just a fallback — it’s the correct choice. That’s our focus today.</strong></p>
 <p>Remember: if proportional odds fails for only some predictors, <strong>partial proportional odds</strong> is the first thing to try. Multinomial is the nuclear option — it drops <strong>all</strong> ordering information.</p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <!-- . . . -->
 <!-- ::: callout-warning -->
 <!-- ## Before you reach for multinomial... -->
@@ -464,11 +607,21 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 </div>
 </section>
 <section id="what-goes-wrong-if-we-force-an-order" class="slide level2 smaller">
-<h2 class="smaller">What goes wrong if we force an order?</h2>
+<h2>What goes wrong if we force an order?</h2>
 <p>Imagine 3 career paths — <strong>academia</strong>, <strong>industry</strong>, <strong>government</strong>, and 1 predictor, years of work experience.</p>
 <aside class="notes">
 <p><strong>Let’s make this concrete. Three career paths — academia, industry, government. One predictor — years of work experience.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <ul>
 <li><p>Experience pushes people <em>toward</em> industry and <em>away from</em> academia, but has little effect on government</p></li>
@@ -477,7 +630,17 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <aside class="notes">
 <p><em>Let’s make this concrete. Three career paths — academia, industry, government. One predictor — years of work experience.</em></p>
 <p><strong>Here’s the truth we’ll bake into the simulation: experience pushes people toward industry and away from academia. Government stays roughly flat. And there’s no natural ordering — academia isn’t “less than” government.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <p><strong>If we force an ordering</strong> (academia = 1, government = 2, industry = 3) and fit an ordinal model:</p>
@@ -485,7 +648,17 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <p><em>Let’s make this concrete. Three career paths — academia, industry, government. One predictor — years of work experience.</em></p>
 <p><em>Here’s the truth we’ll bake into the simulation: experience pushes people toward industry and away from academia. Government stays roughly flat. And there’s no natural ordering — academia isn’t “less than” government.</em></p>
 <p><strong>But what if we forced one anyway? Code academia as 1, government as 2, industry as 3. Run an ordinal model.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <ul>
@@ -495,14 +668,24 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 </ul>
 <aside class="notes">
 <p><strong>The ordinal model estimates one shared slope. But the true effect is contradictory — experience increases industry odds and decreases academia odds. One slope averages them into mush. Proportional odds is violated by design.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>The key difference</strong></p>
 </div>
@@ -518,11 +701,21 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 <p><em>But what if we forced one anyway? Code academia as 1, government as 2, industry as 3. Run an ordinal model.</em></p>
 <p><em>The ordinal model estimates one shared slope. But the true effect is contradictory — experience increases industry odds and decreases academia odds. One slope averages them into mush. Proportional odds is violated by design.</em></p>
 <p><strong>And that’s the key difference. Ordinal: K minus 1 thresholds, one slope. Multinomial: K minus 1 intercepts, K minus 1 slopes. Each category gets its own. That extra flexibility is exactly what you need when effects go in different directions.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="the-connection-across-models" class="slide level2 smaller">
-<h2 class="smaller">The connection across models</h2>
+<h2>The connection across models</h2>
 <p><span class="math display">\[\begin{array}{lll}
 \textbf{Logistic} &amp; \text{2 categories} &amp; \text{1 intercept, 1 slope} \\[6pt]
 \textbf{Ordinal} &amp; \text{K ordered categories} &amp; \text{K−1 thresholds, } \mathbf{1} \text{ slope (shared)} \\[6pt]
@@ -530,7 +723,17 @@ One shared slope across all cumulative splits. K minus 1 thresholds but only one
 \end{array}\]</span></p>
 <aside class="notes">
 <p><strong>Here’s the whole arc in one slide. Logistic — two categories, one intercept, one slope. That was week one. Ordinal — K ordered categories, K minus 1 thresholds, but still just one slope. That’s the proportional odds constraint. And now multinomial — K unordered categories, K minus 1 intercepts, K minus 1 slopes.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -549,22 +752,41 @@ L_2 &amp;= \alpha_2 + \beta_2 x \\
 L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 \end{aligned}\]</span></p>
 <p>Each category gets its <strong>own</strong> <span class="math inline">\(\beta_j\)</span></p>
-</div>
-</div>
+</div></div>
 <aside class="notes">
 <p><em>Here’s the whole arc in one slide. Logistic — two categories, one intercept, one slope. That was week one. Ordinal — K ordered categories, K minus 1 thresholds, but still just one slope. That’s the proportional odds constraint. And now multinomial — K unordered categories, K minus 1 intercepts, K minus 1 slopes.</em></p>
 <p><strong>Look at the equations side by side. On the left, ordinal — same beta everywhere. On the right, multinomial — beta-1, beta-2, beta-K-minus-1. Every category gets its own relationship with the predictor. That’s the one structural change. Everything else — the logit link, maximum likelihood, the log-odds interpretation — stays the same. We’re just relaxing the shared-slope constraint.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="multinomial-logistic-regression" class="slide level2 smaller">
-<h2 class="smaller">Multinomial logistic regression</h2>
+<h2>Multinomial logistic regression</h2>
 <ul>
 <li>Choose a <strong>baseline category</strong> (reference). All comparisons are relative to it.</li>
 </ul>
 <aside class="notes">
 <p><strong>Here’s the formal setup. Pick one category as the baseline — the reference. Every other category gets compared to it.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <ul>
 <li>If the outcome has <span class="math inline">\(K\)</span> categories and the baseline is category <span class="math inline">\(K\)</span>, we model <span class="math inline">\(K - 1\)</span> log-odds:</li>
@@ -575,7 +797,17 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <p><em>Here’s the formal setup. Pick one category as the baseline — the reference. Every other category gets compared to it.</em></p>
 <p><strong>If you have K categories, you write K minus 1 log-odds equations. Each one looks like a logistic regression. But notice the subscript j on every beta — each equation has its own coefficients.</strong></p>
 <p><strong>category-specific log-odds relative to a baseline</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <ul>
@@ -586,20 +818,30 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <p><em>Here’s the formal setup. Pick one category as the baseline — the reference. Every other category gets compared to it.</em></p>
 <p><em>If you have K categories, you write K minus 1 log-odds equations. Each one looks like a logistic regression. But notice the subscript j on every beta — each equation has its own coefficients.</em></p>
 <p><strong>They’re estimated simultaneously, not independently. The model sees all the data at once. The chapter notation — log of mu 2 over mu 1, log of mu 3 over mu 1 — that’s exactly this. Mu 1 is the baseline.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>Interpretation</strong></p>
 </div>
 <div class="callout-content">
-<p><span class="math inline">\(\beta_{1j}\)</span>: when <span class="math inline">\(x_1\)</span> increases by one unit, the log-odds of being in category <span class="math inline">\(j\)</span> <strong>vs. the baseline</strong> change by <span class="math inline">\(\beta_{1j}\)</span></p>
-<p><span class="math inline">\(\exp(\beta_{1j})\)</span>: the <strong>odds ratio</strong> — the multiplicative change in odds of category <span class="math inline">\(j\)</span> vs. baseline</p>
+<p><span class="math inline">\(\beta_{1j}\)</span>: when <span class="math inline">\(x_1\)</span> increases by one unit, the log-odds of being in category <span class="math inline">\(j\)</span> <strong>vs.&nbsp;the baseline</strong> change by <span class="math inline">\(\beta_{1j}\)</span></p>
+<p><span class="math inline">\(\exp(\beta_{1j})\)</span>: the <strong>odds ratio</strong> — the multiplicative change in odds of category <span class="math inline">\(j\)</span> vs.&nbsp;baseline</p>
 </div>
 </div>
 </div>
@@ -608,7 +850,17 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <p><em>If you have K categories, you write K minus 1 log-odds equations. Each one looks like a logistic regression. But notice the subscript j on every beta — each equation has its own coefficients.</em></p>
 <p><em>They’re estimated simultaneously, not independently. The model sees all the data at once. The chapter notation — log of mu 2 over mu 1, log of mu 3 over mu 1 — that’s exactly this. Mu 1 is the baseline.</em></p>
 <p><strong>Interpretation. Beta-1-j is the change in log-odds of category j versus baseline when x goes up by one. Exponentiate and you get the odds ratio. Same as logistic regression, just specific to one comparison.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="multinomial-distribution" class="slide level2">
@@ -644,49 +896,81 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <p><span class="math display">\[P(y_i = 0|x_i) = P_{i0}\]</span> and <span class="math display">\[P(y_i = 1|x_i) = P_{i1}\]</span></p>
 <p><span class="math display">\[\log\bigg(\frac{p_{i1}}{p_{i0}}\bigg) = \beta_{0k} + \beta_{1k} x_i\]</span></p>
 <ul>
-<li><p>Slope: <span class="math inline">\(\beta_1\)</span>: when x increases by one unit, the odds of Y = 1 vs. baseline is expected to multiply by a factor or <span class="math inline">\(exp(\beta)\)</span></p></li>
+<li><p>Slope: <span class="math inline">\(\beta_1\)</span>: when x increases by one unit, the odds of Y = 1 vs.&nbsp;baseline is expected to multiply by a factor or <span class="math inline">\(exp(\beta)\)</span></p></li>
 <li><p>Intercept: <span class="math inline">\(\beta_0\)</span>: when x = 0 the odds of Y = 1 is expected to be <span class="math inline">\(exp(\beta)\)</span></p></li>
 </ul>
 </section>
 <section id="think-of-it-as-simultaneous-binary-regressions" class="slide level2">
 <h2>Think of it as simultaneous binary regressions</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="multinomial_regression_lecture1_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" /></p>
-</figure>
-</div>
-</div>
-</div>
-<aside class="notes">
-<p><strong>Three panels, three comparisons — all versus baseline category 1. Look at the slopes. Red — category 2 vs. 1, positive slope, predictor pushes odds up. Blue — category 3 vs. 1, even steeper. Green — category 4 vs. 1, slightly negative. Predictor pushes you away from this one.</strong></p>
-</aside>
+
+<img data-src="multinomial_regression_lecture1_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"><aside class="notes">
+<p><strong>Three panels, three comparisons — all versus baseline category 1. Look at the slopes. Red — category 2 vs.&nbsp;1, positive slope, predictor pushes odds up. Blue — category 3 vs.&nbsp;1, even steeper. Green — category 4 vs.&nbsp;1, slightly negative. Predictor pushes you away from this one.</strong></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <p>Each comparison has its <strong>own intercept and slope</strong>. The predictor can push <em>toward</em> one category and <em>away from</em> another — something ordinal regression cannot do.</p>
 <aside class="notes">
-<p><em>Three panels, three comparisons — all versus baseline category 1. Look at the slopes. Red — category 2 vs. 1, positive slope, predictor pushes odds up. Blue — category 3 vs. 1, even steeper. Green — category 4 vs. 1, slightly negative. Predictor pushes you away from this one.</em></p>
+<p><em>Three panels, three comparisons — all versus baseline category 1. Look at the slopes. Red — category 2 vs.&nbsp;1, positive slope, predictor pushes odds up. Blue — category 3 vs.&nbsp;1, even steeper. Green — category 4 vs.&nbsp;1, slightly negative. Predictor pushes you away from this one.</em></p>
 <p><strong>This is what ordinal regression cannot do. One slope can’t go up for some categories and down for others. Here, each comparison is free to go its own direction. That’s the whole point of multinomial.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section>
-<section id="under-the-hood-career-roulette" class="title-slide slide level1">
+<section id="under-the-hood-career-roulette" class="title-slide slide level1 center">
 <h1>Under the Hood: Career Roulette</h1>
 
 </section>
 <section id="the-career-roulette" class="slide level2 center">
-<h2 class="center">The career roulette</h2>
+<h2>The career roulette</h2>
 <p>Easier to understand multinomial regression if we <strong>simulate it from scratch</strong> and watch each step.</p>
 <aside class="notes">
 <p><strong>That’s the conceptual setup. You know why multinomial exists — unordered categories need category-specific slopes. You know the equation — K minus 1 log-odds comparisons to a baseline.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <p>Just like our loaded dice helped us understand ordinal regression.</p>
 <aside class="notes">
 <p><em>That’s the conceptual setup. You know why multinomial exists — unordered categories need category-specific slopes. You know the equation — K minus 1 log-odds comparisons to a baseline.</em></p>
 <p><strong>Now let’s build it from scratch. Same philosophy as the loaded dice — set true parameters, generate data, see if the model recovers what we planted. Except instead of dice landing on Low, Medium, High — we have people choosing careers.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <!-- 
 ============================================================
   END OF PHASE 1 — PHASE 2 (simulation) begins here
@@ -702,22 +986,22 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 </div>
 </section>
 <section id="the-dgp-career-paths" class="slide level2 smaller">
-<h2 class="smaller">The DGP: Career paths</h2>
+<h2>The DGP: Career paths</h2>
 <p>300 people choosing among <strong>3 careers</strong> based on years of work experience.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">set.seed</span>(<span class="dv">504</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>experience <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">20</span>)</span>
-<span id="cb3-5"><a href="#cb3-5"></a></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># ── TRUE PARAMETERS (log-odds vs. Government baseline) ──</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>b0_acad <span class="ot">&lt;-</span> <span class="fl">1.0</span>;  b1_acad <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.15</span>   <span class="co"># academia: popular early, fades</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>b0_ind  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.5</span>; b1_ind  <span class="ot">&lt;-</span>  <span class="fl">0.20</span>   <span class="co"># industry: unpopular early, rises</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># Linear predictors (Government is reference. Fixed at 0)</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>score_govt <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb3-12"><a href="#cb3-12"></a>score_acad <span class="ot">&lt;-</span> b0_acad <span class="sc">+</span> b1_acad <span class="sc">*</span> experience</span>
-<span id="cb3-13"><a href="#cb3-13"></a>score_ind  <span class="ot">&lt;-</span> b0_ind  <span class="sc">+</span> b1_ind  <span class="sc">*</span> experience</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">set.seed</span>(<span class="dv">504</span>)</span>
+<span id="cb3-2"><a></a></span>
+<span id="cb3-3"><a></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb3-4"><a></a>experience <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">0</span>, <span class="dv">20</span>)</span>
+<span id="cb3-5"><a></a></span>
+<span id="cb3-6"><a></a><span class="co"># ── TRUE PARAMETERS (log-odds vs. Government baseline) ──</span></span>
+<span id="cb3-7"><a></a>b0_acad <span class="ot">&lt;-</span> <span class="fl">1.0</span>;  b1_acad <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.15</span>   <span class="co"># academia: popular early, fades</span></span>
+<span id="cb3-8"><a></a>b0_ind  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.5</span>; b1_ind  <span class="ot">&lt;-</span>  <span class="fl">0.20</span>   <span class="co"># industry: unpopular early, rises</span></span>
+<span id="cb3-9"><a></a></span>
+<span id="cb3-10"><a></a><span class="co"># Linear predictors (Government is reference. Fixed at 0)</span></span>
+<span id="cb3-11"><a></a>score_govt <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, n)</span>
+<span id="cb3-12"><a></a>score_acad <span class="ot">&lt;-</span> b0_acad <span class="sc">+</span> b1_acad <span class="sc">*</span> experience</span>
+<span id="cb3-13"><a></a>score_ind  <span class="ot">&lt;-</span> b0_ind  <span class="sc">+</span> b1_ind  <span class="sc">*</span> experience</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <aside class="notes">
 <p><strong>Here’s our data generating process.</strong></p>
@@ -734,26 +1018,36 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 </ul></li>
 </ul></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>The truth we’re planting</strong></p>
 </div>
 <div class="callout-content">
 <ul>
-<li><strong>Academia vs. Government</strong>: intercept = 1.0, slope = <strong>−0.15</strong> (experience pulls <em>away</em>)
+<li><strong>Academia vs.&nbsp;Government</strong>: intercept = 1.0, slope = <strong>−0.15</strong> (experience pulls <em>away</em>)
 <ul>
 <li>The <strong>intercept</strong> says: <em>at 0 years of experience, how attractive is this category relative to Government?</em>
 <ul>
 <li>The <strong>slope</strong> says: <em>as experience increases, does this category become more or less attractive relative to Government?</em></li>
 </ul></li>
 </ul></li>
-<li><strong>Industry vs. Government</strong>: intercept = −0.5, slope = <strong>+0.20</strong> (experience pushes <em>toward</em>)</li>
+<li><strong>Industry vs.&nbsp;Government</strong>: intercept = −0.5, slope = <strong>+0.20</strong> (experience pushes <em>toward</em>)</li>
 <li><strong>Government</strong>: baseline (score = 0 by definition)</li>
 </ul>
 </div>
@@ -772,11 +1066,21 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 </ul></li>
 </ul></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="softmax-in-action" class="slide level2 smaller">
-<h2 class="smaller">Softmax in action</h2>
+<h2>Softmax in action</h2>
 <p>How do linear predictors become probabilities? Take one person with <strong>experience = 5 years</strong>:</p>
 <aside class="notes">
 <p><strong>Before we generate the full dataset, let’s see what actually happens here?</strong></p>
@@ -793,7 +1097,7 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <li><p><strong>Now we have three categories</strong> competing for probability</p>
 <ul>
 <li><p>so the denominator gets bigger.</p></li>
-<li><p>It’s the same idea, now with more players.<strong><br />
+<li><p>It’s the same idea, now with more players.<strong><br>
 </strong></p></li>
 </ul></li>
 </ul></li>
@@ -805,7 +1109,17 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <li><strong>Let’s pick one person with five years of experience and trace every step.</strong></li>
 </ul></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <p><strong>Step 1</strong>: Compute scores</p>
 <p><span class="math display">\[\text{score}_{\text{acad}} = 1.0 + (-0.15)(5) = 0.25 \qquad \text{score}_{\text{ind}} = -0.5 + (0.20)(5) = 0.50 \qquad \text{score}_{\text{govt}} = 0\]</span></p>
@@ -828,7 +1142,17 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 </blockquote>
 </div></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <p><strong>Step 2</strong>: Exponentiate → <strong>Step 3</strong>: Normalize (divide by sum)</p>
@@ -845,7 +1169,17 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <li><strong>For this person, industry has a 42 percent chance, academia 33, government 25. The highest score wins the most probability, but nobody gets zero — everyone has some chance.</strong></li>
 </ul></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 <div class="fragment">
 <p><strong>Step 4</strong>: Sample one career with those probabilities → this person happens to choose <strong>Industry</strong></p>
@@ -866,31 +1200,41 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <li><strong>This person lands on industry. Now repeat 300 times, and you have a dataset.</strong></li>
 </ul></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="generating-the-data" class="slide level2 smaller">
-<h2 class="smaller">Generating the data</h2>
+<h2>Generating the data</h2>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Softmax → probabilities</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>denom  <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_govt) <span class="sc">+</span> <span class="fu">exp</span>(score_acad) <span class="sc">+</span> <span class="fu">exp</span>(score_ind)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>p_govt <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_govt) <span class="sc">/</span> denom</span>
-<span id="cb4-4"><a href="#cb4-4"></a>p_acad <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_acad) <span class="sc">/</span> denom</span>
-<span id="cb4-5"><a href="#cb4-5"></a>p_ind  <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_ind)  <span class="sc">/</span> denom</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># Sample one career per person</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>career <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(i) {</span>
-<span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">&quot;Academia&quot;</span>, <span class="st">&quot;Industry&quot;</span>, <span class="st">&quot;Government&quot;</span>),</span>
-<span id="cb4-10"><a href="#cb4-10"></a>         <span class="at">size =</span> <span class="dv">1</span>,</span>
-<span id="cb4-11"><a href="#cb4-11"></a>         <span class="at">prob =</span> <span class="fu">c</span>(p_acad[i], p_ind[i], p_govt[i]))</span>
-<span id="cb4-12"><a href="#cb4-12"></a>})</span>
-<span id="cb4-13"><a href="#cb4-13"></a></span>
-<span id="cb4-14"><a href="#cb4-14"></a>sim_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb4-15"><a href="#cb4-15"></a>  <span class="at">experience =</span> experience,</span>
-<span id="cb4-16"><a href="#cb4-16"></a>  <span class="at">career     =</span> <span class="fu">factor</span>(career, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Government&quot;</span>, <span class="st">&quot;Academia&quot;</span>, <span class="st">&quot;Industry&quot;</span>))</span>
-<span id="cb4-17"><a href="#cb4-17"></a>)</span>
-<span id="cb4-18"><a href="#cb4-18"></a></span>
-<span id="cb4-19"><a href="#cb4-19"></a>sim_data <span class="sc">%&gt;%</span> <span class="fu">count</span>(career)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Softmax → probabilities</span></span>
+<span id="cb4-2"><a></a>denom  <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_govt) <span class="sc">+</span> <span class="fu">exp</span>(score_acad) <span class="sc">+</span> <span class="fu">exp</span>(score_ind)</span>
+<span id="cb4-3"><a></a>p_govt <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_govt) <span class="sc">/</span> denom</span>
+<span id="cb4-4"><a></a>p_acad <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_acad) <span class="sc">/</span> denom</span>
+<span id="cb4-5"><a></a>p_ind  <span class="ot">&lt;-</span> <span class="fu">exp</span>(score_ind)  <span class="sc">/</span> denom</span>
+<span id="cb4-6"><a></a></span>
+<span id="cb4-7"><a></a><span class="co"># Sample one career per person</span></span>
+<span id="cb4-8"><a></a>career <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="cf">function</span>(i) {</span>
+<span id="cb4-9"><a></a>  <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Academia"</span>, <span class="st">"Industry"</span>, <span class="st">"Government"</span>),</span>
+<span id="cb4-10"><a></a>         <span class="at">size =</span> <span class="dv">1</span>,</span>
+<span id="cb4-11"><a></a>         <span class="at">prob =</span> <span class="fu">c</span>(p_acad[i], p_ind[i], p_govt[i]))</span>
+<span id="cb4-12"><a></a>})</span>
+<span id="cb4-13"><a></a></span>
+<span id="cb4-14"><a></a>sim_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb4-15"><a></a>  <span class="at">experience =</span> experience,</span>
+<span id="cb4-16"><a></a>  <span class="at">career     =</span> <span class="fu">factor</span>(career, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Government"</span>, <span class="st">"Academia"</span>, <span class="st">"Industry"</span>))</span>
+<span id="cb4-17"><a></a>)</span>
+<span id="cb4-18"><a></a></span>
+<span id="cb4-19"><a></a>sim_data <span class="sc">%&gt;%</span> <span class="fu">count</span>(career)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   career         n
@@ -912,20 +1256,22 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <pre><code>-   **— that makes it the baseline when we fit the model later.**</code></pre></li>
 </ul></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="the-underlying-data-generating-process" class="slide level2 smaller">
-<h2 class="smaller"><strong>The underlying data-generating process</strong></h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="multinomial_regression_lecture1_files/figure-revealjs/unnamed-chunk-5-1.png" width="1152" /></p>
-</figure>
-</div>
-</div>
-</div>
-<aside class="notes">
+<h2><strong>The underlying data-generating process</strong></h2>
+
+<img data-src="multinomial_regression_lecture1_files/figure-revealjs/unnamed-chunk-5-1.png" width="1152" class="r-stretch"><aside class="notes">
 <p><strong>Two panels.</strong></p>
 <ul>
 <li><p><strong>Left — the observed data,</strong></p>
@@ -945,7 +1291,17 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 </ul></li>
 </ul>
 <p><strong>Even though we are dealing with a linear model in the linear predictor scale.</strong> Because in multinomial regression, what is linear are the <strong>category-specific log-odds relative to the reference category</strong>.</p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <p>The careers <strong>trade places</strong> as experience increases. No single gradient can capture this.</p>
 <aside class="notes">
@@ -953,21 +1309,31 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <ul>
 <li><strong>The careers trade places. At zero experience, academia leads. By twenty years, industry dominates. Government stays roughly flat. There is no single direction here — no gradient from less to more. That’s why this is genuinely unordered.</strong></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="exploring-the-simulated-data" class="slide level2 smaller">
-<h2 class="smaller">Exploring the simulated data</h2>
+<h2>Exploring the simulated data</h2>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Proportions at each experience bin</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>sim_binned <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">count</span>(exp_bin, career) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">group_by</span>(exp_bin) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb7-6"><a href="#cb7-6"></a>    <span class="at">prop =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
-<span id="cb7-7"><a href="#cb7-7"></a>    <span class="at">log_odds_vs_govt =</span> <span class="fu">round</span>(<span class="fu">log</span>(prop <span class="sc">/</span> prop[career <span class="sc">==</span> <span class="st">&quot;Government&quot;</span>]), <span class="dv">3</span>)</span>
-<span id="cb7-8"><a href="#cb7-8"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Proportions at each experience bin</span></span>
+<span id="cb7-2"><a></a>sim_binned <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a></a>  <span class="fu">count</span>(exp_bin, career) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a></a>  <span class="fu">group_by</span>(exp_bin) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-6"><a></a>    <span class="at">prop =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n),</span>
+<span id="cb7-7"><a></a>    <span class="at">log_odds_vs_govt =</span> <span class="fu">round</span>(<span class="fu">log</span>(prop <span class="sc">/</span> prop[career <span class="sc">==</span> <span class="st">"Government"</span>]), <span class="dv">3</span>)</span>
+<span id="cb7-8"><a></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -1055,47 +1421,67 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 <li><strong>That gives us <u>log-odds versus baseline at each experience level.</u></strong></li>
 </ul></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>What do you notice?</strong></p>
 </div>
 <div class="callout-content">
-<p>The <strong>log-odds of academia vs. government</strong> decrease as experience goes up. The <strong>log-odds of industry vs. government</strong> increase. Each career has its own trend — and the trends go in opposite directions.</p>
+<p>The <strong>log-odds of academia vs.&nbsp;government</strong> decrease as experience goes up. The <strong>log-odds of industry vs.&nbsp;government</strong> increase. Each career has its own trend — and the trends go in opposite directions.</p>
 </div>
 </div>
 </div>
 <aside class="notes">
 <p><em>Let’s explore the data before modeling it. We compute the proportion choosing each career at low, medium, and high experience. Then we take the log of each proportion divided by the government proportion. That gives us log-odds versus baseline at each experience level.</em></p>
 <p><strong>Look at the pattern. Academia’s log-odds drop as experience goes up. Industry’s log-odds rise. Two separate trends, opposite directions. This is exactly what the model needs to capture — and exactly what a single shared slope cannot.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="what-if-we-force-an-order" class="slide level2 smaller">
-<h2 class="smaller">What if we force an order?</h2>
+<h2>What if we force an order?</h2>
 <p>Code the careers as <strong>1 = Academia, 2 = Government, 3 = Industry</strong> and fit an ordinal model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>sim_data_ord <span class="ot">&lt;-</span> sim_data <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">mutate</span>(<span class="at">career_ord =</span> <span class="fu">ordered</span>(career, </span>
-<span id="cb8-3"><a href="#cb8-3"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Academia&quot;</span>, <span class="st">&quot;Government&quot;</span>, <span class="st">&quot;Industry&quot;</span>)))</span>
-<span id="cb8-4"><a href="#cb8-4"></a></span>
-<span id="cb8-5"><a href="#cb8-5"></a>wrong_model <span class="ot">&lt;-</span> <span class="fu">clm</span>(career_ord <span class="sc">~</span> experience, <span class="at">data =</span> sim_data_ord)</span>
-<span id="cb8-6"><a href="#cb8-6"></a></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="fu">tidy</span>(wrong_model) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>sim_data_ord <span class="ot">&lt;-</span> sim_data <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a></a>  <span class="fu">mutate</span>(<span class="at">career_ord =</span> <span class="fu">ordered</span>(career, </span>
+<span id="cb8-3"><a></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Academia"</span>, <span class="st">"Government"</span>, <span class="st">"Industry"</span>)))</span>
+<span id="cb8-4"><a></a></span>
+<span id="cb8-5"><a></a>wrong_model <span class="ot">&lt;-</span> <span class="fu">clm</span>(career_ord <span class="sc">~</span> experience, <span class="at">data =</span> sim_data_ord)</span>
+<span id="cb8-6"><a></a></span>
+<span id="cb8-7"><a></a><span class="fu">tidy</span>(wrong_model) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top">
 <colgroup>
-<col style="width: 34%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 13%" />
-<col style="width: 11%" />
-<col style="width: 13%" />
+<col style="width: 34%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 11%">
+<col style="width: 13%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1138,13 +1524,23 @@ L_{K-1} &amp;= \alpha_{K-1} + \beta_{K-1} x
 </div>
 <aside class="notes">
 <p><strong>Now let’s do what you should never do — force an order. We code academia as 1, government as 2, industry as 3 and fit a cumulative logit model. The ordinal model estimates one shared slope for experience. Let’s see what it gives us.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Check proportional odds</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">library</span>(sure)</span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="fu">set.seed</span>(<span class="dv">504</span>)</span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">nominal_test</span>(wrong_model)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># Check proportional odds</span></span>
+<span id="cb9-2"><a></a><span class="fu">library</span>(sure)</span>
+<span id="cb9-3"><a></a><span class="fu">set.seed</span>(<span class="dv">504</span>)</span>
+<span id="cb9-4"><a></a><span class="fu">nominal_test</span>(wrong_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Tests of nominal effects
 
@@ -1160,16 +1556,26 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 <li><p><strong>And the nominal test rejects proportional odds. The assumption fails because the true effects go in opposite directions.</strong></p></li>
 <li><p><strong>The shared slope is trying to average a negative effect and a positive effect into one number.</strong></p></li>
 </ul>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="three-things-went-wrong" class="slide level2 smaller">
-<h2 class="smaller">Three things went wrong</h2>
+<h2>Three things went wrong</h2>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>Why the ordinal model fails here</strong></p>
 </div>
@@ -1184,33 +1590,53 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 </div>
 <aside class="notes">
 <p><strong>Three things went wrong, and they’re all related. First — there’s no real ordering. We picked academia less-than government less-than industry, but that’s arbitrary. Second — the one-slope constraint is fatal. Experience is positive for industry and negative for academia. Average those and you get near zero — the model misses both effects. Third — proportional odds is violated because the true effects genuinely differ across categories. This isn’t a borderline assumption violation. It’s fundamental.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <p>We need a model that gives <strong>each category its own slope</strong>.</p>
 <aside class="notes">
 <p><strong>So we need a model with separate slopes — one for each comparison. That’s exactly what multinomial gives us.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="multinomial-model-recovers-the-truth" class="slide level2 smaller">
-<h2 class="smaller">Multinomial model recovers the truth</h2>
+<h2>Multinomial model recovers the truth</h2>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">library</span>(nnet)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>right_model <span class="ot">&lt;-</span> <span class="fu">multinom</span>(career <span class="sc">~</span> experience, <span class="at">data =</span> sim_data, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="fu">tidy</span>(right_model, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="fu">library</span>(nnet)</span>
+<span id="cb11-2"><a></a>right_model <span class="ot">&lt;-</span> <span class="fu">multinom</span>(career <span class="sc">~</span> experience, <span class="at">data =</span> sim_data, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-3"><a></a></span>
+<span id="cb11-4"><a></a><span class="fu">tidy</span>(right_model, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top">
 <colgroup>
-<col style="width: 11%" />
-<col style="width: 15%" />
-<col style="width: 11%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 10%" />
-<col style="width: 11%" />
-<col style="width: 12%" />
+<col style="width: 11%">
+<col style="width: 15%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1271,7 +1697,17 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 </div>
 <aside class="notes">
 <p><strong>Now we fit the right model. multinom from the nnet package. Government is our reference level. The model estimates two intercepts and two slopes — one for academia versus government, one for industry versus government.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
@@ -1286,25 +1722,25 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Academia vs. Govt</td>
+<td style="text-align: left;">Academia vs.&nbsp;Govt</td>
 <td style="text-align: left;">(Intercept)</td>
 <td style="text-align: right;">1.00</td>
 <td style="text-align: right;">0.502</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Academia vs. Govt</td>
+<td style="text-align: left;">Academia vs.&nbsp;Govt</td>
 <td style="text-align: left;">experience</td>
 <td style="text-align: right;">-0.15</td>
 <td style="text-align: right;">-0.082</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Industry vs. Govt</td>
+<td style="text-align: left;">Industry vs.&nbsp;Govt</td>
 <td style="text-align: left;">(Intercept)</td>
 <td style="text-align: right;">-0.50</td>
 <td style="text-align: right;">-1.085</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Industry vs. Govt</td>
+<td style="text-align: left;">Industry vs.&nbsp;Govt</td>
 <td style="text-align: left;">experience</td>
 <td style="text-align: right;">0.20</td>
 <td style="text-align: right;">0.271</td>
@@ -1316,19 +1752,29 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 <aside class="notes">
 <p><em>Now we fit the right model. multinom from the nnet package. Government is our reference level. The model estimates two intercepts and two slopes — one for academia versus government, one for industry versus government.</em></p>
 <p><strong>And here’s the payoff — true values next to estimated values. The model recovers what we planted. The academia slope is negative, the industry slope is positive, and the magnitudes are close to the truth. The whole point of the simulation: fit the right model, get the right answer.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="changing-the-baseline" class="slide level2 smaller">
-<h2 class="smaller">Changing the baseline</h2>
+<h2>Changing the baseline</h2>
 <p>What happens if we switch the reference from Government to Academia?</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>sim_data_reref <span class="ot">&lt;-</span> sim_data <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">mutate</span>(<span class="at">career =</span> <span class="fu">relevel</span>(career, <span class="at">ref =</span> <span class="st">&quot;Academia&quot;</span>))</span>
-<span id="cb12-3"><a href="#cb12-3"></a></span>
-<span id="cb12-4"><a href="#cb12-4"></a>reref_model <span class="ot">&lt;-</span> <span class="fu">multinom</span>(career <span class="sc">~</span> experience, <span class="at">data =</span> sim_data_reref, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb12-5"><a href="#cb12-5"></a></span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="fu">tidy</span>(reref_model) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>sim_data_reref <span class="ot">&lt;-</span> sim_data <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a></a>  <span class="fu">mutate</span>(<span class="at">career =</span> <span class="fu">relevel</span>(career, <span class="at">ref =</span> <span class="st">"Academia"</span>))</span>
+<span id="cb12-3"><a></a></span>
+<span id="cb12-4"><a></a>reref_model <span class="ot">&lt;-</span> <span class="fu">multinom</span>(career <span class="sc">~</span> experience, <span class="at">data =</span> sim_data_reref, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-5"><a></a></span>
+<span id="cb12-6"><a></a><span class="fu">tidy</span>(reref_model) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -1380,16 +1826,26 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 </div>
 <aside class="notes">
 <p><strong>Common source of confusion — what happens when you change the baseline? Let’s switch from government to academia as the reference and refit. - The coefficients change. - Signs flip, magnitudes shift. - But watch what happens to the predictions.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Predicted probabilities are identical</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">bind_rows</span>(</span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">predict</span>(right_model, <span class="at">newdata =</span> <span class="fu">tibble</span>(<span class="at">experience =</span> <span class="dv">10</span>), <span class="at">type =</span> <span class="st">&quot;probs&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="#cb13-4"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">baseline =</span> <span class="st">&quot;Government&quot;</span>),</span>
-<span id="cb13-5"><a href="#cb13-5"></a>  <span class="fu">predict</span>(reref_model, <span class="at">newdata =</span> <span class="fu">tibble</span>(<span class="at">experience =</span> <span class="dv">10</span>), <span class="at">type =</span> <span class="st">&quot;probs&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-6"><a href="#cb13-6"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">baseline =</span> <span class="st">&quot;Academia&quot;</span>)</span>
-<span id="cb13-7"><a href="#cb13-7"></a>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="co"># Predicted probabilities are identical</span></span>
+<span id="cb13-2"><a></a><span class="fu">bind_rows</span>(</span>
+<span id="cb13-3"><a></a>  <span class="fu">predict</span>(right_model, <span class="at">newdata =</span> <span class="fu">tibble</span>(<span class="at">experience =</span> <span class="dv">10</span>), <span class="at">type =</span> <span class="st">"probs"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">baseline =</span> <span class="st">"Government"</span>),</span>
+<span id="cb13-5"><a></a>  <span class="fu">predict</span>(reref_model, <span class="at">newdata =</span> <span class="fu">tibble</span>(<span class="at">experience =</span> <span class="dv">10</span>), <span class="at">type =</span> <span class="st">"probs"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">baseline =</span> <span class="st">"Academia"</span>)</span>
+<span id="cb13-7"><a></a>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -1430,56 +1886,70 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 <aside class="notes">
 <p><em>Common source of confusion — what happens when you change the baseline? Let’s switch from government to academia as the reference and refit. The coefficients change. Signs flip, magnitudes shift. But watch what happens to the predictions.</em></p>
 <p><strong>Identical predicted probabilities. The model is the same — you’re just reading a different column of the same table. Changing the baseline changes how you describe the model, not what the model says. Like converting temperatures from Fahrenheit to Celsius — different numbers, same weather.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="visualizing-the-recovery" class="slide level2 smaller">
-<h2 class="smaller">Visualizing the recovery</h2>
+<h2>Visualizing the recovery</h2>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r cell-code number-lines"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># True curves (from DGP) + fitted curves (from model)</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>fitted_grid <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">experience =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="fl">0.1</span>))</span>
-<span id="cb14-3"><a href="#cb14-3"></a>fitted_probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(right_model, <span class="at">newdata =</span> fitted_grid, <span class="at">type =</span> <span class="st">&quot;probs&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a>  <span class="fu">bind_cols</span>(fitted_grid) <span class="sc">%&gt;%</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Government, Academia, Industry),</span>
-<span id="cb14-7"><a href="#cb14-7"></a>               <span class="at">names_to =</span> <span class="st">&quot;career&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;fitted&quot;</span>)</span>
-<span id="cb14-8"><a href="#cb14-8"></a></span>
-<span id="cb14-9"><a href="#cb14-9"></a>true_grid <span class="ot">&lt;-</span> exp_grid <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">true_prob =</span> prob)</span>
-<span id="cb14-10"><a href="#cb14-10"></a></span>
-<span id="cb14-11"><a href="#cb14-11"></a>combined <span class="ot">&lt;-</span> fitted_probs <span class="sc">%&gt;%</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a>  <span class="fu">left_join</span>(true_grid, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;experience&quot;</span>, <span class="st">&quot;career&quot;</span>))</span>
-<span id="cb14-13"><a href="#cb14-13"></a></span>
-<span id="cb14-14"><a href="#cb14-14"></a><span class="fu">ggplot</span>(combined, <span class="fu">aes</span>(<span class="at">x =</span> experience)) <span class="sc">+</span></span>
-<span id="cb14-15"><a href="#cb14-15"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> true_prob, <span class="at">color =</span> career), </span>
-<span id="cb14-16"><a href="#cb14-16"></a>            <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb14-17"><a href="#cb14-17"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> fitted, <span class="at">color =</span> career), <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb14-18"><a href="#cb14-18"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Government&quot;</span> <span class="ot">=</span> <span class="st">&quot;#636e72&quot;</span>, </span>
-<span id="cb14-19"><a href="#cb14-19"></a>                                 <span class="st">&quot;Academia&quot;</span>   <span class="ot">=</span> <span class="st">&quot;#d63031&quot;</span>, </span>
-<span id="cb14-20"><a href="#cb14-20"></a>                                 <span class="st">&quot;Industry&quot;</span>   <span class="ot">=</span> <span class="st">&quot;#0984e3&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb14-21"><a href="#cb14-21"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Experience (years)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Probability&quot;</span>,</span>
-<span id="cb14-22"><a href="#cb14-22"></a>       <span class="at">title =</span> <span class="st">&quot;Dashed = truth we planted | Solid = what the model found&quot;</span>,</span>
-<span id="cb14-23"><a href="#cb14-23"></a>       <span class="at">color =</span> <span class="st">&quot;Career&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-24"><a href="#cb14-24"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
-<span id="cb14-25"><a href="#cb14-25"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="multinomial_regression_lecture1_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" /></p>
-</figure>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="co"># True curves (from DGP) + fitted curves (from model)</span></span>
+<span id="cb14-2"><a></a>fitted_grid <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">experience =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="fl">0.1</span>))</span>
+<span id="cb14-3"><a></a>fitted_probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(right_model, <span class="at">newdata =</span> fitted_grid, <span class="at">type =</span> <span class="st">"probs"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-5"><a></a>  <span class="fu">bind_cols</span>(fitted_grid) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Government, Academia, Industry),</span>
+<span id="cb14-7"><a></a>               <span class="at">names_to =</span> <span class="st">"career"</span>, <span class="at">values_to =</span> <span class="st">"fitted"</span>)</span>
+<span id="cb14-8"><a></a></span>
+<span id="cb14-9"><a></a>true_grid <span class="ot">&lt;-</span> exp_grid <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">true_prob =</span> prob)</span>
+<span id="cb14-10"><a></a></span>
+<span id="cb14-11"><a></a>combined <span class="ot">&lt;-</span> fitted_probs <span class="sc">%&gt;%</span></span>
+<span id="cb14-12"><a></a>  <span class="fu">left_join</span>(true_grid, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"experience"</span>, <span class="st">"career"</span>))</span>
+<span id="cb14-13"><a></a></span>
+<span id="cb14-14"><a></a><span class="fu">ggplot</span>(combined, <span class="fu">aes</span>(<span class="at">x =</span> experience)) <span class="sc">+</span></span>
+<span id="cb14-15"><a></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> true_prob, <span class="at">color =</span> career), </span>
+<span id="cb14-16"><a></a>            <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb14-17"><a></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> fitted, <span class="at">color =</span> career), <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb14-18"><a></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Government"</span> <span class="ot">=</span> <span class="st">"#636e72"</span>, </span>
+<span id="cb14-19"><a></a>                                 <span class="st">"Academia"</span>   <span class="ot">=</span> <span class="st">"#d63031"</span>, </span>
+<span id="cb14-20"><a></a>                                 <span class="st">"Industry"</span>   <span class="ot">=</span> <span class="st">"#0984e3"</span>)) <span class="sc">+</span></span>
+<span id="cb14-21"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Experience (years)"</span>, <span class="at">y =</span> <span class="st">"Probability"</span>,</span>
+<span id="cb14-22"><a></a>       <span class="at">title =</span> <span class="st">"Dashed = truth we planted | Solid = what the model found"</span>,</span>
+<span id="cb14-23"><a></a>       <span class="at">color =</span> <span class="st">"Career"</span>) <span class="sc">+</span></span>
+<span id="cb14-24"><a></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb14-25"><a></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
 </div>
-</div>
-</div>
-<aside class="notes">
+<img data-src="multinomial_regression_lecture1_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"><aside class="notes">
 <p><strong>Dashed lines are the truth we planted. Solid lines are what the model estimated. They overlap. The model found the generating process. This is the visual proof that multinomial regression works — it recovers category-specific effects that go in different directions.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="career-roulette-recap" class="slide level2 smaller">
-<h2 class="smaller">Career roulette: Recap</h2>
+<h2>Career roulette: Recap</h2>
 <table class="caption-top">
 <colgroup>
-<col style="width: 26%" />
-<col style="width: 31%" />
-<col style="width: 41%" />
+<col style="width: 26%">
+<col style="width: 31%">
+<col style="width: 41%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1501,7 +1971,7 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Explore proportions</td>
-<td style="text-align: left;">Log-odds vs. baseline at each experience level</td>
+<td style="text-align: left;">Log-odds vs.&nbsp;baseline at each experience level</td>
 <td style="text-align: left;">Structure in the data mirrors what the model estimates</td>
 </tr>
 <tr class="even">
@@ -1523,13 +1993,23 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 </table>
 <aside class="notes">
 <p><strong>Here’s the full arc. We set the truth, generated data, explored it, fit the wrong model, watched it fail, fit the right model, and recovered what we planted. Same philosophy as the loaded dice — except now each category has its own slope instead of sharing one.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="fragment">
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
-<i class='callout-icon'></i>
+<i class="callout-icon"></i>
 </div>
 <p><strong>Note</strong></p>
 </div>
@@ -1541,7 +2021,17 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 <aside class="notes">
 <p><em>Here’s the full arc. We set the truth, generated data, explored it, fit the wrong model, watched it fail, fit the right model, and recovered what we planted. Same philosophy as the loaded dice — except now each category has its own slope instead of sharing one.</em></p>
 <p><strong>The chapter jumps straight to real data. We just did the step Liu skips — checking that the model works on data where we know the answer. Now let’s see what happens when we don’t know the answer.</strong></p>
-</aside>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <!-- 
 ============================================================
   END OF PHASE 2 — PHASE 3 (applied section) begins here
@@ -1551,21 +2041,29 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 </section>
 <section id="tomorrow---stats-seminar" class="slide level2">
 <h2>Tomorrow - Stats Seminar</h2>
-<p><img data-src="images/clipboard-965951265.png" /></p>
-<aside class="notes">
+
+<img data-src="images/clipboard-965951265.png" class="r-stretch"><aside class="notes">
 <p>Psychometrics: designing and evaluating tests that measure psychological traits or abilities. Item Response Theory: models how a person’s latent trait affects their responses to individual test items.</p>
-</aside>
-<div id="quarto-meta-markdown" class="hidden">
-<p><span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW1ldGF0aXRsZQ==">Multinomial Regression – PSY 504, Spring 2026</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=">Multinomial Regression – PSY 504, Spring 2026</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW9nY2FyZHRpdGxl">Multinomial Regression – PSY 504, Spring 2026</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW1ldGFzaXRlbmFtZQ==">PSY 504, Spring 2026</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==">Princeton University</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW9nY2FyZGRkZXNj">Princeton University</span></p>
-</div>
-<div class="quarto-auto-generated-content" style="display: none;">
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
 <p>PSY 504: Advanced Statistics</p>
 </div>
-</div>
-</section></section>
-    </div>
-  </div>
+</div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
   <script src="../../site_libs/revealjs/dist/reveal.js"></script>
@@ -1588,7 +2086,18 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
 
       // Full list of configuration options available at:
       // https://revealjs.com/config/
-      Reveal.initialize({ 
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
         // Display controls in the bottom right corner
         controls: false,
 
@@ -1607,7 +2116,7 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: c/t,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -1757,7 +2266,8 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
         },
 
         // reveal.js plugins
-        plugins: [
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
           RevealMath,
           RevealNotes,
           RevealSearch,
@@ -1803,7 +2313,7 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
       })();
     </script>
 
-    <script id = "quarto-html-after-body" type="application/javascript">
+    <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
         tabsets.forEach(function(tabset) {
@@ -1971,5 +2481,6 @@ experience  1 -192.95 393.90 0.85183    0.356</code></pre>
         }
       });
       </script>
-    </body>
-</html>
+    
+
+</body></html>

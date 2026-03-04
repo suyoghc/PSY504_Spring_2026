@@ -16,6 +16,7 @@
 **/phase*
 **/05-ordinal-regression-narrated*
 **/ordinal_regression_J2*
+**/temp
 
 /.quarto/
 **/*.quarto_ipynb

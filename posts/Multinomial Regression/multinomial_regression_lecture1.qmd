@@ -14,8 +14,6 @@ format:
     incremental: false 
     chalkboard: true 
     fontsize: "25pt"
-  beamer:
-    theme: default
 execute:
   freeze: auto
   echo: true
