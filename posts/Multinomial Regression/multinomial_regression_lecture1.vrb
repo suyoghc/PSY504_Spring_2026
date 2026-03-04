@@ -57,7 +57,7 @@ baseline.}}
 
 \pause
 
-\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, titlerule=0mm, opacitybacktitle=0.6, breakable, left=2mm, arc=.35mm, bottomtitle=1mm, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, coltitle=black, colback=white, toptitle=1mm, opacityback=0, toprule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, bottomrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Interpretation}]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, colframe=quarto-callout-tip-color-frame, toprule=.15mm, arc=.35mm, bottomtitle=1mm, opacityback=0, bottomrule=.15mm, left=2mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Interpretation}, coltitle=black, leftrule=.75mm, rightrule=.15mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, breakable]
 
 \(\beta_{1j}\): when \(x_1\) increases by one unit, the log-odds of
 being in category \(j\) \textbf{vs.~the baseline} change by
