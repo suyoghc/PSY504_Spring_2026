@@ -485,7 +485,6 @@ $$\log\bigg(\frac{p_{i1}}{p_{i0}}\bigg) = \beta_{0k} + \beta_{1k} x_i$$
 
 -   Intercept: $\beta_0$: when x = 0 the odds of Y = 1 is expected to be $exp(\beta)$
 
-
 ## Think of it as simultaneous binary regressions
 
 ```{r}
@@ -798,7 +797,7 @@ sim_data %>% count(career)
 sim_binned <- sim_data %>%
   mutate(exp_bin = cut(experience, 
                        breaks = c(0, 7, 14, 20),
-                       labels = c("Low (0–7)", "Mid (7–14)", "High (14–20)"),
+                       labels = c("Low (0-7)", "Mid (7–14)", "High (14–20)"),
                        include.lowest = TRUE))
 
 p_bars <- sim_binned %>%

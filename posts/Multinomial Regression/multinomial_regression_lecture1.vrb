@@ -1,0 +1,84 @@
+\frametitle{Multinomial logistic regression}
+\phantomsection\label{multinomial-logistic-regression}
+\begin{itemize}
+\tightlist
+\item
+  Choose a \textbf{baseline category} (reference). All comparisons are
+  relative to it.
+\end{itemize}
+
+\note{\textbf{Here's the formal setup. Pick one category as the baseline
+--- the reference. Every other category gets compared to it.}}
+
+\pause
+
+\begin{itemize}
+\tightlist
+\item
+  If the outcome has \(K\) categories and the baseline is category
+  \(K\), we model \(K - 1\) log-odds:
+\end{itemize}
+
+\[\log\bigg(\frac{P(Y = j)}{P(Y = K)}\bigg) = \beta_{0j} + \beta_{1j} x_1 + \cdots + \beta_{pj} x_p\]
+
+for \(j = 1, 2, \ldots, K-1\)
+
+\note{\emph{Here's the formal setup. Pick one category as the baseline
+--- the reference. Every other category gets compared to it.}
+
+\textbf{If you have K categories, you write K minus 1 log-odds
+equations. Each one looks like a logistic regression. But notice the
+subscript j on every beta --- each equation has its own coefficients.}
+
+\textbf{category-specific log-odds relative to a baseline}}
+
+\pause
+
+\begin{itemize}
+\item
+  Each equation is its own logistic regression --- but they're estimated
+  \textbf{simultaneously}
+\item
+  The chapter calls these \texttt{log(mu{[},2{]}/mu{[},1{]})},
+  \texttt{log(mu{[},3{]}/mu{[},1{]})}, etc.
+\end{itemize}
+
+\note{\emph{Here's the formal setup. Pick one category as the baseline
+--- the reference. Every other category gets compared to it.}
+
+\emph{If you have K categories, you write K minus 1 log-odds equations.
+Each one looks like a logistic regression. But notice the subscript j on
+every beta --- each equation has its own coefficients.}
+
+\textbf{They're estimated simultaneously, not independently. The model
+sees all the data at once. The chapter notation --- log of mu 2 over mu
+1, log of mu 3 over mu 1 --- that's exactly this. Mu 1 is the
+baseline.}}
+
+\pause
+
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, titlerule=0mm, opacitybacktitle=0.6, breakable, left=2mm, arc=.35mm, bottomtitle=1mm, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, coltitle=black, colback=white, toptitle=1mm, opacityback=0, toprule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, bottomrule=.15mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Interpretation}]
+
+\(\beta_{1j}\): when \(x_1\) increases by one unit, the log-odds of
+being in category \(j\) \textbf{vs.~the baseline} change by
+\(\beta_{1j}\)
+
+\(\exp(\beta_{1j})\): the \textbf{odds ratio} --- the multiplicative
+change in odds of category \(j\) vs.~baseline
+
+\end{tcolorbox}
+
+\note{\emph{Here's the formal setup. Pick one category as the baseline
+--- the reference. Every other category gets compared to it.}
+
+\emph{If you have K categories, you write K minus 1 log-odds equations.
+Each one looks like a logistic regression. But notice the subscript j on
+every beta --- each equation has its own coefficients.}
+
+\emph{They're estimated simultaneously, not independently. The model
+sees all the data at once. The chapter notation --- log of mu 2 over mu
+1, log of mu 3 over mu 1 --- that's exactly this. Mu 1 is the baseline.}
+
+\textbf{Interpretation. Beta-1-j is the change in log-odds of category j
+versus baseline when x goes up by one. Exponentiate and you get the odds
+ratio. Same as logistic regression, just specific to one comparison.}}
