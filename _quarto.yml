@@ -11,6 +11,9 @@ project:
     - "!**/*Bayes_Lab_1_Coins.qmd"
     - "!**/*_narrative.qmd"
     - "!**/*Key.qmd"
+    - "!**/*J2.qmd"
+    - "!**/phase*.qmd"
+    - "!**/temp.qmd"
 
 website:
   title: "PSY 504, Spring 2026"
