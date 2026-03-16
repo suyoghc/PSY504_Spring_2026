@@ -14,6 +14,7 @@ project:
     - "!**/*J2.qmd"
     - "!**/phase*.qmd"
     - "!**/temp.qmd"
+    - "!**/deck*.qmd"
 
 website:
   title: "PSY 504, Spring 2026"

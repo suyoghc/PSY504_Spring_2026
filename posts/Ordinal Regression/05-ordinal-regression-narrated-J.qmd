@@ -918,38 +918,38 @@ This is the same equation you saw two weeks ago. Nothing new yet — just the GL
 *Let me show you.*
 :::
 
-## Ordinal regression: Filling in the GLM {.smaller}
+<!-- ## Ordinal regression: Filling in the GLM {.smaller} -->
 
-$$\begin{align*}
-  Y_i & \sim \color{#d63031}{\mathrm{Cumulative}}(\pi_1, \ldots, \pi_K) & \quad & \color{#d63031}{\text{← Ordinal outcome (K ordered categories)}} \\[8pt]
-  \color{#2d3436}{g(\mu_i)} & = \color{#0984e3}{\mathrm{logit}} & \quad & \color{#0984e3}{\text{← Same link as logistic regression}} \\[8pt]
-  \eta_i & = \color{#00b894}{\alpha_k - (\beta_1 X_{1i} + \beta_2 X_{2i} + \ldots)} & \quad & \color{#00b894}{\text{← Thresholds + slopes}}
-\end{align*}$$
+<!-- $$\begin{align*} -->
+<!--   Y_i & \sim \color{#d63031}{\mathrm{Cumulative}}(\pi_1, \ldots, \pi_K) & \quad & \color{#d63031}{\text{← Ordinal outcome (K ordered categories)}} \\[8pt] -->
+<!--   \color{#2d3436}{g(\mu_i)} & = \color{#0984e3}{\mathrm{logit}} & \quad & \color{#0984e3}{\text{← Same link as logistic regression}} \\[8pt] -->
+<!--   \eta_i & = \color{#00b894}{\alpha_k - (\beta_1 X_{1i} + \beta_2 X_{2i} + \ldots)} & \quad & \color{#00b894}{\text{← Thresholds + slopes}} -->
+<!-- \end{align*}$$ -->
 
-. . .
+<!-- . . . -->
 
-:::::: columns
-::: {.column width="33%"}
-[**Distribution**]{style="color: #d63031; font-size: 1.1em;"}
+<!-- :::::: columns -->
+<!-- ::: {.column width="33%"} -->
+<!-- [**Distribution**]{style="color: #d63031; font-size: 1.1em;"} -->
 
-Models cumulative probability $P(Y \leq k)$ — preserves the ordering
-:::
+<!-- Models cumulative probability $P(Y \leq k)$ — preserves the ordering -->
+<!-- ::: -->
 
-::: {.column width="33%"}
-[**Link**]{style="color: #0984e3; font-size: 1.1em;"}
+<!-- ::: {.column width="33%"} -->
+<!-- [**Link**]{style="color: #0984e3; font-size: 1.1em;"} -->
 
-Logit — identical to logistic regression. Nothing new here.
-:::
+<!-- Logit — identical to logistic regression. Nothing new here. -->
+<!-- ::: -->
 
-::: {.column width="33%"}
-[**Linear predictor**]{style="color: #00b894; font-size: 1.1em;"}
+<!-- ::: {.column width="33%"} -->
+<!-- [**Linear predictor**]{style="color: #00b894; font-size: 1.1em;"} -->
 
-$K-1$ thresholds $\alpha_k$ (one per split) + shared slopes $\beta$ (proportional odds)
-:::
-::::::
+<!-- $K-1$ thresholds $\alpha_k$ (one per split) + shared slopes $\beta$ (proportional odds) -->
+<!-- ::: -->
+<!-- :::::: -->
 
-::: notes
-Now we fill in the blanks. Three changes from logistic regression — and **only one of them is actually new.**
+<!-- ::: notes -->
+<!-- Now we fill in the blanks. Three changes from logistic regression — and **only one of them is actually new.** -->
 
 ## Cumulative logit model (notation) {.smaller}.
 
@@ -1435,7 +1435,7 @@ When it is wrong, you have options: partial proportional odds, multinomial regre
 ## Dice simulation: Recap {.smaller}
 
 | Step | What we did | What it teaches |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Generate latent scores | `rnorm()` per die | Latent variable concept |
 | Apply thresholds | `case_when()` with $\tau_1$, $\tau_2$ | How categories arise from a continuum |
 | Fit OLS | `lm(y_numeric ~ lead_weight)` | Why treating ordinal as numeric fails |

@@ -2,7 +2,7 @@
 title: "Lab 3: Ordinal Regression"
 subtitle: "PSY 504: Advanced Statistics"
 author: "Your Name"
-date: today
+date: '2026-02-25'
 format: 
   html:
     code-fold: true

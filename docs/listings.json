@@ -1,20 +1,21 @@
 [
   {
+    "listing": "/misc/index.html",
+    "items": []
+  },
+  {
     "listing": "/index.html",
     "items": [
+      "/posts/Poisson and more/Poisson_lecture.html",
       "/posts/Multinomial Regression/Lab_MultinomialRegression.html",
       "/posts/Multinomial Regression/multinom_NHANES.html",
-      "/posts/Ordinal Regression/Lab3 - ordinal regression - Q.html",
       "/posts/Multinomial Regression/multinomial_regression_lecture1.html",
+      "/posts/Ordinal Regression/Lab3 - ordinal regression - Q.html",
       "/posts/Ordinal Regression/ordinal-regression-lecture.html",
       "/posts/Bayes Intro/Bayes_Intro_2026_Lecture.html",
       "/posts/Logistic Regression/logistic_Feb11_clean.html",
       "/posts/Logistic Regression/logistic_Feb9_clean.html",
       "/posts/Multiple Regression/Mul_Reg.html"
     ]
-  },
-  {
-    "listing": "/misc/index.html",
-    "items": []
   }
 ]

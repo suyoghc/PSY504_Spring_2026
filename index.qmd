@@ -3,7 +3,9 @@ title: "PSY 504 Advanced Statistics for Psychology"
 subtitle: "Graduate seminar in Psychology, Princeton University."
 listing:
   id: lecture-listing
-  contents: posts
+  contents:
+    - "posts"
+    - "!**/deck*"
   sort: "date desc"
   type: default 
   categories: true
