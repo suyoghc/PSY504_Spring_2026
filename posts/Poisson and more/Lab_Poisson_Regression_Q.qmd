@@ -58,7 +58,9 @@ options(scipen = 999)
 
 # Part 1: Data Preparation & Cleaning
 
-The data for this lab come from the 2010 General Social Survey (GSS). As described in the pre-registration document, we are testing whether the number of hours per week a person spends on the Internet (`wwwhr`) is predicted by their vocabulary (`wordsum`), age (`age`), sex (`sex`), religiosity (`reliten`), political orientation (`polviews`), and how often they work from home (`wrkhome`).
+This lab accompanies a pre-registration document. Download it here: [Pre-Registration (PDF)](https://github.com/suyoghc/PSY504_Spring_2026/raw/main/posts/Poisson/Lab_Poisson_Pre-Registration.pdf). Refer to Hypothesis (a) for the variables and analysis plan you'll be implementing.
+
+The data come from the 2010 General Social Survey (GSS). As described in the pre-registration, we are testing whether the number of hours per week a person spends on the Internet (`wwwhr`) is predicted by their vocabulary (`wordsum`), age (`age`), sex (`sex`), religiosity (`reliten`), political orientation (`polviews`), and how often they work from home (`wrkhome`).
 
 ```{r}
 #| code-fold: false
