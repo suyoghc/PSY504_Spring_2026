@@ -1,12 +1,7 @@
 [
   {
-    "listing": "/misc/index.html",
-    "items": []
-  },
-  {
     "listing": "/index.html",
     "items": [
-      "/posts/Poisson and more/Lab5_Poisson_Regression_Q.html",
       "/posts/Poisson and more/Lab_Poisson_Regression_Q.html",
       "/posts/Poisson and more/Poisson_lecture.html",
       "/posts/Multinomial Regression/Lab_MultinomialRegression.html",
@@ -19,5 +14,9 @@
       "/posts/Logistic Regression/logistic_Feb9_clean.html",
       "/posts/Multiple Regression/Mul_Reg.html"
     ]
+  },
+  {
+    "listing": "/misc/index.html",
+    "items": []
   }
 ]
