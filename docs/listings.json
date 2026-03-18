@@ -6,6 +6,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Poisson and more/Lab5_Poisson_Regression_Q.html",
+      "/posts/Poisson and more/Lab_Poisson_Regression_Q.html",
       "/posts/Poisson and more/Poisson_lecture.html",
       "/posts/Multinomial Regression/Lab_MultinomialRegression.html",
       "/posts/Multinomial Regression/multinom_NHANES.html",
