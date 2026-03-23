@@ -19,6 +19,9 @@
 **/temp
 planning notes/
 **/deck*
+**/*MLM_2026*
+**/*MLM_exercise*
+**/*MLM_simulation*
 
 /.quarto/
 **/*.quarto_ipynb

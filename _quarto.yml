@@ -15,6 +15,9 @@ project:
     - "!**/phase*.qmd"
     - "!**/temp.qmd"
     - "!**/deck*.qmd"
+    - "!**/*MLM_2026*.qmd"
+    - "!**/*MLM_exercise*.qmd"
+    - "!**/*MLM_simulation*.qmd"
 
 website:
   title: "PSY 504, Spring 2026"

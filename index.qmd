@@ -27,6 +27,8 @@ Spring 2026 · Mon / Wed 10:00 AM · NEU A30 · Suyog Chandramouli
 ## Student Presentations
 
 - [Sebastian - Intro to Bayes (Feb 16)](https://drive.google.com/file/d/1nuKOfsitg4etXtqP1fb-EbEFlFq59RE3/view?usp=drive_link){target="_blank"}
+- [Bianca - Ordinal Regression](https://github.com/suyoghc/PSY504_Spring_2026/blob/main/posts/Ordinal%20Regression/ordinal_regression_student_presentation.pptx){target="_blank"}
+- [Emmy - Intro to Mixed Models (Mar 23)](https://github.com/suyoghc/PSY504_Spring_2026/blob/main/posts/Multilevel%20Models/Mixed_Models_Emmy.pdf){target="_blank"}
 
 <br>
 <br>

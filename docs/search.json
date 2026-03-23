@@ -2888,14 +2888,14 @@
     "href": "index.html#student-presentations",
     "title": "PSY 504 Advanced Statistics for Psychology",
     "section": "Student Presentations",
-    "text": "Student Presentations\n\nSebastian - Intro to Bayes (Feb 16)"
+    "text": "Student Presentations\n\nSebastian - Intro to Bayes (Feb 16)\nBianca - Ordinal Regression\nEmmy - Intro to Mixed Models (Mar 23)"
   },
   {
     "objectID": "index.html#lecture-slides",
     "href": "index.html#lecture-slides",
     "title": "PSY 504 Advanced Statistics for Psychology",
     "section": "Lecture Slides",
-    "text": "Lecture Slides\n\n\n\n\n\nLab 5: Poisson Regression\n\n\n\n\n\n\n\n\nMar 18\n\n\n\n\n\n\n\nPoisson, Negative Binomial, and Zero-Inflated Models\n\n\n\n\n\n\n\n\nMar 16\n\n\n\n\n\n\n\nLab 4 - Multinomial Regression\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression (NHANES data example)\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nMar 02\n\n\n\n\n\n\n\nLab 3: Ordinal Regression\n\n\n\n\n\n\n\n\nFeb 25\n\n\n\n\n\n\n\nOrdinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 23\n\n\n\n\n\n\n\nIntroduction to Bayesian Inference\n\n\n\nBayes\n\n\n\n\n\n\n\n\n\nFeb 16\n\n\n\n\n\n\n\nGLM & Logistic Regression (updated)\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 11\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 09\n\n\n\n\n\n\n\nMultiple Regression\n\n\n\nLinear Models\n\n\n\n\n\n\n\n\n\nFeb 04\n\n\n\n\n\nNo matching items"
+    "text": "Lecture Slides\n\n\n\n\n\nMultilevel Modeling (with R) Part 1\n\n\n\n\n\n\n\n\nMar 23\n\n\n\n\n\n\n\nLab 5: Poisson Regression\n\n\n\n\n\n\n\n\nMar 18\n\n\n\n\n\n\n\nPoisson, Negative Binomial, and Zero-Inflated Models\n\n\n\n\n\n\n\n\nMar 16\n\n\n\n\n\n\n\nLab 4 - Multinomial Regression\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression (NHANES data example)\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nMar 02\n\n\n\n\n\n\n\nLab 3: Ordinal Regression\n\n\n\n\n\n\n\n\nFeb 25\n\n\n\n\n\n\n\nOrdinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 23\n\n\n\n\n\n\n\nIntroduction to Bayesian Inference\n\n\n\nBayes\n\n\n\n\n\n\n\n\n\nFeb 16\n\n\n\n\n\n\n\nGLM & Logistic Regression (updated)\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 11\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 09\n\n\n\n\n\n\n\nMultiple Regression\n\n\n\nLinear Models\n\n\n\n\n\n\n\n\n\nFeb 04\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "misc/index.html",
@@ -3855,5 +3855,488 @@
     "title": "Lab 5: Poisson Regression",
     "section": "Mini-tutorial: Fitting a zero-inflated model",
     "text": "Mini-tutorial: Fitting a zero-inflated model\nThe zeroinfl() function from the pscl package fits a two-part model. The left side of | is the count model (Poisson or negative binomial). The right side models the probability of a structural zero using logistic regression.\n\n# Extending the doctor visits example from Part 2\n# Some people avoid doctors entirely (structural zeros)\n# Others see doctors but had 0 visits that month (sampling zeros)\n# Adding a binary predictor: whether the person has insurance\n\ntoy_zi_data &lt;- tibble(\n  visits   = c(0, 0, 0, 0, 1, 3, 0, 2, 0, 7, 0, 0, 4, 1, 0),\n  age      = c(22, 25, 35, 19, 40, 55, 28, 45, 23, 60, 20, 30, 50, 33, 27),\n  insured  = c(0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0)\n)\n\n# Count model: visits ~ age (how many visits, given you go at all)\n# Zero model:  ~ insured (does having insurance affect whether you go at all?)\ntoy_zi_model &lt;- zeroinfl(visits ~ age | insured, dist = \"negbin\", data = toy_zi_data)\n\nsummary(toy_zi_model)\n\n\nCall:\nzeroinfl(formula = visits ~ age | insured, data = toy_zi_data, dist = \"negbin\")\n\nPearson residuals:\n       Min         1Q     Median         3Q        Max \n-0.8469321 -0.0003344 -0.0002728  0.0493294  0.7525305 \n\nCount model coefficients (negbin with log link):\n             Estimate Std. Error z value Pr(&gt;|z|)   \n(Intercept)  -3.46939    1.57370  -2.205  0.02748 * \nage           0.08963    0.02954   3.035  0.00241 **\nLog(theta)   14.44810  363.04780   0.040  0.96826   \n\nZero-inflation model coefficients (binomial with logit link):\n            Estimate Std. Error z value Pr(&gt;|z|)\n(Intercept)    14.79    1154.93   0.013    0.990\ninsured       -28.14    1208.95  -0.023    0.981\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 \n\nTheta = 1882483.6392 \nNumber of iterations in BFGS optimization: 37 \nLog-likelihood: -9.666 on 5 Df\n\n\nThe output has two sections. “Count model coefficients” are interpreted like a regular negative binomial (log-counts, exponentiate for IRRs). “Zero-inflation model coefficients” are interpreted like logistic regression (log-odds of being a structural zero). In this example, uninsured people may be more likely to avoid doctors entirely, which is a different process from how often insured people visit.\n\nExercise 6.2\nBased on your zero-inflation test, should you fit a zero-inflated model? If yes, fit one and compare it to your negative binomial. If no, explain why the negative binomial is sufficient.\n\n\n\n\n\n\nTipHint: Zero-inflated syntax\n\n\n\n\n\nThe mini-tutorial above shows the syntax pattern. The left side of | is your count model formula, the right side models structural zeros. Use dist = \"negbin\" if your count model is negative binomial."
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#overview",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#overview",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Overview",
+    "text": "Overview\n\n\n\nThe nuts and bolts of multilevel models\n\nWhy do we need multilevel models? what are they? and why are they awesome?\nImportant terminology\nHow we specify MLMs (in code and mathematically)\n\n\n\n\nHow to do it\n\nOrganizing data for MLM analysis\nEstimation\nFit and interpret multilevel models\nEffect size\nPower\nVisualizing data\nReporting"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#packages",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#packages",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Packages",
+    "text": "Packages\n\nPackages you will need\n\n\nlibrary(tidyverse)\nlibrary(easystats)\nlibrary(here)\nlibrary(knitr)\nlibrary(broom)\nlibrary(broom.mixed)\nlibrary(lme4)\n\n\nFollow along by downloading .qmd file here: https://github.com/suyoghc/PSY-504_Spring-2025/blob/main/Multilevel%20Modeling/MLM.qmd"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why multilevel modeling?",
+    "text": "Why multilevel modeling?\n\nLet’s look at the relationship between SES and math achievement\n\n\ndata &lt;- read.csv(\"https://raw.githubusercontent.com/suyoghc/PSY-504_Spring-2025/refs/heads/main/Multilevel%20Modeling/data/heck2011.csv\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlm(math~ses, data=data) %&gt;%\ntidy() %&gt;%\n  kable()\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n57.598169\n0.0981885\n586.60833\n0\n\n\nses\n4.254676\n0.1256614\n33.85826\n0"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-1",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-1",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why multilevel modeling?",
+    "text": "Why multilevel modeling?\n\nHowever, if we introduce grouping we tell a slightly different story"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-2",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-2",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why multilevel modeling?",
+    "text": "Why multilevel modeling?\n\n\n\nSimpson’s paradox\n\n\n\n\n\n\n\n\nA phenomenon in which a trend appears in several groups of data but disappears or reverses when the groups are combined"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-3",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-3",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why multilevel modeling?",
+    "text": "Why multilevel modeling?\n\nThe word we live in is highly interdependent!\n\nBiological, psychological, social processes occur at multiple levels"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-4",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-4",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why multilevel modeling?",
+    "text": "Why multilevel modeling?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#what-is-multilevel-modeling",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#what-is-multilevel-modeling",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "What is multilevel modeling?",
+    "text": "What is multilevel modeling?\n\nChelsea Parlett-Pelleriti\n\nAn elaboration on regression\n\njust extra errors!"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#what-is-multilevel-modeling-1",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#what-is-multilevel-modeling-1",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "What is multilevel modeling?",
+    "text": "What is multilevel modeling?\n\nTechnique that allows us deal with non-independence between data points (i.e., clustered/nested data)\n\nNested data violate key assumptions of OLS\n\nindependent observations\nindependent errors\n\nBiased estimates and/or underestimated SEs, inflating Type 1 error\n\n\nCorrect inferences!\n\nExplicit partitioning of the variance\n\nWithin (intra-group differences)\nBetween (inter-group differences)"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#what-is-a-hierarchy",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#what-is-a-hierarchy",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "What is a “hierarchy?”",
+    "text": "What is a “hierarchy?”\n\nClustering = Nesting = Grouping = Hierarchies\n\n\n\n\nKey idea: More than one dimension sampling simultaneously\n\n“Nested” designs\nRepeated-measures and longitudinal designs\nAny complex mixed design"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#nested-designs",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#nested-designs",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Nested designs",
+    "text": "Nested designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#two-level-hierarchy",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#two-level-hierarchy",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Two-level Hierarchy",
+    "text": "Two-level Hierarchy\n\nNested designs\n\n\n\nFor now we will focus on data with two levels:\n\nLevel one: most basic level of observation\nLevel two: groups formed from aggregated level-one observation"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#three-level-hierarchy",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#three-level-hierarchy",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Three-level Hierarchy",
+    "text": "Three-level Hierarchy"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#crossed-vs.-nested-designs",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#crossed-vs.-nested-designs",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Crossed vs. nested designs",
+    "text": "Crossed vs. nested designs\n\nCrossed designs (sometimes called cross-classified)\n\nWhen lower units do not belong to only one higher level unit"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Repeated designs",
+    "text": "Repeated designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-1",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-1",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Repeated designs",
+    "text": "Repeated designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-2",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-2",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Repeated designs",
+    "text": "Repeated designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-3",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-3",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Repeated designs",
+    "text": "Repeated designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-4",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-4",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Repeated designs",
+    "text": "Repeated designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-5",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#repeated-designs-5",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Repeated designs",
+    "text": "Repeated designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#longitudinal-designs",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#longitudinal-designs",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Longitudinal designs",
+    "text": "Longitudinal designs"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#test-your-knowledge",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#test-your-knowledge",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Test your knowledge",
+    "text": "Test your knowledge\n\nRadon is a carcinogen – a naturally occurring radioactive gas whose decay products are also radioactive – known to cause lung cancer in high concentrations. The EPA sampled more than 80,000 homes across the U.S. Each house came from a randomly selected county and measurements were made on each level of each home. Uranium measurements at the county level were included to improve the radon estimates.\n\n\nWhat is the most basic level of observation (Level One)?\nWhat are the group units (Level Two, Level Three, etc…)?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#ols-vs.-mlm",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#ols-vs.-mlm",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "OLS vs. MLM",
+    "text": "OLS vs. MLM\n\nWe claimed that ignoring clusters biases estimates and inflates Type 1 error\nLet’s test this claim with simulated data where we know the ground truth, then see which model gets it right\n\n\n\nThe setup:\n\nSimulate clustered data where the true effect of X is zero\nFit OLS (ignoring clusters) and MLM (accounting for clusters)\nIf OLS finds a “significant” effect, we’ve caught a Type I error red-handed"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#the-data-generating-process",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#the-data-generating-process",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "The data generating process",
+    "text": "The data generating process\n\n30 groups (classrooms, therapists, schools…), 10 observations each\nGroups differ in their baseline (random intercepts, SD = 3)\nTrue slope of x is exactly 0 — there is no effect to find\nWe wrote the equation, so we know the truth — can our models recover it?\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#what-does-the-data-look-like",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#what-does-the-data-look-like",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "What does the data look like?",
+    "text": "What does the data look like?\n\n\nEach color is a different group — notice how groups sit at different heights\nOLS ignores the group structure. Fits a single line to all 300 points\nThe vertical spread across groups is between-group variance (OLS absorbs it into the error term)"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#what-happens-when-we-account-for-groups",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#what-happens-when-we-account-for-groups",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "What happens when we account for groups?",
+    "text": "What happens when we account for groups?\n\n\nWithin-group lines are mostly flat — exactly what we’d expect when the true slope is zero\nThe OLS line captures between-group intercept differences, not the effect of X you’re trying to estimate\nWithin each group, the lines are mostly flat — the true slope is zero"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#each-group-on-its-own",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#each-group-on-its-own",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Each group on its own",
+    "text": "Each group on its own\n\n\nWithin-group lines are mostly flat — exactly what we’d expect when the true slope is zero\nThe OLS line captures between-group intercept differences, not the effect of X you’re trying to estimate\nWithin each group, the lines are mostly flat — the true slope is zero"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#ols-vs.-mlm-comparing-estimates",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#ols-vs.-mlm-comparing-estimates",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "OLS vs. MLM: comparing estimates",
+    "text": "OLS vs. MLM: comparing estimates\n\n\n\n\n\nmodel\nestimate\nstd.error\np.value\n\n\n\n\nOLS (ignores clusters)\n-0.323\n0.133\n0.016\n\n\nMLM (accounts for clusters)\n-0.006\n0.057\nNA\n\n\n\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\n\n\n\n\n\n\nImportant\n\n\n\nThe true effect is zero — but OLS finds p = .016!\nIf this were a real study, we’d publish a false finding\nMLM correctly concludes no effect (p = .91)\nThe OLS estimate (-0.32) is far from zero because between-group variance contaminates it. MLM’s estimate (-0.006) recovers the truth"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#what-went-wrong-with-ols",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#what-went-wrong-with-ols",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "What went wrong with OLS?",
+    "text": "What went wrong with OLS?\n\n\n\nOLS sees 300 “independent” observations\nBetween-group differences in Y get absorbed into the residuals\nThis contaminates the slope estimate, pulling it away from the true value\nBiased estimate \\(\\rightarrow\\) false significance\n\n\n\nMLM partitions the variance:\n\nBetween-group variance: \\(\\sigma^2_{U_0}\\)\nWithin-group variance: \\(\\sigma^2_e\\)\n\nThe slope is estimated using only within-group variation\nUnbiased estimate \\(\\rightarrow\\) correct conclusion"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#the-equations-one-error-vs.-many",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#the-equations-one-error-vs.-many",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "The equations: one error vs. many",
+    "text": "The equations: one error vs. many\n\nOLS has one error term — everything unexplained goes into a single pile:\n\n\\[y_i = \\color{blue}{b_0 + b_1 x_i} + \\color{red}{e_i}\\]\n\nMLM splits that pile into separate sources of variance:\n\n\\[y_{ij} = \\color{blue}{\\gamma_0 + \\gamma_1 x_{ij}} + \\color{red}{U_{0j}} + \\color{red}{e_{ij}}\\]\n\n\\(\\color{red}{U_{0j}}\\) = how far group \\(j\\)’s intercept deviates from the grand mean (between-group error)\n\\(\\color{red}{e_{ij}}\\) = how far observation \\(i\\) deviates from its group mean (within-group error)"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#mapping-the-equation-to-our-simulation-code",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#mapping-the-equation-to-our-simulation-code",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Mapping the equation to our simulation code",
+    "text": "Mapping the equation to our simulation code\n\nOur data generating process is the MLM equation:\n\ny = 5 + 0 * x + group_effects[group] + rnorm(...)\n\n\n\n\n\n\n\n\nCode\nEquation\nWhat it is\n\n\n\n\n5\n\\(\\gamma_0\\)\nFixed intercept\n\n\n0 * x\n\\(\\gamma_1 x_{ij}\\)\nFixed slope (set to zero)\n\n\ngroup_effects[group]\n\\(U_{0j}\\)\nBetween-group error\n\n\nrnorm(...)\n\\(e_{ij}\\)\nWithin-group error\n\n\n\n\nOLS lumps \\(U_{0j}\\) and \\(e_{ij}\\) into one \\(e_i\\) — it can’t tell them apart\nMLM recovers both, so the slope estimate reflects only the within-group relationship"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#reading-the-code",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#reading-the-code",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Reading the code",
+    "text": "Reading the code\n\nOLS: lm(y ~ x) — one equation, one error term, all observations treated as independent\nMLM: lmer(y ~ x + (1|group)) — same fixed effect, but (1|group) lets each group have its own intercept\nThat one addition is what partitioned the variance, gave us an unbiased estimate, and prevented the false positive\nWe’ll unpack the full lmer syntax later\n\n\n\nNow let’s see this in action with an interactive simulation"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#interactive-simulation-app",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#interactive-simulation-app",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Interactive Simulation App",
+    "text": "Interactive Simulation App\nOpen the simulation app on your laptop:\nLaunch the MLM Simulation App\nUse the sliders to control:\n\nBetween-group SD — how strong the clustering is\nTrue slope — the real effect of X on Y\nNumber of groups and observations per group\nHit Re-simulate for a new random draw"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#questions",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#questions",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Questions",
+    "text": "Questions\nQ1: Set between-group SD = 0, true slope = 0. Compare OLS and MLM. What do you notice? What is the ICC?\n\nQ2: Keep true slope = 0, increase between-group SD to 3. What happens to the OLS p-value? What about MLM? Look at the plots. Why does OLS find a significant effect?\n\nQ3: Set true slope = 0.5, between-group SD = 3. Compare the OLS and MLM estimates. Which is closer to 0.5?\n\nQ4: Set true slope = 0. Slowly decrease between-group SD from 3 → 2 → 1 → 0.5 → 0. At what ICC do OLS and MLM start agreeing?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#q1-baseline",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#q1-baseline",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Q1: Baseline",
+    "text": "Q1: Baseline\nSet between-group SD = 0, true slope = 0. Compare OLS and MLM. What do you notice? What is the ICC?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#a1-baseline",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#a1-baseline",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "A1: Baseline",
+    "text": "A1: Baseline\n\nOLS and MLM give essentially identical results\nBoth correctly find no significant effect\nICC ≈ 0, no variance is between groups\nTakeaway: when there’s no clustering, OLS is fine and MLM adds nothing"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#q2-introduce-clustering",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#q2-introduce-clustering",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Q2: Introduce clustering",
+    "text": "Q2: Introduce clustering\nKeep true slope = 0, increase between-group SD to 3. What happens to the OLS p-value? What about MLM? Look at the plots. Why does OLS find a significant effect?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#a2-introduce-clustering",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#a2-introduce-clustering",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "A2: Introduce clustering",
+    "text": "A2: Introduce clustering\n\nOLS often finds p &lt; .05, a false positive (the true effect is zero!)\nMLM correctly finds no significant effect\nThe plots show groups sitting at different heights, which OLS cannot distinguish from a real effect\nWithin each group, the lines are flat, there’s no real relationship\nICC jumps to ~0.90, most variance is between groups"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#q3-a-real-effect",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#q3-a-real-effect",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Q3: A real effect",
+    "text": "Q3: A real effect\nSet true slope = 0.5, between-group SD = 3. Compare the OLS and MLM estimates. Which is closer to 0.5?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#a3-a-real-effect",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#a3-a-real-effect",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "A3: A real effect",
+    "text": "A3: A real effect\n\nMLM consistently estimates close to 0.5 (the true value)\nOLS is more variable, often overshooting or undershooting\nBetween-group variance contaminates the OLS estimate even when there IS a real effect\nMLM isolates the within-group relationship, which is where the true effect lives"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#q4-the-threshold",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#q4-the-threshold",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Q4: The threshold",
+    "text": "Q4: The threshold\nSet true slope = 0. Slowly decrease between-group SD from 3 → 2 → 1 → 0.5 → 0. Watch the ICC and model table. At what point do OLS and MLM start agreeing?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#a4-the-threshold",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#a4-the-threshold",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "A4: The threshold",
+    "text": "A4: The threshold\n\nAround ICC ≈ 0.20 or below (between-group SD around 0.5–1), OLS and MLM converge\nWhen clustering is weak, OLS is approximately fine\nWhen clustering is strong, you need MLM\nThe ICC is your diagnostic: it tells you how much the grouping structure matters"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why MLM is Awesome",
+    "text": "Why MLM is Awesome\n\nClassic analysis:\n\nAggregate to level of the group (e.g., with means)\n\nDrawback of classic analysis:\n\nLoss of resolution!\nLoss of power!\n\nMLM Approach:\n\nDeaggregation (keep all the data)"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-1",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-1",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why MLM is Awesome",
+    "text": "Why MLM is Awesome\n\nClassic Analysis:\n\nRepeated-measures ANOVA\n\nDrawback of this approach:\n\nMissing data\n\nMust exclude entire people OR, you can interpolate missing data\n\n\nMLM Approach:\n\nCan analyze all the observations you have!"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-2",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-2",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why MLM is Awesome",
+    "text": "Why MLM is Awesome\n\nClassic Analysis:\n\nRepeated-measures ANOVA\n\nDrawback of ANOVA:\n\nOnly use categorical predictors\n\nMLM Approach:\n\nCan use any combo of categorical and continuous predictors!"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-3",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-3",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why MLM is Awesome",
+    "text": "Why MLM is Awesome\n\n\n\nInterdependence\n\nYou can model the relationships between cases (regression for repeated observations)\n\nMissing data\n\nUses ML for missing data\n\nPower\n\nDeaggregated data\n\nTake into account within and between variance\nFlexibility"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#multilevel-models",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#multilevel-models",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Multilevel models",
+    "text": "Multilevel models\n\nWhen to use them:\n\nNested designs\nRepeated measures\nLongitudinal data\nComplex designs\n\nWhy use them:\n\nCaptures variance occurring between groups and within groups\n\nWhat they are:\n\nLinear model with extra residuals"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-not-use-mlm",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#why-not-use-mlm",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Why not use MLM?",
+    "text": "Why not use MLM?\n\nDont really care about variance (it is just a nuisance variable)\n\nUse GEEs (generalized estimating equations)\nClustered standard errors\n\nData is not actually interdependent\n\nTest with ICC\n\nSmall number of groups/clusters\nYou only have a between-subjects design"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#jumping-right-in",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#jumping-right-in",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Jumping right in",
+    "text": "Jumping right in\n\nWords you hear constantly in MLM Land:\n\nFixed effects\nRandom effects\nRandom factors\nRandom intercepts\nRandom slopes\n\nWhat do they all mean?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#fixed-and-random-effects",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#fixed-and-random-effects",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Fixed and random effects",
+    "text": "Fixed and random effects\n\nTwo sides to any model\n\\[\ny_i = \\color{blue}{b_{0_{\\text{(intercept)}}} + b_{1_{\\text{(slope)}}} x_i} + e_{i_{\\text{(error)}}}\n\\]\n\nModel for the means (fixed part):\n\nFixed effect (constant effect):\n\nPopulation-level (i.e., average) effects that should persist across clusters/experiments\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nWhat you are used to caring about for testing hypotheses\n\n\n\nOur predictor variables (can be continuous or categorical)"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#fixed-and-random-effects-1",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#fixed-and-random-effects-1",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Fixed and random effects",
+    "text": "Fixed and random effects\n\nModel for the variance (random part):\n\n\\[\ny_i = {b_{0_{\\text{(intercept)}}} + b_{1_{\\text{(slope)}}} x_i} + \\color{red}{e_{i_{\\text{(error)}}}}\n\\]\n\nUncorrelated with fixed part\nVariation around the expected values\nNormal distributed ~ \\(N(\\mu,\\sigma)\\)\n\n\n\nIn MLM multiple “piles of variance” or residual terms"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-factors-and-random-effects",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-factors-and-random-effects",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random factors and random effects",
+    "text": "Random factors and random effects\n\nRandom factors:\n\nRepresent higher level grouping variables\n\nA random sample of an infinite number of possible levels\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\nCan only be categorical!"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-factors-vs-random-effects",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-factors-vs-random-effects",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random factors vs random effects",
+    "text": "Random factors vs random effects\n\nThe random factor is your clustering variable:\n\nParticipants 🧑‍🤝‍🧑\nSchools 🏫\nWords\nPictures 🖼️"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-factors-vs-random-effects-1",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-factors-vs-random-effects-1",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random factors vs random effects",
+    "text": "Random factors vs random effects\n\nRandom effects:\n\nHow random factors are allowed to vary\n\nRandom intercept (most common) : \\(U_{0j}\\)\n\nEach level-2 cluster has its own average level-1 outcome\n\nRandom slope: \\(U_{1j}\\)\n\nEach level-2 cluster has its own coef for the effect of a predictor on the outcome\n\nYou have a choice about whether or not to allow your Level 1 intercept and slopes to have variability"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#is-it-a-random-or-fixed-factor",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#is-it-a-random-or-fixed-factor",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Is it a random or fixed factor?",
+    "text": "Is it a random or fixed factor?\n\nShould my variable be fixed or random?\n\nIf it is continuous, has few levels (&lt;5), or is an experimental manipulation\n\nFixed\n\n\nWant to estimate variance at each level of factor?\n\nFixed\n\nWant a general estimate of variance of factor?\n\nRandom"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#what-is-random-and-what-is-fixed",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#what-is-random-and-what-is-fixed",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "What is random and what is fixed?",
+    "text": "What is random and what is fixed?\n\nScenario: Investigating how student performance is influenced by teaching methods and individual student characteristics across different schools.\n\nData Collected: student socio-economic status (SES), teaching method used (e.g., traditional, modern), and school ID\n\nWhat is fixed?\nWhat is random?"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#single-level-fixed-regression",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#single-level-fixed-regression",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Single-level (fixed) regression",
+    "text": "Single-level (fixed) regression\n\nBlue = fixed\nRed = random\n\\[y_i = \\color{blue}{b_{0_{\\text{(intercept)}}} + b_{1_{\\text{(slope)}}} x_i} + \\color{red}{ e_{i_{\\text{(error)}}}}\\]\n\n\\[\ne_{i_{\\text{(error)}}} = y_i - \\hat{y}_i\n\\]"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-intercept",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-intercept",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random intercept",
+    "text": "Random intercept\n\nVarying starting point per higher level/group variable\n\n\\[\ny_{ij} = (\\color{blue}{b_{0j_{\\text{(intercept)}}}} + \\color{red}{U_{0j_{\\text{(random intercept)}}}}) + \\color{blue}{b_{1_{\\text{(slope)}}} x_{ij}} + \\color{red}{e_{ij_{\\text{(error)}}}}\n\\]\n\\[\nU_{0j} = b_{0j} - b_0\n\\]\n\nBetween-group variation\n\n\ni = individual observation j = group"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-intercepts",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-intercepts",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random intercepts",
+    "text": "Random intercepts\n\\[\ny_{ij} = ({b_{0j_{\\text{(intercept)}}} + U_{0j_{\\text{(random intercept)}}}}) + b_{1_{\\text{(slope)}}} x_{ij} + \\color{red}{ e_{ij_{\\text{(error)}}}}\n\\]\nWithin-group variation"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-intercepts---fixed-slope",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-intercepts---fixed-slope",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random intercepts - fixed slope",
+    "text": "Random intercepts - fixed slope\n\nVarying starting point (intercept), same slope for each group"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-intercepts---random-slopes",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-intercepts---random-slopes",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random Intercepts - Random slopes",
+    "text": "Random Intercepts - Random slopes\n\nVarying starting point (intercept), varying slope for each group\n\n\\[\ny_{ij} = (\\color{blue}{b_{0j_{\\text{(intercept)}}}} + \\color{red}{U_{0j_{\\text{(random intercept)}}}}) + (\\color{blue}{b_{1_{\\text{(slope)}}} x_{ij}} + \\color{red}{U_{1j_{\\text{(random slope)}}}}) +  \\color{red}{e_{ij_{\\text{(error)}}}}\n\\]\n\n\n\n\n\n\nImportant\n\n\n\nOnly put a random slope if it changes within cluster/group"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#random-slopes",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#random-slopes",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Random slopes",
+    "text": "Random slopes\n\nThe dotted lines are fixed slopes. The arrows show the added error term for each random slope\n\n\\[\nU_{1j} = b_{1j} - b_1\n\\]"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#mlm-equations",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#mlm-equations",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "MLM Equations",
+    "text": "MLM Equations\n\n\n\n\n\n\n\nLevel\nEquation\n\n\n\n\nLevel 1\n\\(y_{ij} = b_{0j} + b_{1j}X_{ij} + e_{ij}\\)\n\n\nLevel 2\n\\(b_{0j}=γ00+U_{0j}\\)\n\\(b_{1j} = \\gamma{10} + U_{1j}\\)\n\n\nCombined\n\\(y_{ij} = \\gamma_{0} + \\gamma_{1}X_{ij} + e_{ij} + U_{b0j} + U_{b1j}X_{ij}\\)\n\n\n\n\nYou will see both equations used in the literature"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#all-together",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#all-together",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "All together",
+    "text": "All together\n\n\n\n\n\n\n\n\n\nFit models using lmer in lme4 package\n\n\nlm(math~ses, data=data) # lm\n\nlmer(math~ses + (1|schcode), data=data) # random intercept fixed slope\n\nlmer(math~ses + (0+ ses |schcode), data=data) # random slope fixed intercept\n\nlmer(math~ses + (1+ses|schcode), data=data) # random intercept + random slope"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#syntax-cheat-sheet",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#syntax-cheat-sheet",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Syntax cheat sheet",
+    "text": "Syntax cheat sheet"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#how-do-your-groups-differ",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#how-do-your-groups-differ",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "How do your groups differ?",
+    "text": "How do your groups differ?\n\nDifferent averages\n\nRandom intercept\n\nEach group gets its own intercept\n\n\nDifferent relationships between x and y\n\nRandom Slope\n\nEach group gets its own slope"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#implications",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#implications",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "Implications",
+    "text": "Implications\n\nMultiple sources of variance?\n\nJust add more residuals!\n\nEach source of variance gets its own residual term\n\nResiduals capture variance\nResiduals are added rendering them conditionally independent\n\nOtherwise, MLM is the same as GLM"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#how-are-mlms-similar-to-lm",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#how-are-mlms-similar-to-lm",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "How are MLMs similar to LM?",
+    "text": "How are MLMs similar to LM?\n\nThe fixed effects (usually) hold your hypothesis tests\n\nFixed effects output: Looks like GLM output\n\nCan (essentially) be interpreted like GLM output\nFor most people, this is all that matters"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#how-are-lm-and-mlm-different",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#how-are-lm-and-mlm-different",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "How are LM and MLM different?",
+    "text": "How are LM and MLM different?\n\nMLM has random effects output\n\nVariance explained by the random effect\nThis may be interesting, in and of itself\n\nFixed effects of random terms are the average estimates across groups"
   }
 ]
