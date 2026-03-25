@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.36">
 
   <meta name="author" content="Suyog Chandramouli">
-  <meta name="dcterms.date" content="2026-03-25">
+  <meta name="dcterms.date" content="2026-03-23">
   <title>PSY 504, Spring 2026 – Multilevel Modeling (with R) Part 1</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2048,7 +2048,7 @@ Suyog Chandramouli
 </div>
 </div>
 
-  <p class="date">2026-03-25</p>
+  <p class="date">2026-03-23</p>
 </section>
 <section id="overview" class="slide level2">
 <h2>Overview</h2>
@@ -2116,10 +2116,9 @@ Suyog Chandramouli
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co">#|</span></span>
-<span id="cb3-2"><a></a><span class="fu">lm</span>(math<span class="sc">~</span>ses, <span class="at">data=</span>data) <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a></a><span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">lm</span>(math<span class="sc">~</span>ses, <span class="at">data=</span>data) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a></a><span class="fu">tidy</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -2484,11 +2483,11 @@ Suyog Chandramouli
 <li>Our data generating process <strong>is</strong> the MLM equation:</li>
 </ul>
 <pre><code>y = 5 + 0 * x + group_effects[group] + rnorm(...)</code></pre>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 27%">
-<col style="width: 37%">
+<col style="width: 35%">
+<col style="width: 26%">
+<col style="width: 38%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -2627,56 +2626,55 @@ Suyog Chandramouli
 <section id="why-mlm-is-awesome" class="slide level2">
 <h2>Why MLM is Awesome</h2>
 <ul>
-<li><p>Traditional approach:</p>
+<li><p>Classic analysis:</p>
 <ul>
-<li>RM ANOVA <strong>requires aggregating</strong> to group/condition means before analysis</li>
+<li>Aggregate to level of the group (e.g., with means)</li>
 </ul></li>
-<li><p>Limitation:</p>
+<li><p>Drawback of classic analysis:</p>
 <ul>
-<li>Loss of resolution and power</li>
+<li>Loss of resolution!</li>
+<li>Loss of power!</li>
 </ul></li>
-<li><p>MLM extends this:</p>
+<li><p>MLM Approach:</p>
 <ul>
-<li>Can also work with trial-level data (deaggregation)</li>
+<li>Deaggregation (keep all the data)</li>
 </ul></li>
 </ul>
 </section>
 <section id="why-mlm-is-awesome-1" class="slide level2">
 <h2>Why MLM is Awesome</h2>
 <ul>
-<li><p>Traditional approach:</p>
+<li><p>Classic Analysis:</p>
 <ul>
-<li>RM ANOVA <strong>requires complete cases</strong></li>
+<li>Repeated-measures ANOVA</li>
 </ul></li>
-<li><p>Limitation:</p>
+<li><p>Drawback of this approach:</p>
 <ul>
-<li>Missing data forces exclusion of entire participants</li>
+<li><p>Missing data</p>
+<ul>
+<li>Must exclude entire people OR, you can interpolate missing data</li>
 </ul></li>
-<li><p>MLM extends this:</p>
+</ul></li>
+<li><p>MLM Approach:</p>
 <ul>
-<li>Analyzes all available observations via maximum likelihood</li>
+<li>Can analyze all the observations you have!</li>
 </ul></li>
 </ul>
 </section>
 <section id="why-mlm-is-awesome-2" class="slide level2">
 <h2>Why MLM is Awesome</h2>
 <ul>
-<li><p>Traditional approach:</p>
+<li><p>Classic Analysis:</p>
 <ul>
-<li>Different procedures for different situations (despite all of them being variants of GLM)
-<ul>
-<li>ANOVA for categorical predictors</li>
-<li>ANCOVA to add a continuous covariate</li>
-<li>Regression for continuous predictors</li>
+<li>Repeated-measures ANOVA</li>
 </ul></li>
-</ul></li>
-<li><p>Limitation:</p>
+<li><p>Drawback of ANOVA:</p>
 <ul>
-<li>Switching procedures depending on your predictor types</li>
+<li>Only use categorical predictors</li>
 </ul></li>
-<li><p>MLM extends this:</p>
+<li><p>MLM Approach:</p>
 <ul>
-<li>One framework handles any combination of predictors</li>
+<li>Can use any combo of categorical and continuous predictors!</li>
 </ul></li>
 </ul>
 </section>
@@ -2728,8 +2726,8 @@ Suyog Chandramouli
 </ul></li>
 </ul>
 </section>
-<section id="when-mlm-isnt-needed" class="slide level2">
-<h2>When MLM isn’t needed?</h2>
+<section id="why-not-use-mlm" class="slide level2">
+<h2>Why not use MLM?</h2>
 <ul>
 <li><p>Dont really care about variance (it is just a nuisance variable)</p>
 <ul>
@@ -2819,45 +2817,6 @@ y_i = {b_{0_{\text{(intercept)}}} + b_{1_{\text{(slope)}}} x_i} + \color{red}{e_
 </ul>
 </div>
 </section>
-<section id="the-naming-problem" class="slide level2">
-<h2>The naming problem</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Frequentist (lme4)</th>
-<th>Bayesian (brms)</th>
-<th>Gelman / Vasishth</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Fixed effects</td>
-<td>Population-level effects</td>
-<td>Constant effects</td>
-</tr>
-<tr class="even">
-<td>Random effects</td>
-<td>Group-level effects</td>
-<td>Varying effects</td>
-</tr>
-<tr class="odd">
-<td>Random intercepts</td>
-<td>Group-level intercepts</td>
-<td>Varying intercepts</td>
-</tr>
-<tr class="even">
-<td>Random slopes</td>
-<td>Group-level slopes</td>
-<td>Varying slopes</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>All describe the same underlying model</li>
-<li>Betancourt: avoid labels entirely — think in terms of the generative model</li>
-<li>“Population-level” and “group-level” are arguably the clearest descriptors</li>
-</ul>
-</section>
 <section id="random-factors-and-random-effects" class="slide level2">
 <h2>Random factors and random effects</h2>
 <ul>
@@ -2920,8 +2879,8 @@ y_i = {b_{0_{\text{(intercept)}}} + b_{1_{\text{(slope)}}} x_i} + \color{red}{e_
 </ul></li>
 </ul>
 </section>
-<section id="heuristics-is-it-a-random-or-fixed-factor" class="slide level2">
-<h2>(Heuristics) Is it a random or fixed factor?</h2>
+<section id="is-it-a-random-or-fixed-factor" class="slide level2">
+<h2>Is it a random or fixed factor?</h2>
 <ul>
 <li><p>Should my variable be fixed or random?</p>
 <ul>
@@ -3041,8 +3000,8 @@ U_{1j} = b_{1j} - b_1
 <h2>MLM Equations</h2>
 <table class="caption-top">
 <colgroup>
-<col style="width: 15%">
-<col style="width: 84%">
+<col style="width: 13%">
+<col style="width: 86%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -3178,6 +3137,8 @@ U_{1j} = b_{1j} - b_1
   <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
   <script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../../site_libs/revealjs/plugin/multiplex/socket.io.js"></script>
+  <script src="../../site_libs/revealjs/plugin/multiplex/multiplex.js"></script>
   <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
@@ -3201,6 +3162,7 @@ U_{1j} = b_{1j} - b_1
 'jumpToSlide': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
+'multiplex': {"secret":"44702129e641ed83ee72775b4158ca6b","id":"cd226bdb7fd1798c8d3f0860c443c70d55189d7095d769ca981473b4c5c3c50b","url":"https://multiplex.up.railway.app/"},
 'smaller': false,
  
         // Display controls in the bottom right corner

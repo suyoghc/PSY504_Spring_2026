@@ -2895,7 +2895,7 @@
     "href": "index.html#lecture-slides",
     "title": "PSY 504 Advanced Statistics for Psychology",
     "section": "Lecture Slides",
-    "text": "Lecture Slides\n\n\n\n\n\nMultilevel Modeling (with R) Part 1\n\n\n\n\n\n\n\n\nMar 23\n\n\n\n\n\n\n\nLab 5: Poisson Regression\n\n\n\n\n\n\n\n\nMar 18\n\n\n\n\n\n\n\nPoisson, Negative Binomial, and Zero-Inflated Models\n\n\n\n\n\n\n\n\nMar 16\n\n\n\n\n\n\n\nLab 4 - Multinomial Regression\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression (NHANES data example)\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nMar 02\n\n\n\n\n\n\n\nLab 3: Ordinal Regression\n\n\n\n\n\n\n\n\nFeb 25\n\n\n\n\n\n\n\nOrdinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 23\n\n\n\n\n\n\n\nIntroduction to Bayesian Inference\n\n\n\nBayes\n\n\n\n\n\n\n\n\n\nFeb 16\n\n\n\n\n\n\n\nGLM & Logistic Regression (updated)\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 11\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 09\n\n\n\n\n\n\n\nMultiple Regression\n\n\n\nLinear Models\n\n\n\n\n\n\n\n\n\nFeb 04\n\n\n\n\n\nNo matching items"
+    "text": "Lecture Slides\n\n\n\n\n\nLab: Intro to Multilevel Models\n\n\n\n\n\n\n\n\nMar 25\n\n\n\n\n\n\n\nMultilevel Modeling (with R) Part 1\n\n\nLectures: Mar 23 & Mar 25\n\n\n\n\n\nMar 25\n\n\n\n\n\n\n\nLab 5: Poisson Regression\n\n\n\n\n\n\n\n\nMar 18\n\n\n\n\n\n\n\nPoisson, Negative Binomial, and Zero-Inflated Models\n\n\n\n\n\n\n\n\nMar 16\n\n\n\n\n\n\n\nLab 4 - Multinomial Regression\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression (NHANES data example)\n\n\n\n\n\n\n\n\nMar 04\n\n\n\n\n\n\n\nMultinomial Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nMar 02\n\n\n\n\n\n\n\nLab 3: Ordinal Regression\n\n\n\n\n\n\n\n\nFeb 25\n\n\n\n\n\n\n\nOrdinal Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 23\n\n\n\n\n\n\n\nIntroduction to Bayesian Inference\n\n\n\nBayes\n\n\n\n\n\n\n\n\n\nFeb 16\n\n\n\n\n\n\n\nGLM & Logistic Regression (updated)\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 11\n\n\n\n\n\n\n\nGeneralized Linear Madness: Binary Outcome Models/Logistic Regression\n\n\n\nGLM\n\n\n\n\n\n\n\n\n\nFeb 09\n\n\n\n\n\n\n\nMultiple Regression\n\n\n\nLinear Models\n\n\n\n\n\n\n\n\n\nFeb 04\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "misc/index.html",
@@ -3875,7 +3875,7 @@
     "href": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling",
     "title": "Multilevel Modeling (with R) Part 1",
     "section": "Why multilevel modeling?",
-    "text": "Why multilevel modeling?\n\nLet’s look at the relationship between SES and math achievement\n\n\ndata &lt;- read.csv(\"https://raw.githubusercontent.com/suyoghc/PSY-504_Spring-2025/refs/heads/main/Multilevel%20Modeling/data/heck2011.csv\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlm(math~ses, data=data) %&gt;%\ntidy() %&gt;%\n  kable()\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n57.598169\n0.0981885\n586.60833\n0\n\n\nses\n4.254676\n0.1256614\n33.85826\n0"
+    "text": "Why multilevel modeling?\n\nLet’s look at the relationship between SES and math achievement\n\n\ndata &lt;- read.csv(\"https://raw.githubusercontent.com/suyoghc/PSY-504_Spring-2025/refs/heads/main/Multilevel%20Modeling/data/heck2011.csv\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n#|\nlm(math~ses, data=data) %&gt;%\ntidy() %&gt;%\n  kable()\n\n\n\n\nterm\nestimate\nstd.error\nstatistic\np.value\n\n\n\n\n(Intercept)\n57.598169\n0.0981885\n586.60833\n0\n\n\nses\n4.254676\n0.1256614\n33.85826\n0"
   },
   {
     "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-multilevel-modeling-1",
@@ -4155,21 +4155,21 @@
     "href": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome",
     "title": "Multilevel Modeling (with R) Part 1",
     "section": "Why MLM is Awesome",
-    "text": "Why MLM is Awesome\n\nClassic analysis:\n\nAggregate to level of the group (e.g., with means)\n\nDrawback of classic analysis:\n\nLoss of resolution!\nLoss of power!\n\nMLM Approach:\n\nDeaggregation (keep all the data)"
+    "text": "Why MLM is Awesome\n\nTraditional approach:\n\nRM ANOVA requires aggregating to group/condition means before analysis\n\nLimitation:\n\nLoss of resolution and power\n\nMLM extends this:\n\nCan also work with trial-level data (deaggregation)"
   },
   {
     "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-1",
     "href": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-1",
     "title": "Multilevel Modeling (with R) Part 1",
     "section": "Why MLM is Awesome",
-    "text": "Why MLM is Awesome\n\nClassic Analysis:\n\nRepeated-measures ANOVA\n\nDrawback of this approach:\n\nMissing data\n\nMust exclude entire people OR, you can interpolate missing data\n\n\nMLM Approach:\n\nCan analyze all the observations you have!"
+    "text": "Why MLM is Awesome\n\nTraditional approach:\n\nRM ANOVA requires complete cases\n\nLimitation:\n\nMissing data forces exclusion of entire participants\n\nMLM extends this:\n\nAnalyzes all available observations via maximum likelihood"
   },
   {
     "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-2",
     "href": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-2",
     "title": "Multilevel Modeling (with R) Part 1",
     "section": "Why MLM is Awesome",
-    "text": "Why MLM is Awesome\n\nClassic Analysis:\n\nRepeated-measures ANOVA\n\nDrawback of ANOVA:\n\nOnly use categorical predictors\n\nMLM Approach:\n\nCan use any combo of categorical and continuous predictors!"
+    "text": "Why MLM is Awesome\n\nTraditional approach:\n\nDifferent procedures for different situations (despite all of them being variants of GLM)\n\nANOVA for categorical predictors\nANCOVA to add a continuous covariate\nRegression for continuous predictors\n\n\nLimitation:\n\nSwitching procedures depending on your predictor types\n\nMLM extends this:\n\nOne framework handles any combination of predictors"
   },
   {
     "objectID": "posts/Multilevel Models/mlm_part1_students.html#why-mlm-is-awesome-3",
@@ -4338,5 +4338,47 @@
     "title": "Multilevel Modeling (with R) Part 1",
     "section": "How are LM and MLM different?",
     "text": "How are LM and MLM different?\n\nMLM has random effects output\n\nVariance explained by the random effect\nThis may be interesting, in and of itself\n\nFixed effects of random terms are the average estimates across groups"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#when-mlm-isnt-needed",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#when-mlm-isnt-needed",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "When MLM isn’t needed?",
+    "text": "When MLM isn’t needed?\n\nDont really care about variance (it is just a nuisance variable)\n\nUse GEEs (generalized estimating equations)\nClustered standard errors\n\nData is not actually interdependent\n\nTest with ICC\n\nSmall number of groups/clusters\nYou only have a between-subjects design"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#the-naming-problem",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#the-naming-problem",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "The naming problem",
+    "text": "The naming problem\n\n\n\nFrequentist (lme4)\nBayesian (brms)\nGelman / Vasishth\n\n\n\n\nFixed effects\nPopulation-level effects\nConstant effects\n\n\nRandom effects\nGroup-level effects\nVarying effects\n\n\nRandom intercepts\nGroup-level intercepts\nVarying intercepts\n\n\nRandom slopes\nGroup-level slopes\nVarying slopes\n\n\n\n\nAll describe the same underlying model\nBetancourt: avoid labels entirely — think in terms of the generative model\n“Population-level” and “group-level” are arguably the clearest descriptors"
+  },
+  {
+    "objectID": "posts/Multilevel Models/mlm_part1_students.html#heuristics-is-it-a-random-or-fixed-factor",
+    "href": "posts/Multilevel Models/mlm_part1_students.html#heuristics-is-it-a-random-or-fixed-factor",
+    "title": "Multilevel Modeling (with R) Part 1",
+    "section": "(Heuristics) Is it a random or fixed factor?",
+    "text": "(Heuristics) Is it a random or fixed factor?\n\nShould my variable be fixed or random?\n\nIf it is continuous, has few levels (&lt;5), or is an experimental manipulation\n\nFixed\n\n\nWant to estimate variance at each level of factor?\n\nFixed\n\nWant a general estimate of variance of factor?\n\nRandom"
+  },
+  {
+    "objectID": "posts/Multilevel Models/MLM_Lab.html",
+    "href": "posts/Multilevel Models/MLM_Lab.html",
+    "title": "Lab: Intro to Multilevel Models",
+    "section": "",
+    "text": "⬇️ Download the .qmd"
+  },
+  {
+    "objectID": "posts/Multilevel Models/MLM_Lab.html#instructions",
+    "href": "posts/Multilevel Models/MLM_Lab.html#instructions",
+    "title": "Lab: Intro to Multilevel Models",
+    "section": "Instructions",
+    "text": "Instructions\n\nIf you are fitting a model, display the model output in a neatly formatted table. (The tidy() and kable() functions can help!)\nIf you are creating a plot, use clear labels for all axes, titles, etc.\nCommit and push your work to GitHub regularly, at least after each exercise. Write short and informative commit messages.\nWhen you’re done, we should be able to knit the final version of the QMD in your GitHub as an HTML.\n\n\n\n\n\n\n\nImportantHow to work through this lab\n\n\n\nToday’s lab is not about “how to do analyses with multilevel models” — we will do that next week! Instead, the lab aims to get you thinking and help with an understanding of how mixed models work.\nThis is more of a walkthrough than a traditional assignment. Solutions are present in the file — but don’t look at them immediately.\n\nCreate new chunks immediately after the questions with your attempt at a solution after spending some time with the question.\nThen look at the solutions, and add brief comments on whether your answers diverged — if so, how?\n\n\n\n\n\n\n\n\n\nTipWorkflow tip\n\n\n\nWork through the lab by running chunks one at a time in RStudio (Cmd/Ctrl + Enter), not by rendering the whole document. Render only at the end, once all your code is working.\nThis is how most R users actually work — you’d write a line, run it, check the output, and iterate. Rendering is for producing the final document. When you render, Quarto starts a fresh R session and runs every chunk top-to-bottom, so if anything is incomplete, everything downstream breaks. When you work interactively using chunks, your environment builds up as you go, so you always have your objects available to inspect and troubleshoot.\nThe “Run All Chunks Above” button (downward arrow with a bar, next to the green play button in each chunk) is another useful tool. It re-runs everything from the top of the document up to your current chunk, so all your objects are up to date before you start working on the next question."
+  },
+  {
+    "objectID": "posts/Multilevel Models/MLM_Lab.html#setup",
+    "href": "posts/Multilevel Models/MLM_Lab.html#setup",
+    "title": "Lab: Intro to Multilevel Models",
+    "section": "Setup",
+    "text": "Setup\n\nlibrary(tidyverse)\nlibrary(lme4)\nlibrary(broom.mixed)\nlibrary(lmerTest)\nlibrary(patchwork)\nlibrary(ggdist)\nlibrary(effects)\nlibrary(gt)\nlibrary(parameters)\nlibrary(knitr)"
   }
 ]

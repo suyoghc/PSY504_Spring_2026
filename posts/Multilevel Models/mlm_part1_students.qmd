@@ -2,13 +2,14 @@
 title: "Multilevel Modeling (with R) Part 1"
 subtitle: "<small>(adapted from materials by Jason Geller)</small>"
 author: "Suyog Chandramouli"
-date: '2026-03-23'
+date: '2026-03-25'
+description: "Lectures: Mar 23 & Mar 25"
 footer: "PSY 504: Advaced Statistics"
 format: 
   revealjs:
     theme: solarized
     css: slide-style.css
-    multiplex: true
+    multiplex: false
     transition: fade
     slide-number: true
     incremental: false 
@@ -58,6 +59,7 @@ execute:
 :::
 :::::
 
+
 ## Packages
 
 -   Packages you will need
@@ -73,6 +75,7 @@ library(lme4)
 ```
 
 -   Follow along by downloading .qmd file here: <https://github.com/suyoghc/PSY-504_Spring-2025/blob/main/Multilevel%20Modeling/MLM.qmd>
+
 
 ## Why multilevel modeling?
 
@@ -90,16 +93,16 @@ data <- read.csv("https://raw.githubusercontent.com/suyoghc/PSY-504_Spring-2025/
 ```{r}
 #| echo: false
 #| fig-align: center
-#| 
+#|
 
-data_sub <- data %>% 
+data_sub <- data %>%
       filter(schcode <= 10)
 
-data_sub %>% 
+data_sub %>%
       ggplot(mapping = aes(x = ses, y = math)) +
       geom_point2(size=3) +
-      geom_smooth(method = "lm", se = FALSE, fullrange = TRUE) + 
-      labs(y="Math Score", x="SES") + 
+      geom_smooth(method = "lm", se = FALSE, fullrange = TRUE) +
+      labs(y="Math Score", x="SES") +
   theme_lucid(base_size=21)
 
 ```
@@ -109,13 +112,14 @@ data_sub %>%
 ```{r}
 #| echo: true
 #| fig-align: center
-#| 
+#|
 lm(math~ses, data=data) %>%
 tidy() %>%
   kable()
 ```
 :::
 :::::
+
 
 ## Why multilevel modeling?
 
@@ -125,15 +129,16 @@ tidy() %>%
 #| echo: false
 #| fig-align: center
 
-data_sub %>% 
+data_sub %>%
   ggplot(mapping = aes(x = ses, y = math, colour = factor(schcode))) +
   geom_point2(size=3) +
   geom_smooth(mapping = aes(group = schcode), method = "lm", se = FALSE, fullrange = TRUE) +
-  labs(colour = "schcode") + 
-  labs(y="Math Score", x="SES") + 
-  ggeasy::easy_add_legend_title("School") + 
+  labs(colour = "schcode") +
+  labs(y="Math Score", x="SES") +
+  ggeasy::easy_add_legend_title("School") +
     theme_lucid(base_size=21)
 ```
+
 
 ## Why multilevel modeling?
 
@@ -151,6 +156,7 @@ data_sub %>%
 :::
 :::::
 
+
 ## Why multilevel modeling?
 
 -   The word we live in is highly interdependent!
@@ -159,9 +165,11 @@ data_sub %>%
 
 ![](images/inter.png){fig-align="center"}
 
+
 ## Why multilevel modeling?
 
 ![](images/important.png){fig-align="center"}
+
 
 ## What is multilevel modeling?
 
@@ -172,6 +180,7 @@ data_sub %>%
 -   An elaboration on regression
 
     -   just extra errors!
+
 
 ## What is multilevel modeling?
 
@@ -188,6 +197,7 @@ data_sub %>%
     -   Within (intra-group differences)
 
     -   Between (inter-group differences)
+
 
 ## What is a "hierarchy?"
 
@@ -211,11 +221,13 @@ data_sub %>%
 :::
 :::::
 
+
 ## Nested designs
 
 ```{r, echo=FALSE, fig.align='center', out.width="70%"}
 knitr::include_graphics("images/nestingdolls.webp")
 ```
+
 
 ## Two-level Hierarchy
 
@@ -230,11 +242,13 @@ knitr::include_graphics("images/nested.png")
     -   Level one: most basic level of observation
     -   Level two: groups formed from aggregated level-one observation
 
+
 ## Three-level Hierarchy
 
 ```{r, echo=FALSE, fig.align='center', out.width="100%"}
 knitr::include_graphics("images/2level.png")
 ```
+
 
 ## Crossed vs. nested designs
 
@@ -244,33 +258,41 @@ knitr::include_graphics("images/2level.png")
 
 ![](images/cross-classified.PNG){fig-align="center"}
 
+
 ## Repeated designs
 
 ![](images/repeat_mlm.png){fig-align="center"}
+
 
 ## Repeated designs
 
 ![](images/repeat1.png){fig-align="center"}
 
+
 ## Repeated designs
 
 ![](images/repeat2.png){fig-align="center"}
+
 
 ## Repeated designs
 
 ![](images/repeat3.png){fig-align="center"}
 
+
 ## Repeated designs
 
 ![](images/repeat4.png){fig-align="center"}
+
 
 ## Repeated designs
 
 ![](images/repeat5.png){fig-align="center"}
 
+
 ## Longitudinal designs
 
 ![](images/lng_mlm.png){fig-align="center"}
+
 
 ## Test your knowledge
 
@@ -278,6 +300,7 @@ knitr::include_graphics("images/2level.png")
 
 1.  What is the most basic level of observation (Level One)?
 2.  What are the group units (Level Two, Level Three, etc...)?
+
 
 # Simulation: OLS vs. MLM
 
@@ -293,6 +316,7 @@ knitr::include_graphics("images/2level.png")
     1.  Simulate clustered data where the **true effect of X is zero**
     2.  Fit OLS (ignoring clusters) and MLM (accounting for clusters)
     3.  If OLS finds a "significant" effect, we've caught a Type I error red-handed
+
 
 ## The data generating process
 
@@ -330,6 +354,7 @@ sim <- tibble(
 )
 ```
 
+
 ## What does the data look like?
 
 ```{r}
@@ -351,6 +376,7 @@ sim %>%
 -   Each color is a different group — notice how groups sit at different heights
 -   OLS ignores the group structure. Fits a single line to all 300 points
 -   The vertical spread across groups is between-group variance (OLS absorbs it into the error term)
+
 
 ## What happens when we account for groups?
 
@@ -375,6 +401,7 @@ sim %>%
 -   The OLS line captures **between-group** intercept differences, not the effect of X you're trying to estimate
 -   Within each group, the lines are mostly flat — the true slope is zero
 
+
 ## Each group on its own
 
 ```{r}
@@ -397,6 +424,7 @@ sim %>%
 -   Within-group lines are mostly flat — exactly what we'd expect when the true slope is zero
 -   The OLS line captures **between-group** intercept differences, not the effect of X you're trying to estimate
 -   Within each group, the lines are mostly flat — the true slope is zero
+
 
 ## OLS vs. MLM: comparing estimates
 
@@ -434,9 +462,10 @@ bind_rows(
 -   The OLS estimate (-0.32) is far from zero because between-group variance contaminates it. MLM's estimate (-0.006) recovers the truth
 :::
 
+
 ## What went wrong with OLS?
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 -   OLS sees 300 "independent" observations
 
@@ -457,7 +486,8 @@ bind_rows(
 
 -   Unbiased estimate $\rightarrow$ correct conclusion
 :::
-:::
+:::::
+
 
 ## The equations: one error vs. many
 
@@ -472,23 +502,30 @@ $$y_{ij} = \color{blue}{\gamma_0 + \gamma_1 x_{ij}} + \color{red}{U_{0j}} + \col
 -   $\color{red}{U_{0j}}$ = how far group $j$'s intercept deviates from the grand mean (between-group error)
 -   $\color{red}{e_{ij}}$ = how far observation $i$ deviates from its group mean (within-group error)
 
+
 ## Mapping the equation to our simulation code
 
 -   Our data generating process **is** the MLM equation:
 
-```
+```         
 y = 5 + 0 * x + group_effects[group] + rnorm(...)
 ```
 
-| Code                    | Equation          | What it is                |
-|-------------------------|-------------------|---------------------------|
-| `5`                     | $\gamma_0$        | Fixed intercept           |
++------------------------+-------------------+---------------------------+
+| Code                   | Equation          | What it is                |
++========================+===================+===========================+
+| `5`                    | $\gamma_0$        | Fixed intercept           |
++------------------------+-------------------+---------------------------+
 | `0 * x`                | $\gamma_1 x_{ij}$ | Fixed slope (set to zero) |
++------------------------+-------------------+---------------------------+
 | `group_effects[group]` | $U_{0j}$          | Between-group error       |
++------------------------+-------------------+---------------------------+
 | `rnorm(...)`           | $e_{ij}$          | Within-group error        |
++------------------------+-------------------+---------------------------+
 
 -   OLS lumps $U_{0j}$ and $e_{ij}$ into one $e_i$ — it can't tell them apart
 -   MLM recovers both, so the slope estimate reflects only the within-group relationship
+
 
 ## Reading the code
 
@@ -501,6 +538,7 @@ y = 5 + 0 * x + group_effects[group] + rnorm(...)
 
 -   Now let's see this in action with an interactive simulation
 
+
 # In-Class Exercise
 
 ## Interactive Simulation App
@@ -511,10 +549,11 @@ Open the simulation app on your laptop:
 
 Use the sliders to control:
 
-- **Between-group SD** — how strong the clustering is
-- **True slope** — the real effect of X on Y
-- **Number of groups** and **observations per group**
-- Hit **Re-simulate** for a new random draw
+-   **Between-group SD** — how strong the clustering is
+-   **True slope** — the real effect of X on Y
+-   **Number of groups** and **observations per group**
+-   Hit **Re-simulate** for a new random draw
+
 
 ## Questions
 
@@ -532,97 +571,109 @@ Use the sliders to control:
 
 **Q4: Set true slope = 0. Slowly decrease between-group SD from 3 → 2 → 1 → 0.5 → 0.** At what ICC do OLS and MLM start agreeing?
 
+
 ## Q1: Baseline
 
 **Set between-group SD = 0, true slope = 0.** Compare OLS and MLM. What do you notice? What is the ICC?
 
+
 ## A1: Baseline
 
-- OLS and MLM give essentially **identical** results
-- Both correctly find no significant effect
-- ICC ≈ 0, no variance is between groups
-- **Takeaway:** when there's no clustering, OLS is fine and MLM adds nothing
+-   OLS and MLM give essentially **identical** results
+-   Both correctly find no significant effect
+-   ICC ≈ 0, no variance is between groups
+-   **Takeaway:** when there's no clustering, OLS is fine and MLM adds nothing
+
 
 ## Q2: Introduce clustering
 
 **Keep true slope = 0, increase between-group SD to 3.** What happens to the OLS p-value? What about MLM? Look at the plots. Why does OLS find a significant effect?
 
+
 ## A2: Introduce clustering
 
-- OLS often finds p < .05, a **false positive** (the true effect is zero!)
-- MLM correctly finds no significant effect
-- The plots show groups sitting at different heights, which OLS cannot distinguish from a real effect
-- Within each group, the lines are flat, there's no real relationship
-- ICC jumps to ~0.90, most variance is between groups
+-   OLS often finds p \< .05, a **false positive** (the true effect is zero!)
+-   MLM correctly finds no significant effect
+-   The plots show groups sitting at different heights, which OLS cannot distinguish from a real effect
+-   Within each group, the lines are flat, there's no real relationship
+-   ICC jumps to \~0.90, most variance is between groups
+
 
 ## Q3: A real effect
 
 **Set true slope = 0.5, between-group SD = 3.** Compare the OLS and MLM estimates. Which is closer to 0.5?
 
+
 ## A3: A real effect
 
-- MLM consistently estimates close to **0.5** (the true value)
-- OLS is more variable, often overshooting or undershooting
-- Between-group variance contaminates the OLS estimate even when there IS a real effect
-- MLM isolates the within-group relationship, which is where the true effect lives
+-   MLM consistently estimates close to **0.5** (the true value)
+-   OLS is more variable, often overshooting or undershooting
+-   Between-group variance contaminates the OLS estimate even when there IS a real effect
+-   MLM isolates the within-group relationship, which is where the true effect lives
+
 
 ## Q4: The threshold
 
 **Set true slope = 0. Slowly decrease between-group SD from 3 → 2 → 1 → 0.5 → 0.** Watch the ICC and model table. At what point do OLS and MLM start agreeing?
 
+
 ## A4: The threshold
 
-- Around **ICC ≈ 0.20 or below** (between-group SD around 0.5–1), OLS and MLM converge
-- When clustering is weak, OLS is approximately fine
-- When clustering is strong, you **need** MLM
-- The ICC is your diagnostic: it tells you how much the grouping structure matters
+-   Around **ICC ≈ 0.20 or below** (between-group SD around 0.5–1), OLS and MLM converge
+-   When clustering is weak, OLS is approximately fine
+-   When clustering is strong, you **need** MLM
+-   The ICC is your diagnostic: it tells you how much the grouping structure matters
+
 
 # Multilevel models are awesome!
 
 ## Why MLM is Awesome
 
--   Classic analysis:
+-   Traditional approach:
 
-    -   Aggregate to level of the group (e.g., with means)
+    -   RM ANOVA **requires aggregating** to group/condition means before analysis
 
--   Drawback of classic analysis:
+-   Limitation:
 
-    -   Loss of resolution!
-    -   Loss of power!
+    -   Loss of resolution and power
 
--   MLM Approach:
+-   MLM extends this:
 
-    -   Deaggregation (keep all the data)
+    -   Can also work with trial-level data (deaggregation)
 
-## Why MLM is Awesome
-
--   Classic Analysis:
-
-    -   Repeated-measures ANOVA
-
--   Drawback of this approach:
-
-    -   Missing data
-
-        -   Must exclude entire people OR, you can interpolate missing data
-
--   MLM Approach:
-
-    -   Can analyze all the observations you have!
 
 ## Why MLM is Awesome
 
--   Classic Analysis:
+-   Traditional approach:
 
-    -   Repeated-measures ANOVA
+    -   RM ANOVA **requires complete cases**
 
--   Drawback of ANOVA:
+-   Limitation:
 
-    -   Only use categorical predictors
+    -   Missing data forces exclusion of entire participants
 
--   MLM Approach:
+-   MLM extends this:
 
-    -   Can use any combo of categorical and continuous predictors!
+    -   Analyzes all available observations via maximum likelihood
+
+
+## Why MLM is Awesome
+
+-   Traditional approach:
+
+    -   Different procedures for different situations (despite all of them being variants of GLM)
+        -   ANOVA for categorical predictors
+        -   ANCOVA to add a continuous covariate
+        -   Regression for continuous predictors
+
+-   Limitation:
+
+    -   Switching procedures depending on your predictor types
+
+-   MLM extends this:
+
+    -   One framework handles any combination of predictors
+
 
 ## Why MLM is Awesome
 
@@ -642,6 +693,7 @@ Use the sliders to control:
 ![](images/lego.webp){fig-align="center"}
 :::
 :::::
+
 
 ## Multilevel models
 
@@ -663,7 +715,8 @@ Use the sliders to control:
 
     -   Linear model with extra residuals
 
-## Why not use MLM?
+
+## When MLM isn't needed?
 
 -   Dont really care about variance (it is just a nuisance variable)
 
@@ -678,6 +731,7 @@ Use the sliders to control:
 
 -   You only have a between-subjects design
 
+
 # Important Terminology
 
 ## Jumping right in
@@ -691,6 +745,7 @@ Use the sliders to control:
     -   *Random slopes*
 
 -   What do they all mean?
+
 
 ## Fixed and random effects
 
@@ -714,6 +769,7 @@ Use the sliders to control:
 -   Our predictor variables (can be continuous or categorical)
 :::
 
+
 ## Fixed and random effects
 
 -   Model for the variance (random part):
@@ -732,6 +788,21 @@ $$
 
 -   In MLM multiple "piles of variance" or residual terms
 
+
+## The naming problem
+
+| Frequentist (lme4) | Bayesian (brms)          | Gelman / Vasishth  |
+|--------------------|--------------------------|--------------------|
+| Fixed effects      | Population-level effects | Constant effects   |
+| Random effects     | Group-level effects      | Varying effects    |
+| Random intercepts  | Group-level intercepts   | Varying intercepts |
+| Random slopes      | Group-level slopes       | Varying slopes     |
+
+-   All describe the same underlying model
+-   Betancourt: avoid labels entirely — think in terms of the generative model
+-   "Population-level" and "group-level" are arguably the clearest descriptors
+
+
 ## Random factors and random effects
 
 -   Random factors:
@@ -746,6 +817,7 @@ $$
     Can only be categorical!
     :::
 
+
 ## Random factors vs random effects
 
 -   The random factor is your clustering variable:
@@ -757,6 +829,7 @@ $$
     -   Words
 
     -   Pictures 🖼️
+
 
 ## Random factors vs random effects
 
@@ -774,7 +847,8 @@ $$
 
                 -   **You have a choice about whether or not to allow your Level 1 intercept and slopes to have variability**
 
-## Is it a random or fixed factor?
+
+## (Heuristics) Is it a random or fixed factor?
 
 -   Should my variable be fixed or random?
 
@@ -790,6 +864,7 @@ $$
 
     -   Random
 
+
 ## What is random and what is fixed?
 
 -   **Scenario**: Investigating how student performance is influenced by teaching methods and individual student characteristics across different schools.
@@ -799,6 +874,7 @@ $$
         -   What is fixed?
 
         -   What is random?
+
 
 # Specifiying MLMs
 
@@ -815,6 +891,7 @@ e_{i_{\text{(error)}}} = y_i - \hat{y}_i
 $$
 
 ![](images/null5.png){fig-align="center"}
+
 
 ## Random intercept
 
@@ -834,6 +911,7 @@ $$
 
 i = individual observation j = group
 
+
 ## Random intercepts
 
 $$
@@ -844,11 +922,13 @@ Within-group variation
 
 ![](images/ranint2.png){fig-align="center" width="491"}
 
+
 ## Random intercepts - fixed slope
 
 -   Varying starting point (intercept), same slope for each group
 
 ![](images/ranint.png){fig-align="center"}
+
 
 ## Random Intercepts - Random slopes
 
@@ -864,6 +944,7 @@ $$
 
 ![](images/ranintslope.png){fig-align="center"}
 
+
 ## Random slopes
 
 -   The dotted lines are fixed slopes. The arrows show the added error term for each random slope
@@ -874,21 +955,23 @@ $$
 
 ![](images/randintslope3.png){fig-align="center"}
 
+
 ## MLM Equations
 
-+-----------+-----------------------------------------------------------------------------+
-| **Level** | **Equation**                                                                |
-+===========+=============================================================================+
-| Level 1   | $y_{ij} = b_{0j} + b_{1j}X_{ij} + e_{ij}$                                   |
-+-----------+-----------------------------------------------------------------------------+
-| Level 2   | $b_{0j}=γ00+U_{0j}$                                                         |
-|           |                                                                             |
-|           | $b_{1j} = \gamma{10} + U_{1j}$                                              |
-+-----------+-----------------------------------------------------------------------------+
-| Combined  | $y_{ij} = \gamma_{0} + \gamma_{1}X_{ij} + e_{ij} + U_{b0j} + U_{b1j}X_{ij}$ |
-+-----------+-----------------------------------------------------------------------------+
++-------------+-----------------------------------------------------------------------------+
+| **Level**   | **Equation**                                                                |
++=============+=============================================================================+
+| Level 1     | $y_{ij} = b_{0j} + b_{1j}X_{ij} + e_{ij}$                                   |
++-------------+-----------------------------------------------------------------------------+
+| Level 2     | $b_{0j}=γ00+U_{0j}$                                                         |
+|             |                                                                             |
+|             | $b_{1j} = \gamma{10} + U_{1j}$                                              |
++-------------+-----------------------------------------------------------------------------+
+| Combined    | $y_{ij} = \gamma_{0} + \gamma_{1}X_{ij} + e_{ij} + U_{b0j} + U_{b1j}X_{ij}$ |
++-------------+-----------------------------------------------------------------------------+
 
 -   You will see both equations used in the literature
+
 
 ## All together
 
@@ -914,9 +997,11 @@ lmer(math~ses + (1+ses|schcode), data=data) # random intercept + random slope
 :::
 :::::
 
+
 ## Syntax cheat sheet
 
 ![](images/lmesyntax.png){fig-align="center"}
+
 
 ## How do your groups differ?
 
@@ -932,6 +1017,7 @@ lmer(math~ses + (1+ses|schcode), data=data) # random intercept + random slope
 
         -   Each group gets its own slope
 
+
 ## Implications
 
 -   Multiple sources of variance?
@@ -946,6 +1032,7 @@ lmer(math~ses + (1+ses|schcode), data=data) # random intercept + random slope
 
         -   Otherwise, MLM is the same as GLM
 
+
 ## How are MLMs similar to LM?
 
 -   The fixed effects (usually) hold your hypothesis tests
@@ -955,6 +1042,7 @@ lmer(math~ses + (1+ses|schcode), data=data) # random intercept + random slope
 -   Can (essentially) be interpreted like GLM output
 
 -   For most people, this is all that matters
+
 
 ## How are LM and MLM different?
 
@@ -966,6 +1054,10 @@ lmer(math~ses + (1+ses|schcode), data=data) # random intercept + random slope
 
 -   Fixed effects of random terms are the average estimates across groups
 
-##
 
-<iframe src="https://psych.princeton.edu/news-events/2026/russell-poldrack-albert-ray-lang-professor-psychology-stanford-university" width="100%" height="600" style="border:none;"></iframe>
+## 
+
+<iframe src="https://psych.princeton.edu/news-events/2026/russell-poldrack-albert-ray-lang-professor-psychology-stanford-university" width="100%" height="600" style="border:none;">
+
+</iframe>
+
