@@ -1,0 +1,352 @@
+---
+title: "From Coins to Regression"
+subtitle: "Bayesian Posteriors in Regression"
+author: "Suyog Chandramouli"
+categories: [Bayes]
+date: '2026-04-01'
+institute: 'PSY504, Advanced Statistics in Psychology<br>Princeton University'
+footer: "PSY 504: Advanced Statistics"
+format:
+  revealjs:
+    theme: solarized
+    css: slide-style.css
+    transition: fade
+    multiplex: false
+    slide-number: true
+    incremental: false
+    chalkboard: true
+    fontsize: "25pt"
+execute:
+  freeze: auto
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  code-overflow: wrap
+editor:
+  markdown:
+    wrap: sentence
+---
+
+## From coins to regression
+
+Last time we focused on coins — one parameter, $\theta$. Each posterior draw was a single number.
+
+In regression, each draw is a full set of parameters: $\beta_0$, $\beta_1$, and $\sigma$. What changes?
+
+. . .
+
+|   | Coin | Regression |
+|---|------|-----------|
+| Model | $Y \sim \text{Binomial}(n, \theta)$ | $Y \sim \text{Normal}(\mu_i, \sigma)$ |
+| Parameters | $\theta$ | $\beta_0, \beta_1, \sigma$ |
+| Draws | 4,000 values of $\theta$ | 4,000 sets of $(\beta_0, \beta_1, \sigma)$ |
+
+. . .
+
+More parameters, but the recipe is the same — except that grid approximation no longer scales (1,000$^3$ = 1 billion cells), so we rely on MCMC.
+
+::: {.notes}
+Walk through the table row by row. "In the coins lab, your model was Binomial. Your parameter was theta. Your draws were values of theta. Today, your model is Normal — standard linear regression. Your parameters are beta_0, beta_1, and sigma. Your draws will be 4,000 triplets." The number dropped from 12,000 to 4,000 because brms defaults to 4 chains x 1000 post-warmup = 4,000 draws. They computed the grid-scaling problem in coins lab Section 8.
+:::
+
+
+## Each draw is a full equation
+
+With coins, each draw was one number ($\theta$). With regression, each draw is a complete set of parameters:
+
+| Draw | $\beta_0$ | $\beta_1$ | $\sigma$ |
+|------|-----------|-----------|----------|
+| 1    | 32.8      | 0.0041    | 2.85     |
+| 2    | 31.5      | 0.0044    | 2.97     |
+| 3    | 33.1      | 0.0039    | 2.88     |
+
+. . .
+
+Each row is a complete regression equation: $\hat{y}_i = \beta_0 + \beta_1 x_i$
+
+. . .
+
+4,000 draws = 4,000 regression lines.
+
+::: {.notes}
+This is the core conceptual shift. With coins, each draw was a single number you could histogram. With regression, each draw defines a line. Walk through: "Draw 1 says intercept is 32.8, slope is 0.0041, sigma is 2.85. That's one regression line. Draw 2 says slightly different values — a different line."
+
+Each draw also includes sigma. A future lab will use sigma to simulate data from the posterior predictive distribution. For now, the focus is the lines defined by beta_0 and beta_1.
+
+In the lab, students run as_draws_df(fit1.b), see columns b_Intercept, b_body_mass_g, and sigma, rename them, then compute y_hat = beta0 + beta1 * x. That produces a histogram of predictions at one x-value. The spaghetti plot extends this across the full range of x.
+:::
+
+
+## Spaghetti plots
+
+::::: columns
+::: {.column width="50%"}
+
+One draw from the posterior = one regression line.
+
+Stack many of them = a fuzzy bundle, dense where the posterior is concentrated, sparse where uncertain.
+
+Color-code by intercept ($\beta_0$): **lower intercepts pair with steeper slopes**.
+
+All lines pass through the data cloud, so if a line starts lower it must rise more steeply.
+
+$\beta_0$ and $\beta_1$ are **negatively correlated** in the posterior.
+
+:::
+
+::: {.column width="50%"}
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 6
+
+library(ggplot2)
+
+set.seed(42)
+n_draws <- 40
+beta0 <- rnorm(n_draws, mean = 33, sd = 1.5)
+beta1 <- rnorm(n_draws, mean = 0.004, sd = 0.0004)
+# induce negative correlation
+beta1 <- beta1 - 0.00025 * (beta0 - 33)
+
+draws_df <- data.frame(
+  draw = rep(1:n_draws, each = 2),
+  beta0 = rep(beta0, each = 2),
+  x = rep(c(2700, 4800), n_draws)
+)
+draws_df$y <- draws_df$beta0 + rep(beta1, each = 2) * draws_df$x
+
+ggplot(draws_df, aes(x = x, y = y, group = draw, color = beta0)) +
+  geom_line(linewidth = 0.6, alpha = 0.7) +
+  scale_color_viridis_c(expression(beta[0]), end = 0.9) +
+  labs(x = "body_mass_g", y = "bill_length_mm") +
+  theme_minimal(base_size = 16) +
+  theme(legend.position = "bottom")
+```
+
+:::
+:::::
+
+::: {.notes}
+Draw this on the chalkboard if you can. Sketch a scatter plot, draw one line, say "that's draw 1." Draw another with a different intercept/slope — "that's draw 2." Then: "Now imagine 4,000 of these."
+
+Students often think of "the regression line" as one fixed thing. The Bayesian perspective: there's a distribution over lines.
+
+For the color-coded version: sketch two lines through the same data — one with low intercept and steep slope, one with high intercept and shallow slope. Both pass through the cloud, which is why the correlation exists. The lab uses scale_color_viridis_c to show this gradient. Lines fan out like a hand of cards, all anchored near the data centroid.
+
+OLS parameters have the same correlation (the lab shows vcov(fit1.ols) next to vcov(fit1.b) — nearly identical). In Bayes you can *see* it in the draws.
+:::
+
+
+# Joint vs. marginal distributions {.center}
+
+## Marginal distributions
+
+In the coins lab, the posterior was one-dimensional: just $p(\theta \mid \text{data})$.
+
+. . .
+
+In regression, each parameter has its own **marginal** posterior:
+
+- $p(\beta_0 \mid \text{data})$
+- $p(\beta_1 \mid \text{data})$
+- $p(\sigma \mid \text{data})$
+
+. . .
+
+"Marginal" = looking at one parameter at a time, collapsing over the others.
+
+These are the histograms you'll make in the lab.
+
+::: {.notes}
+Connect "marginal" to something they know: "If you have a joint distribution of X and Y, the marginal of X is what you get when you integrate over all values of Y." In practice, making a histogram of just the beta_0 column IS computing the marginal — you're ignoring beta_1 and sigma.
+
+With coins, the posterior WAS marginal by default — only one parameter. Now with three, the full posterior lives in 3D. A histogram of beta_0 is a 1D slice.
+
+Lab Question 2.1 asks: "What is the term for the distributions on the diagonal of the pairs() plot? And the off-diagonal?" Having heard "marginal" and "joint" here, they'll be ready.
+:::
+
+## Joint distributions
+
+The parameters don't vary independently.
+
+The **joint** posterior captures how they move *together*:
+
+$$p(\beta_0, \beta_1, \sigma \mid \text{data})$$
+
+. . .
+
+Visualize the joint for two parameters as a scatter plot — each point is one draw.
+
+. . .
+
+Circle = independent. Tilted ellipse = correlated.
+
+::: {.notes}
+"We can't visualize 3D easily, but we can look at 2D slices: beta_0 vs beta_1, beta_0 vs sigma, beta_1 vs sigma." Draw a 2D scatter on the board: x-axis is beta_0, y-axis is beta_1, each dot is one draw. "If dots form a circle, parameters are independent. A tilted ellipse means correlated." That's exactly what the pairs() plot shows.
+:::
+
+## The `pairs()` plot
+
+```r
+pairs(fit1.b)
+```
+
+**Diagonal:** marginal distributions (one parameter at a time)
+
+**Off-diagonal:** joint distributions (two parameters together)
+
+. . .
+
+You'll see a tight ellipse between $\beta_0$ and $\beta_1$, tilted from upper-left to lower-right.
+
+That tilt = the negative correlation from the spaghetti plot.
+
+::: {.notes}
+The pairs() plot is a standard Bayesian diagnostic: (1) marginal posteriors on the diagonal, (2) parameter correlations off-diagonal. The off-diagonal scatter plots shade different chains differently (half above, half below diagonal) — students don't need to worry about that detail. The key is the cloud shape.
+
+For beta_0 vs beta_1: tight tilted ellipse (strong negative correlation). For beta_0 vs sigma and beta_1 vs sigma: rounder clouds (weaker correlation).
+:::
+
+
+## Why marginals alone can mislead
+
+::::: columns
+::: {.column width="55%"}
+
+$\beta_0 = 35$ is plausible. $\beta_1 = 0.005$ is plausible.
+
+But $\beta_0 = 35$ **and** $\beta_1 = 0.005$ together? The joint posterior may assign that combination very low probability.
+
+You never see a line that starts high **and** rises steeply.
+
+`vcov(fit1.b, correlation = TRUE)` quantifies the correlation.
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 5
+
+set.seed(42)
+n_draws <- 40
+b0 <- rnorm(n_draws, mean = 33, sd = 1.5)
+b1 <- rnorm(n_draws, mean = 0.004, sd = 0.0004)
+b1 <- b1 - 0.00025 * (b0 - 33)
+
+sdf <- data.frame(
+  draw = rep(1:n_draws, each = 2),
+  b0 = rep(b0, each = 2),
+  x = rep(c(2700, 4800), n_draws)
+)
+sdf$y <- sdf$b0 + rep(b1, each = 2) * sdf$x
+
+ggplot(sdf, aes(x = x, y = y, group = draw, color = b0)) +
+  geom_line(linewidth = 0.5, alpha = 0.6) +
+  scale_color_viridis_c(expression(beta[0]), end = 0.9) +
+  labs(x = "body_mass_g", y = "bill_length_mm") +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "none")
+```
+
+:::
+:::::
+
+::: {.notes}
+An analogy: "Being 6 feet tall is common. Wearing size 12 shoes is common. Being 6 feet tall AND wearing size 5 shoes? Very rare — even though each is individually plausible." The logic is the same for beta_0 and beta_1: high intercept + steep slope would overshoot every data point.
+
+The vcov() function returns the variance-covariance matrix. The lab shows both vcov(fit1.b) and vcov(fit1.ols) side by side — nearly identical. Parameter correlations are not Bayes-specific. The lab also converts covariances to correlations using the formula, and shows the shortcut vcov(fit1.b, correlation = TRUE).
+:::
+
+
+## Sigma skew and summarizing posteriors
+
+::::: columns
+::: {.column width="55%"}
+
+$\sigma$ must be positive, so its posterior is **right-skewed**.
+
+. . .
+
+When skewed, mean, median, and mode diverge:
+
+- **Mean** — pulled toward tail (brms default)
+- **Median** — more robust (Gelman)
+- **Mode** — the peak (Kruschke)
+
+. . .
+
+`robust = TRUE` switches brms to median + MAD SD.
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 6
+
+library(ggplot2)
+
+set.seed(42)
+sigma_draws <- rgamma(4000, shape = 30, rate = 10)
+
+ggplot(data.frame(sigma = sigma_draws), aes(x = sigma)) +
+  geom_density(fill = "steelblue", alpha = 0.6) +
+  geom_vline(aes(xintercept = mean(sigma)),
+             linetype = "dashed", color = "red", linewidth = 0.8) +
+  geom_vline(aes(xintercept = median(sigma)),
+             linetype = "dashed", color = "darkgreen", linewidth = 0.8) +
+  annotate("text", x = mean(sigma_draws) + 0.12, y = 0.5,
+           label = "mean", color = "red", size = 5) +
+  annotate("text", x = median(sigma_draws) - 0.14, y = 0.5,
+           label = "median", color = "darkgreen", size = 5) +
+  labs(x = expression(sigma), y = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  theme_minimal(base_size = 18)
+```
+
+:::
+:::::
+
+::: {.notes}
+This prepares students for lab Questions 2.3 and 2.4. "Sigma is the residual SD. It must be positive — can't be zero (perfect prediction), unlikely to be huge. The posterior is squeezed between a hard floor at zero and a soft ceiling set by the data. That compression creates right skew."
+
+Connect to their experience: the sampling distribution of s is also right-skewed for small samples, for the same reason.
+
+The plot shows mean (red) pulled toward the tail and median (green) closer to the bulk. In the lab, they'll see mode too (at the peak, left of both), overlaid as vertical lines on the real posterior draws.
+
+About MAD SD: it's the spread analog of the median. The lab walks through the formula step by step: (1) find the median of draws, (2) compute absolute distance of each draw from median, (3) take the median of those distances, (4) multiply by 1.4826. The constant makes MAD SD = SD for a normal distribution. For most students, the takeaway is just: "robust = TRUE gives median + MAD SD. Use it when the posterior is skewed."
+
+Practical point: for beta_0 and beta_1 (symmetric posteriors), mean vs median barely differs. For sigma, the choice can matter. In the lab plot, the three vertical lines sit on top of each other for the betas but visibly separate for sigma.
+:::
+
+## The lab
+
+**Part 1:** Fit `lm()` and `brm()` on Chinstrap penguins, compare output
+
+**Part 2:** Extract draws, `pairs()` plot, spaghetti plots, parameter summaries
+
+**Exercise:** Redo it all with Gentoo penguins
+
+::: {.notes}
+Practical notes before releasing them:
+
+1. brm() takes ~30-60 seconds to compile and sample. "Compiling Stan model" in the console is normal.
+
+2. The lab has conceptual questions (1.1-1.3, 2.1-2.5). They should pause and answer these — not just run code. Question 2.5 is particularly important: "We have done all this without yet specifying a prior. What do you think is going on?" This sets up the next lab on priors.
+
+3. The exercises ask them to redo with Gentoo penguins — that's where learning consolidates. Encourage trying before looking at chinstrap code.
+
+4. Required packages: palmerpenguins, tidyverse, brms, ggside, broom, broom.mixed, ggdist, tidybayes. brms needs a C++ compiler (rstan dependency) — pair anyone with install issues.
+
+5. If students finish early: try adding flipper_length_mm as a second predictor and see how pairs() changes.
+:::

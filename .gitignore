@@ -24,5 +24,6 @@ planning notes/
 **/*MLM_simulation*
 **/bayesian_hlm_lecture_plan.md
 
+
 /.quarto/
 **/*.quarto_ipynb

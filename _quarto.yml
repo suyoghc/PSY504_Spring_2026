@@ -19,6 +19,7 @@ project:
     - "!**/*MLM_exercise*.qmd"
     - "!**/*MLM_simulation*.qmd"
 
+
 website:
   title: "PSY 504, Spring 2026"
   navbar:
