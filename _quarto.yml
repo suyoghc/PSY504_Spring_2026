@@ -18,6 +18,7 @@ project:
     - "!**/*MLM_2026*.qmd"
     - "!**/*MLM_exercise*.qmd"
     - "!**/*MLM_simulation*.qmd"
+    - "!**/*Lecture_short*.qmd"
 
 
 website:
