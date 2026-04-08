@@ -99,34 +99,7 @@ $\beta_0$ and $\beta_1$ are **negatively correlated** in the posterior.
 
 ::: {.column width="50%"}
 
-```{r}
-#| echo: false
-#| fig-width: 5
-#| fig-height: 6
-
-library(ggplot2)
-
-set.seed(42)
-n_draws <- 40
-beta0 <- rnorm(n_draws, mean = 33, sd = 1.5)
-beta1 <- rnorm(n_draws, mean = 0.004, sd = 0.0004)
-# induce negative correlation
-beta1 <- beta1 - 0.00025 * (beta0 - 33)
-
-draws_df <- data.frame(
-  draw = rep(1:n_draws, each = 2),
-  beta0 = rep(beta0, each = 2),
-  x = rep(c(2700, 4800), n_draws)
-)
-draws_df$y <- draws_df$beta0 + rep(beta1, each = 2) * draws_df$x
-
-ggplot(draws_df, aes(x = x, y = y, group = draw, color = beta0)) +
-  geom_line(linewidth = 0.6, alpha = 0.7) +
-  scale_color_viridis_c(expression(beta[0]), end = 0.9) +
-  labs(x = "body_mass_g", y = "bill_length_mm") +
-  theme_minimal(base_size = 16) +
-  theme(legend.position = "bottom")
-```
+![](images/spaghetti_plot.png){fig-align="center"}
 
 :::
 :::::

@@ -22,8 +22,19 @@ planning notes/
 **/*MLM_2026*
 **/*MLM_exercise*
 **/*MLM_simulation*
+**/*Bayes_Lab_3.qmd
+**/*Bayes_Lab_3_solutions*
 **/bayesian_hlm_lecture_plan.md
 
+
+# Stats Vault (personal KB, not part of course site)
+Stats Vault/
+
+# Consulting cases (client data)
+**/Cases/
+!**/Cases/_CaseLog.md
+!**/Cases/_template/
+!**/Cases/_template/**
 
 /.quarto/
 **/*.quarto_ipynb

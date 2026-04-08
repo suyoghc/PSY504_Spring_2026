@@ -5,6 +5,7 @@ project:
     - "index.qmd"
     - "about.qmd"
     - "**/*.qmd"
+    - "!Stats Vault/**"
     - "!**/ord_lab_q.qmd"
     - "!**/*ordinal-regression.qmd"
     - "!**/*-narrated-J.qmd"
@@ -18,7 +19,9 @@ project:
     - "!**/*MLM_2026*.qmd"
     - "!**/*MLM_exercise*.qmd"
     - "!**/*MLM_simulation*.qmd"
-    - "!**/*Lecture_short*.qmd"
+    - "!**/*Lecture_short.qmd"
+    - "!**/*Bayes_Lab_3.qmd"
+    - "!**/*Bayes_Lab_3_solutions*"
 
 
 website:
