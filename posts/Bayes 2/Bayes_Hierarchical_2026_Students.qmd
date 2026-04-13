@@ -1,0 +1,590 @@
+---
+title: "Hierarchical Bayesian Models"
+subtitle: "Partial Pooling, Shrinkage, and Group-Level Inference"
+author: "Suyog Chandramouli"
+categories: [Bayes]
+date: '2026-04-13'
+institute: 'PSY504, Advanced Statistics in Psychology<br>Princeton University'
+footer: "PSY 504: Advanced Statistics"
+format:
+  revealjs:
+    theme: solarized
+    css: slide-style.css
+    transition: fade
+    multiplex: false
+    slide-number: true
+    incremental: false
+    chalkboard: true
+    fontsize: "25pt"
+execute:
+  freeze: auto
+  eval: true
+  echo: true
+  message: false
+  warning: false
+  fig-align: center
+  fig-width: 12
+  fig-height: 8
+  code-overflow: wrap
+editor:
+  markdown:
+    wrap: sentence
+---
+
+
+```{r}
+#| label: setup
+#| echo: false
+
+library(tidyverse)
+library(brms)
+library(tidybayes)
+library(bayesplot)
+library(broom.mixed)
+library(lme4)
+library(patchwork)
+library(bayestestR)
+
+theme_set(theme_bw(base_size = 18))
+
+# Load radon data (Minnesota EPA measurements)
+data(radon, package = "rstanarm")
+mn_radon <- radon
+mn_radon$county_id <- as.factor(mn_radon$county)
+```
+
+# The Case for Bayesian MLM {.center}
+
+
+## Where we are
+
+**You already know two things:**
+
+-   How to fit mixed models with `lmer()`: random intercepts, random slopes, crossed effects, ICC, model comparison
+
+-   How to fit Bayesian regression with `brm()`: priors, posteriors, credible intervals, posterior predictive checks, LOO-CV
+
+. . .
+
+**Today**: what happens when we combine them
+
+
+## What does `lme4` actually do?
+
+`lme4` uses a procedure equivalent to [empirical Bayes]{.vocab}:
+
+-   Estimate the variance components via ML or REML (REML is the `lmer` default)
+-   Fix those at plug-in estimates as if they were known
+-   Condition on them to get the random effects (BLUPs)
+
+
+. . .
+
+The uncertainty in the variance components is **not propagated** to the group-level estimates.
+
+
+## A frequentist proof that pooling wins
+
+In 1956, Charles Stein proved something that surprised the statistics world:
+
+-   If you're estimating **three or more group means** at once, estimating each one separately is always beatable
+-   An estimator that pulls groups toward each other will have lower prediction error, on average
+-   Pulling groups toward each other is not a Bayesian idea. It has frequentist proofs.
+
+
+. . .
+
+`lmer()` already produces these pulled estimates (shrinkage).
+The Bayesian model does the same pulling, with full uncertainty about *how much* to pull.
+
+
+## The right tool for the job
+
+::::: columns
+::: {.column width="50%"}
+**Simple balanced experiment**
+
+Using Bayes to analyze a clean 2x2 ANOVA is like cutting a birthday cake with a chainsaw.
+
+It works, but the extra machinery does nothing.
+:::
+
+::: {.column width="50%"}
+**Multilevel models**
+
+Fitting hierarchical models without Bayes is like cutting down a tree with a pocketknife.
+
+It works, but you end up making compromises you don't have to make.
+:::
+:::::
+
+
+. . .
+
+Bayes vs. freq differences are more striking with MLMs.
+
+
+## Frequentist vs. Bayesian {.smaller .shrink}
+
+| Aspect | Frequentist | Bayesian |
+|:-----------------------|:-----------------------|:-----------------------|
+| **Probability philosophy** | Long-run frequency | Degree of belief |
+| **Parameters** | Fixed unknowns | Random variables |
+| **Estimation** | Point estimates (MLE) | Full posteriors |
+| **Uncertainty** | Confidence intervals | Credible intervals |
+| **Interpretation** | "95% of samples contain true value" | "95% probability parameter in range" |
+| **Prior Info** | Not formally used | Explicit priors |
+| **Prediction** | Points with errors | Full distributions |
+| **Testing** | p-values | Posterior probabilities |
+| **Comparison** | AIC, BIC | WAIC, LOO-CV, Bayes Factor |
+| **Computation** | Often analytical | MCMC sampling |
+| **Workflow** | Residuals, QQ plots | Posterior checks, Rhat |
+| **Small Samples** | Often poor | Can be robust |
+| **R Implementation** | lm(), glmer() | brms::brm(), rstan() |
+| **Speed** | Faster | More intensive |
+| **Regularization** | Penalties (LASSO) | Natural via priors |
+
+
+# The Pooling Framework {.center}
+
+
+## Complete pooling
+
+-   One grand estimate: ignores groups entirely
+-   Pro: simple, uses all data
+-   Con: misses group-level variation
+
+
+## No pooling
+
+-   Each group estimated independently from its own data
+-   Pro: captures group uniqueness
+-   Con: limited by each group's sample size; overfits small groups
+
+
+## Partial pooling
+
+-   Groups borrow strength from each other
+-   Small groups have more sampling error; borrowing reduces it
+-   The amount of borrowing is learned from the data
+
+
+## The group-level standard deviation controls pooling
+
+The hyperparameter $\sigma$ (group-level SD) determines the amount of pooling:
+
+-   $\sigma$ close to 0: groups are nearly identical, recover complete pooling
+-   $\sigma$ very large: groups are essentially independent, recover no pooling
+-   $\sigma$ estimated from data, guided by your prior on $\sigma$
+
+
+. . .
+
+**You do not hand-pick the amount of pooling. The model estimates it from the data, guided by your prior on** $\sigma$.
+
+
+## The duck-rabbit
+
+![](images/duck-rabbit.jpg){fig-align="center" width="35%"}
+
+::::: columns
+::: {.column width="50%"}
+**(a) A description of population structure**
+
+Groups come from a population.
+The model describes that population's distribution.
+:::
+
+::: {.column width="50%"}
+**(b) A regularization machine**
+
+Extreme estimates from small groups get pulled toward the population average.
+:::
+:::::
+
+
+. . .
+
+If you model the population, regularization happens.
+
+If you want regularization, model the population.
+
+
+## What is shrinkage?
+
+Partial pooling produces [shrinkage]{.vocab}: estimates pulled toward a common value.
+
+-   Groups with **few observations** shrink more toward the grand mean
+-   Groups with **many observations** retain their individual character
+-   Groups with **extreme raw estimates** get pulled further
+
+
+. . .
+
+Adaptive, automatic, and not a tuning choice.
+
+
+# Three Models in `brms` {.center}
+
+
+## The radon data
+
+EPA measurements of radon gas levels in 919 Minnesota homes across 85 counties.
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+
+county_counts <- mn_radon %>%
+  group_by(county) %>%
+  summarize(n = n(), mean_radon = mean(log_radon)) %>%
+  arrange(n)
+
+ggplot(county_counts, aes(x = n)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "white") +
+  labs(title = "Number of observations per county",
+       x = "Houses measured", y = "Number of counties") +
+  theme_bw(base_size = 18)
+```
+
+
+## Radon data: key variables
+
+-   **Outcome**: `log_radon` (log of radon gas level)
+-   **Predictor**: `floor` (0 = basement, 1 = first floor)
+-   **Grouping**: `county` (85 Minnesota counties)
+-   **County-level**: `log_uranium` (soil uranium content)
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+
+ggplot(mn_radon, aes(x = factor(floor), y = log_radon, fill = factor(floor))) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("steelblue", "coral")) +
+  labs(x = "Floor (0 = basement, 1 = first floor)",
+       y = "Log radon level") +
+  guides(fill = "none") +
+  theme_bw(base_size = 18)
+```
+
+
+## Model 1: Complete pooling
+
+Ignore counties entirely.
+One regression for all 919 homes.
+
+```{r}
+#| results: hide
+#| cache: true
+
+fit_pool <- brm(
+  log_radon ~ floor,
+  data = mn_radon,
+  file = "fits/fit_pool"
+)
+```
+
+```{r}
+fixef(fit_pool)
+```
+
+
+## Model 2: No pooling
+
+Each county gets its own intercept, estimated from its own data.
+(The `floor` slope and residual variance are still shared.)
+
+```{r}
+#| results: hide
+#| cache: true
+
+fit_nopool <- brm(
+  log_radon ~ 0 + floor + county_id,
+  data = mn_radon,
+  file = "fits/fit_nopool"
+)
+```
+
+
+## Model 3: Partial pooling
+
+Counties share a common distribution.
+Each county's estimate borrows strength from the others.
+
+```{r}
+#| results: hide
+#| cache: true
+
+fit_partial <- brm(
+  log_radon ~ floor + (1 | county_id),
+  prior = prior(normal(0, 1), class = Intercept) +
+    prior(exponential(1), class = sd) +
+    prior(exponential(1), class = sigma),
+  data = mn_radon,
+  file = "fits/fit_partial"
+)
+```
+
+The formula is the same as `lmer()`: `(1 | county_id)`
+
+The one addition: `prior(exponential(1), class = sd)`
+
+
+## Visualizing shrinkage
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+
+bayesplot::mcmc_intervals(fit_partial, regex_pars = "r_county") +
+  bayesplot::yaxis_text(FALSE) +
+  labs(title = "County-level intercept deviations (partial pooling)")
+```
+
+
+## The partial pooling summary
+
+```{r}
+summary(fit_partial)
+```
+
+
+# Syntax (lme4 vs. brms) {.center}
+
+
+## `lmer()` and `brm()`: same formula
+
+|              | Formula                                           |
+|:-------------|:--------------------------------------------------|
+| `lmer()`     | `mean_pupil ~ vocoded + (1 + vocoded \| subject)` |
+| `brm()`      | `mean_pupil ~ vocoded + (1 + vocoded \| subject)` |
+| What changes | Add `prior(exponential(1), class = sd)`           |
+
+
+. . .
+
+The formula syntax is **identical**.
+The difference is that `brms` puts an explicit prior on $\sigma$ (the group-level SD), while `lme4` fixes it at a plug-in estimate.
+
+
+## `ranef()` vs. `coef()` in `brms`
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 6
+
+# Load the evals data for this demonstration
+data(evals, package = "moderndive")
+
+```
+
+Two ways to summarize group-level parameters:
+
+-   `ranef()` (**ran**dom **ef**fects, or "group-level effects" in `brms`) returns **deviations** around the grand mean ($u_{0i}$)
+-   `coef()` (**coef**ficients, or "population-level + group-level" in `brms`) returns the **actual group intercepts** ($\beta_0 + u_{0i}$)
+
+```{r}
+#| eval: false
+# Deviations from grand mean
+ranef(fit_partial)
+
+# Actual county-level intercepts
+coef(fit_partial)
+```
+
+
+##  Bayes advantage: group-level credible intervals
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+
+coef(fit_partial)$county_id[, , "Intercept"] %>%
+  data.frame() %>%
+  arrange(Estimate) %>%
+  mutate(rank = 1:n()) %>%
+  bind_rows(
+    fixef(fit_partial) %>%
+      data.frame() %>%
+      filter(row.names(.) == "Intercept") %>%
+      mutate(rank = 0)
+  ) %>%
+  mutate(type = ifelse(rank == 0, "Grand mean", "County intercept")) %>%
+
+  ggplot(aes(x = Estimate, xmin = Q2.5, xmax = Q97.5,
+             y = rank, color = type)) +
+  geom_pointrange(size = 1/3) +
+  scale_color_manual(NULL, values = c("Grand mean" = "red", "County intercept" = "steelblue")) +
+  scale_y_continuous("Rank order", breaks = c(1, 25, 50, 75)) +
+  xlab("Log radon level") +
+  theme(panel.grid = element_blank())
+```
+
+
+## The group-level variance parameter
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+
+as_draws_df(fit_partial) %>%
+  ggplot(aes(x = sd_county_id__Intercept)) +
+  stat_halfeye(.width = .95, fill = "steelblue") +
+  scale_x_continuous(expression(sigma[county]), limits = c(0, NA)) +
+  scale_y_continuous(NULL, breaks = NULL) +
+  theme_bw(base_size = 18)
+```
+
+$\sigma_{county} \approx 0.3$ — the population SD of county-level radon intercepts.
+
+
+# Testing and Practical Workflow {.center}
+
+
+## HDI-based significance
+
+Does the 95% credible interval for a fixed effect exclude zero?
+
+```{r}
+posteriors <- as_draws_df(fit_partial)
+
+hdi(posteriors$b_floor, ci = 0.95)
+```
+
+
+. . .
+
+If the HDI excludes zero, the effect is credibly different from zero at 95%.
+
+
+## Posterior predictive check
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+
+pp_check(fit_partial, ndraws = 100) +
+  theme_bw(base_size = 18)
+```
+
+
+## Building hierarchical models incrementally
+
+McElreath's practical workflow:
+
+1.  Start with **intercepts-only**: `y ~ 1 + (1 | group)`
+2.  Run **prior predictive checks** on the hierarchical structure
+3.  Fit and check **diagnostics** (ESS, Rhat, especially for $\sigma$)
+4.  If you see **divergences**, increase `adapt_delta` (e.g., `control = list(adapt_delta = 0.95)`)
+5.  **Prior-posterior overlap** for $\sigma$ is common and expected — data often cannot fully learn the variance structure
+6.  Add **varying slopes** if theoretically motivated
+
+
+## Watch for these diagnostics
+
+| Diagnostic  | What it tells you        | Worry threshold |
+|:------------|:-------------------------|:----------------|
+| Rhat        | Chain convergence        | Above 1.01      |
+| Bulk ESS    | Posterior body sampling  | Below 400       |
+| Tail ESS    | Posterior tail sampling  | Below 400       |
+| Divergences | Funnel geometry problems | Any above 0     |
+
+Divergences in hierarchical models often mean the sampler is struggling with the "funnel" shape of the posterior where $\sigma$ is small.
+
+
+# Lab Preview {.center}
+
+
+## What you'll do in the lab
+
+1.  Load a grouped dataset
+2.  Fit a **complete pooling** model (no group structure)
+3.  Fit a **no pooling** model (fixed effects for each group)
+4.  Fit a **partial pooling** model (random intercepts)
+5.  Compare shrinkage: which groups move most?
+6.  Visualize group-level credible intervals
+7.  Run posterior predictive checks
+8.  Compare models with **LOO-CV** (`loo_compare()`)
+
+
+## Resources
+
+-   Gelman & Hill (2007). *Data Analysis Using Regression and Multilevel/Hierarchical Models*
+-   McElreath (2020). *Statistical Rethinking*, Chapters 12--13
+-   Kurz (2023). *Introduction to Bayesian Statistics with brms and the tidyverse* (Module 19)
+
+
+# Optional: Bayes Factors for Parameter Testing {.center}
+
+
+## Testing parameters with Bayes Factors
+
+Can we test whether a specific effect is zero?
+
+-   Use `bayesfactor_parameters()` from `bayestestR`
+-   Requires `sample_prior = "yes"` and an explicit prior
+
+```{r}
+#| eval: false
+
+# Fit with prior sampling enabled
+fit_bf <- brm(
+  log_radon ~ floor + (1 | county_id),
+  prior = prior(normal(0, 1), class = Intercept) +
+    prior(normal(0, 1), class = b) +
+    prior(exponential(1), class = sd) +
+    prior(exponential(1), class = sigma),
+  data = mn_radon,
+  sample_prior = "yes",
+  file = "fits/fit_bf"
+)
+
+# Test floor effect against zero
+bayesfactor_parameters(fit_bf, null = 0)
+```
+
+
+## Comparing full models with Bayes Factors
+
+```{r}
+#| eval: false
+
+# Compare models with different fixed effects
+fit_bf1 <- brm(
+  log_radon ~ floor + (1 | county_id),
+  prior = prior(normal(0, 1), class = b) +
+    prior(exponential(1), class = sd),
+  data = mn_radon,
+  sample_prior = "yes",
+  save_pars = save_pars(all = TRUE),
+  file = "fits/fit_bf1"
+)
+
+fit_bf2 <- brm(
+  log_radon ~ 1 + (1 | county_id),
+  prior = prior(exponential(1), class = sd),
+  data = mn_radon,
+  sample_prior = "yes",
+  save_pars = save_pars(all = TRUE),
+  file = "fits/fit_bf2"
+)
+
+bayesfactor_models(fit_bf1, fit_bf2)
+```
+
+
+## Tomorrow: Tracy Sweet
+
+**Tracy Sweet** -- Associate Professor, University of Maryland
+
+QMMS Psychometric Computation and Simulation (PCS) Lab
+
+**Network Science in Psychology**
+
+- Apr 14, 2026, 12:00 pm -- 1:00 pm
+- A30, Princeton Neuroscience Institute
+

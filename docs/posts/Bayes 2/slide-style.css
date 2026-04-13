@@ -49,6 +49,11 @@ div.cell-output cell-output-stdout {
   font-weight: bold;
 }
 
+/*Shrink tables a bit more*/
+.shrink table {
+  font-size: 0.62em;
+}
+
 /*Box for equations*/
 .eq {
   border-radius: 25px;

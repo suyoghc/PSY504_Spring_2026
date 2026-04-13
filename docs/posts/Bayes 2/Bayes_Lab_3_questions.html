@@ -251,7 +251,7 @@ window.Quarto = {
 
 
 
-<p>⬇️ <a href="https://github.com/suyoghc/PSY504_Spring_2026/raw/main/posts/Bayes%202/Bayes_Lab_2_questions.qmd">Download the .qmd</a></p>
+<p>⬇️ <a href="https://github.com/suyoghc/PSY504_Spring_2026/raw/main/posts/Bayes%202/Bayes_Lab_3_questions.qmd">Download the .qmd</a></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -529,11 +529,11 @@ Formula: bill_length_mm ~ 1
 
 Regression Coefficients:
           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept    48.85      0.41    48.04    49.67 1.00     3518     2932
+Intercept    48.84      0.41    48.05    49.65 1.00     3127     2435
 
 Further Distributional Parameters:
       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sigma     3.38      0.30     2.85     4.03 1.00     3146     2692
+sigma     3.38      0.28     2.88     3.99 1.00     3135     2644
 
 Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -559,7 +559,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -574,10 +574,10 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>mu; sigma</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 48.849</code></pre>
+<pre><code>[1] 48.83877</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.38139</code></pre>
+<pre><code>[1] 3.376664</code></pre>
 </div>
 </div>
 <p>We can use <code>dnorm()</code> to compute the shape of <span class="math inline">\(\operatorname{Normal}(48.8, 3.4)\)</span>.</p>
@@ -594,7 +594,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -614,7 +614,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -651,12 +651,12 @@ Tip
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   Estimate    Est.Error          Q2.5         Q97.5
-b_Intercept    3.228660e+01 3.5117992142  2.537857e+01   39.07721547
-b_body_mass_g  4.439751e-03 0.0009367769  2.612826e-03    0.00627224
-sigma          2.935441e+00 0.2654674750  2.470790e+00    3.50214252
-Intercept      4.886058e+01 0.3527626333  4.818312e+01   49.57233142
-lprior        -4.299822e+00 0.0713120603 -4.455419e+00   -4.18228119
-lp__          -1.723549e+02 1.2759183235 -1.756725e+02 -170.89786437</code></pre>
+b_Intercept    3.219020e+01 3.4991437422  2.520195e+01  3.902057e+01
+b_body_mass_g  4.460538e-03 0.0009337018  2.630735e-03  6.314249e-03
+sigma          2.924427e+00 0.2562101322  2.467389e+00  3.486101e+00
+Intercept      4.884178e+01 0.3557498901  4.817866e+01  4.953159e+01
+lprior        -4.298329e+00 0.0687981373 -4.449870e+00 -4.181116e+00
+lp__          -1.723218e+02 1.2099861347 -1.754015e+02 -1.709036e+02</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -687,7 +687,7 @@ lp__          -1.723549e+02 1.2759183235 -1.756725e+02 -170.89786437</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -722,7 +722,7 @@ lp__          -1.723549e+02 1.2759183235 -1.756725e+02 -170.89786437</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -748,7 +748,7 @@ lp__          -1.723549e+02 1.2759183235 -1.756725e+02 -170.89786437</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -768,7 +768,7 @@ lp__          -1.723549e+02 1.2759183235 -1.756725e+02 -170.89786437</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -801,12 +801,12 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Estimate Est.Error     Q2.5    Q97.5
-[1,] 44.27392 1.0272080 42.21716 46.27509
-[2,] 44.36810 1.0085685 42.34307 46.33473
-[3,] 44.46228 0.9899769 42.47047 46.38883
-[4,] 44.55645 0.9714359 42.60167 46.45106
-[5,] 44.65063 0.9529486 42.73585 46.51099
-[6,] 44.74481 0.9345180 42.86253 46.57125</code></pre>
+[1,] 44.23365 1.0238050 42.14411 46.23851
+[2,] 44.32826 1.0052567 42.28035 46.29769
+[3,] 44.42288 0.9867573 42.41195 46.35881
+[4,] 44.51750 0.9683095 42.54554 46.41911
+[5,] 44.61212 0.9499165 42.68544 46.47880
+[6,] 44.70673 0.9315813 42.81839 46.53342</code></pre>
 </div>
 </div>
 <p>Now plot.</p>
@@ -827,7 +827,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -855,7 +855,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -870,7 +870,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> num [1:4000, 1:100] 44.1 45 44.8 45.4 43 ...</code></pre>
+<pre><code> num [1:4000, 1:100] 42.5 45.5 44.4 43.6 44.1 ...</code></pre>
 </div>
 </div>
 <p>We get full 4,000 draw posterior distributions for each of the 100 levels of the predictor <code>body_mass_g</code>. Now look at what happens if we wrangle that output a little, and plot with aid from <code>stat_lineribbon()</code> from the <strong>ggdist</strong> package.</p>
@@ -895,7 +895,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -925,7 +925,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -953,7 +953,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -973,12 +973,12 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Estimate Est.Error     Q2.5    Q97.5
-[1,] 44.27392 1.0272080 42.21716 46.27509
-[2,] 44.36810 1.0085685 42.34307 46.33473
-[3,] 44.46228 0.9899769 42.47047 46.38883
-[4,] 44.55645 0.9714359 42.60167 46.45106
-[5,] 44.65063 0.9529486 42.73585 46.51099
-[6,] 44.74481 0.9345180 42.86253 46.57125</code></pre>
+[1,] 44.23365 1.0238050 42.14411 46.23851
+[2,] 44.32826 1.0052567 42.28035 46.29769
+[3,] 44.42288 0.9867573 42.41195 46.35881
+[4,] 44.51750 0.9683095 42.54554 46.41911
+[5,] 44.61212 0.9499165 42.68544 46.47880
+[6,] 44.70673 0.9315813 42.81839 46.53342</code></pre>
 </div>
 <details class="code-fold">
 <summary>Code</summary>
@@ -988,12 +988,12 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Estimate Est.Error     Q2.5    Q97.5
-[1,] 44.30065  3.127637 38.34394 50.39570
-[2,] 44.42433  3.150752 38.31617 50.74098
-[3,] 44.49237  3.154823 38.39261 50.77337
-[4,] 44.56673  3.119734 38.43994 50.53196
-[5,] 44.64785  3.046742 38.71531 50.57886
-[6,] 44.76398  3.110620 38.66800 51.11470</code></pre>
+[1,] 44.23211  3.102651 38.32178 50.32730
+[2,] 44.29920  3.146962 38.24330 50.59841
+[3,] 44.42653  3.164127 38.03926 50.64089
+[4,] 44.47491  3.117934 38.44270 50.67178
+[5,] 44.63282  3.142262 38.56949 50.94807
+[6,] 44.75521  3.052955 38.85073 50.99229</code></pre>
 </div>
 </div>
 <p>The posterior means (<code>Estimate</code>) are about the same, but the SD’s (<code>Est.Error</code>) are much larger in the <code>predict()</code> output, and the widths of the 95% intervals are too. Let’s make a plot.</p>
@@ -1015,7 +1015,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1054,7 +1054,7 @@ $ body_mass_g &lt;dbl&gt; 2700.000, 2721.212, 2742.424, 2763.636, 2784.848, 2806
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1107,12 +1107,12 @@ Tip
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Estimate Est.Error     Q2.5    Q97.5
-[1,] 47.79252  2.997277 41.99083 53.90076
-[2,] 49.57057  2.968204 43.68787 55.40806
-[3,] 48.57329  2.984641 42.70040 54.43958
-[4,] 47.98502  3.003154 42.02880 53.82344
-[5,] 48.78569  2.948785 42.85711 54.52335
-[6,] 49.86390  2.957797 44.16047 55.65668</code></pre>
+[1,] 47.84228  2.927958 42.12494 53.40081
+[2,] 49.54560  2.940014 43.80953 55.38665
+[3,] 48.48634  2.989070 42.62021 54.10952
+[4,] 47.91161  2.966407 42.09254 53.83108
+[5,] 48.77327  2.988233 42.93486 54.70046
+[6,] 49.82069  2.952518 43.99991 55.74329</code></pre>
 </div>
 </div>
 <p>We get posterior predictive summaries for each of the original data points. Here’s what happens if we set <code>summary = FALSE</code>.</p>
@@ -1123,7 +1123,7 @@ Tip
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> num [1:4000, 1:68] 51.2 47.6 52.4 48.4 47.2 ...
+<pre><code> num [1:4000, 1:68] 39.9 47.7 47.5 48.9 44.6 ...
  - attr(*, "dimnames")=List of 2
   ..$ : NULL
   ..$ : NULL</code></pre>
@@ -1137,7 +1137,7 @@ Tip
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> num [1:6, 1:68] 44.6 47.8 48.3 46.1 49.5 ...
+<pre><code> num [1:6, 1:68] 44.7 51.9 51.6 45.7 45.3 ...
  - attr(*, "dimnames")=List of 2
   ..$ : NULL
   ..$ : NULL</code></pre>
@@ -1166,7 +1166,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1195,7 +1195,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1223,7 +1223,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1242,7 +1242,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1257,7 +1257,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1268,7 +1268,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-33-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-33-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1346,12 +1346,12 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The dark line is your real data. The light lines are datasets the model would generate using only the priors — no learning from data at all. If these look wildly different from anything you’d expect to see, the priors are encoding unreasonable assumptions.</p>
+<p><code>pp_check()</code> overlays your observed data (dark line) as a reference, but the evaluation here is different from a posterior predictive check. The light lines are datasets the model would generate using only the priors — no learning from data at all. You’re not asking “do these match my data?” (priors that already reproduce the data would be suspiciously informative). You’re asking “are these physically plausible for penguin bill lengths?” Predictions in the 30–60 mm range are reasonable. Predictions spanning hundreds of millimeters mean the priors are encoding implausible assumptions.</p>
 <section id="question-4.1" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="question-4.1">Question 4.1</h3>
 <p>The prior predictive check shows data the model would generate <em>before seeing any real data</em>. Do the predictions look reasonable? What would you change if they predicted bill lengths of 500 mm (that’s 50 cm — about the length of your forearm)?</p>
@@ -1365,7 +1365,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Compare the light lines to the dark line. Do they cover the same range of values? Recall the summary statistics you computed for <code>bill_length_mm</code>.</p>
+<p>The dark line is just a scale reference. Ask: could these simulated datasets plausibly be penguin bill measurements? You don’t want the light lines to match the dark line (that would mean your priors are doing the data’s job), but they should be in a biologically sensible range.</p>
 </div>
 </div>
 <div class="cell">
@@ -1448,7 +1448,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1471,7 +1471,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1493,7 +1493,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Bayes_Lab_2_questions_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Bayes_Lab_3_questions_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1526,12 +1526,12 @@ Formula: bill_length_mm ~ 1 + body_mass_g
 
 Regression Coefficients:
             Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept      32.29      3.51    25.38    39.08 1.00     5575     2520
-body_mass_g     0.00      0.00     0.00     0.01 1.00     5715     2671
+Intercept      32.19      3.50    25.20    39.02 1.00     5352     2971
+body_mass_g     0.00      0.00     0.00     0.01 1.00     5391     3056
 
 Further Distributional Parameters:
       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sigma     2.94      0.27     2.47     3.50 1.00     2055     1833
+sigma     2.92      0.26     2.47     3.49 1.00     1916     1553
 
 Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
 and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -1620,7 +1620,7 @@ Tip
 <div class="cell-output cell-output-stdout">
 <pre><code>       elpd_diff se_diff
 fit1.b  0.0       0.0   
-fit0.b -9.3       3.7   </code></pre>
+fit0.b -9.2       3.7   </code></pre>
 </div>
 </div>
 <p>The first row is the better model. The <code>elpd_diff</code> column tells you how much better, and <code>se_diff</code> tells you how certain that difference is.</p>

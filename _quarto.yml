@@ -22,6 +22,8 @@ project:
     - "!**/*Lecture_short.qmd"
     - "!**/*Bayes_Lab_3.qmd"
     - "!**/*Bayes_Lab_3_solutions*"
+    - "!**/*Poisson_Regression_S*"
+    - "!**/*Bayes_Hierarchical*Lecture*"
 
 
 website:

@@ -2,7 +2,7 @@
 title: "Lab: Bayes and Penguins (Part 2)"
 subtitle: "PSY 504: Advanced Statistics"
 author: "Your Name"
-date: today
+date: '2026-04-08'
 format:
   html:
     code-fold: true
@@ -724,14 +724,14 @@ Now run `pp_check()` on the prior-only model:
 pp_check(fit_prior_only, ndraws = 50)
 ```
 
-The dark line is your real data. The light lines are datasets the model would generate using only the priors — no learning from data at all. If these look wildly different from anything you'd expect to see, the priors are encoding unreasonable assumptions.
+`pp_check()` overlays your observed data (dark line) as a reference, but the evaluation here is different from a posterior predictive check. The light lines are datasets the model would generate using only the priors — no learning from data at all. You're not asking "do these match my data?" (priors that already reproduce the data would be suspiciously informative). You're asking "are these physically plausible for penguin bill lengths?" Predictions in the 30–60 mm range are reasonable. Predictions spanning hundreds of millimeters mean the priors are encoding implausible assumptions.
 
 ### Question 4.1 {.unnumbered}
 
 The prior predictive check shows data the model would generate *before seeing any real data*. Do the predictions look reasonable? What would you change if they predicted bill lengths of 500 mm (that's 50 cm — about the length of your forearm)?
 
 ::: callout-tip
-Compare the light lines to the dark line. Do they cover the same range of values? Recall the summary statistics you computed for `bill_length_mm`.
+The dark line is just a scale reference. Ask: could these simulated datasets plausibly be penguin bill measurements? You don't want the light lines to match the dark line (that would mean your priors are doing the data's job), but they should be in a biologically sensible range.
 :::
 
 ```{r}
