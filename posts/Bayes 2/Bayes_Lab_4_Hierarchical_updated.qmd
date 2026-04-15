@@ -1,0 +1,672 @@
+---
+title: "Lab: Hierarchical Bayesian Models"
+subtitle: "PSY 504: Advanced Statistics"
+author: "Your Name"
+date: '2026-04-15'
+format:
+  html:
+    code-fold: true
+    code-overflow: wrap
+    toc: true
+    toc-depth: 2
+    toc-location: left
+execute:
+  message: false
+  warning: false
+engine: knitr
+---
+
+⬇️ [Download the .qmd](https://github.com/suyoghc/PSY504_Spring_2026/raw/main/posts/Bayes%202/Bayes_Lab_4_Hierarchical.qmd)
+
+::: callout-note
+## Building on what you know
+This lab brings together two threads from the course: Bayesian inference with `brms` (Labs 2--3) and multilevel models with `lme4` (MLM lectures). You'll fit hierarchical Bayesian models and see partial pooling, shrinkage, and group-level credible intervals in action.
+:::
+
+::: callout-important
+## How to work through this lab
+
+1.  Read and run each code chunk, making sure you understand what it does before moving on.
+2.  Some questions have a **hidden answer you can reveal** after writing your own response. These cover concepts that later questions build on, so check your understanding before continuing.
+3.  Other questions are **open**: no answer is provided.
+4.  Write your responses in the code chunks marked `# Enter your answer here` (use R comments for text answers). For coding exercises, write your code in chunks marked `# Enter your code here`.
+5.  The final section is a **transfer exercise** where you apply what you've learned to a new dataset with less scaffolding.
+:::
+
+# Part 1: The reedfrogs data
+
+## Setup
+
+```{r}
+#| code-fold: false
+library(tidyverse)
+library(brms)
+library(tidybayes)
+library(bayesplot)
+library(ggdist)
+library(lme4)
+```
+
+## The data
+
+We'll use data from a predation experiment on African reed frog tadpoles (*Hyperolius spinigularis*), originally from Vonesh & Bolker (2005). This dataset is one of the canonical examples in McElreath's *Statistical Rethinking* for introducing hierarchical models. But unlike the book's implementation, we will be using `brms()` and tidyverse.
+
+Here is the setup of the experiment: Tadpoles were placed in 48 experimental tanks. The researchers varied three things across the tanks --- the initial number of tadpoles per tank (the **density**: 10, 25, or 35), whether a predator was present, and the tadpole body size. After the experiment, they counted how many survived.
+
+```{r}
+#| code-fold: false
+
+# Load the data
+d <- read.csv("https://raw.githubusercontent.com/rmcelreath/rethinking/master/data/reedfrogs.csv", sep = ";") %>%
+  mutate(
+    tank = factor(1:n()),
+    density = as.integer(density),
+    surv = as.integer(surv)
+  )
+
+glimpse(d)
+```
+
+Key variables:
+
+-   `surv` — number of tadpoles that survived (our outcome)
+-   `density` — initial number of tadpoles in the tank (10, 25, or 35)
+-   `propsurv` — proportion surviving (`surv / density`)
+-   `pred` — predator presence (`no` or `pred`)
+-   `size` — tadpole body size (`big` or `small`)
+-   `tank` — tank ID (1 through 48), our grouping variable
+
+Let’s see what survival looks like across tanks:
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+
+ggplot(d, aes(x = reorder(tank, propsurv), y = propsurv, fill = factor(density))) +
+  geom_col() +
+  scale_fill_manual(values = c("10" = "steelblue", "25" = "coral", "35" = "seagreen"),
+                    name = "Initial density") +
+  labs(x = "Tank (ordered by survival proportion)",
+       y = "Proportion surviving") +
+  theme_bw(base_size = 14) +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+```
+
+There is substantial variation across tanks. Some tanks had 100% survival, others lost most of their tadpoles.
+
+### Question 1.1 {.unnumbered}
+
+Recreate the bar chart above, but facet it by `density` (using `facet_wrap(~ density, scales = "free_x")`). What do you notice about the spread of survival proportions across the three density levels?
+
+```{r}
+# Enter your code here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+The density = 25 and density = 35 facets show wider spread than density = 10. All three levels include tanks near 1.0, but the larger tanks include more tanks with very low survival (likely driven by predator presence). The density = 10 tanks cluster mostly at the high end, with a few dropping to around 0.4.
+:::
+
+### Question 1.2 {.unnumbered}
+
+With only 10 tadpoles, a single death moves the survival proportion by 0.10. With 35 tadpoles, a single death moves it by only ~0.03. What does this mean for how much we should trust the raw proportions from small vs. large tanks?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+The raw proportions from small tanks are less reliable. Each individual outcome has a larger effect on the estimate, so the proportion carries more sampling noise. A tank with 10/10 surviving could easily have a true rate of 0.85 where we got lucky, but a tank with 35/35 is stronger evidence of genuinely high survival. When we fit the partial pooling model later, the model will reflect this: tanks with fewer observations will have wider credible intervals and be pulled more toward the grand mean.
+:::
+
+
+# Part 2: From `glm()` to `brm()` — Bayesian logistic regression
+
+## A quick bridge
+
+You already know how to fit logistic regression with `glm()`:
+
+```{r}
+#| code-fold: false
+glm_fit <- glm(cbind(surv, density - surv) ~ 1,
+               family = binomial, data = d)
+coef(glm_fit)
+```
+
+The intercept is on the **log-odds** scale.
+
+::: callout-note
+## `glm()` vs `brms` syntax for binomial models
+In `glm()`, you specify a binomial outcome with `cbind(successes, failures)`. In `brms`, the syntax is `successes | trials(total)` — you give the outcome and the number of trials instead. The `|` here is not a conditioning bar; it's how `brms` attaches extra information to the response (the same slot handles censoring, weights, and other annotations in more advanced models). 
+
+For now, just read `surv | trials(density)` as: "the outcome is `surv`, out of `density` trials."
+:::
+
+```{r}
+#| code-fold: false
+#| results: hide
+#| cache: true
+
+fit_complete <- brm(
+  surv | trials(density) ~ 1,
+  family = binomial,
+  data = d,
+  file = "fits/lab4_fit_complete"
+)
+```
+
+```{r}
+fixef(fit_complete)
+```
+
+The intercept is in log-odds. To convert to a probability, use `brms::inv_logit_scaled()`:
+
+```{r}
+inv_logit_scaled(fixef(fit_complete)[, "Estimate"])
+```
+
+### Question 2.1 {.unnumbered}
+
+Compare the `glm()` coefficient to the `brm()` posterior mean. Are they similar? Why would you expect them to be?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+They should be very similar. With 48 tanks and hundreds of total observations, the data dominate the (default, weakly informative) prior. The Bayesian posterior mean converges toward the MLE when the data are plentiful and the prior is weak. The key difference is that `brm()` gives you a full posterior distribution, not just a point estimate.
+:::
+
+
+# Prior predictive check
+
+Before fitting the hierarchical model and looking at results, it's good practice to ask: **do our priors make sense?** We can answer this by fitting the model with `sample_prior = "only"`, which ignores the data entirely and generates predictions based solely on the priors.
+
+We'll use the priors we plan to use for the partial pooling model: `normal(0, 1.5)` on the intercept and `exponential(1)` on the group-level SD.
+
+```{r}
+#| results: hide
+#| cache: true
+
+fit_prior_only <- brm(
+  surv | trials(density) ~ 1 + (1 | tank),
+  family = binomial,
+  prior = c(
+    prior(normal(0, 1.5), class = Intercept),
+    prior(exponential(1), class = sd)
+  ),
+  data = d,
+  sample_prior = "only",
+  file = "fits/lab4_fit_prior_only"
+)
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+
+pp_check(fit_prior_only, ndraws = 100) +
+  theme_bw(base_size = 14) +
+  labs(title = "Prior predictive check: what does the model expect before seeing data?")
+```
+
+### Question 2.2 {.unnumbered}
+
+Look at the prior predictive distributions. Do the simulated survival counts span a reasonable range?
+
+Now try it yourself with a much wider prior on the group-level SD. Refit the prior-only model using `prior(normal(0, 10), class = sd)` instead of `exponential(1)`, run `pp_check()` on it, and compare the two. What changes?
+
+```{r}
+# Enter your code here — refit with the wider prior and run pp_check()
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+With `exponential(1)` on the group-level SD, the prior predictive distribution covers a wide but sensible range of survival counts — the priors allow tanks to differ without implying anything absurd. With `normal(0, 10)` on the SD, the group-level standard deviation can be enormous, implying that some tanks have survival rates near 0% and others near 100% as entirely separate modes. The prior predictive distribution looks bimodal and extreme. The `exponential(1)` prior gently regularizes $\sigma_{\text{tank}}$, keeping it in a reasonable range.
+:::
+
+
+# Part 3: Three models
+
+## Complete pooling
+
+We already fit the complete pooling model above: one grand intercept, ignoring tanks entirely. Every tank is assumed to have the same underlying survival probability.
+
+```{r}
+summary(fit_complete)
+```
+
+### Question 3.1 {.unnumbered}
+
+What assumption does this model make about differences between tanks?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+Complete pooling assumes all tanks share exactly the same survival probability. Any observed differences between tanks are treated as pure sampling noise. The model has no mechanism for representing real variation between tanks.
+:::
+
+
+## No pooling
+
+Each tank gets its own intercept, estimated entirely from its own data:
+
+```{r}
+#| results: hide
+#| cache: true
+
+fit_no_pool <- brm(
+  surv | trials(density) ~ 0 + tank,
+  family = binomial,
+  data = d,
+  file = "fits/lab4_fit_no_pool"
+)
+```
+
+Extract the per-tank estimates and convert to probabilities:
+
+```{r}
+no_pool_estimates <- fixef(fit_no_pool) %>%
+  data.frame() %>%
+  rownames_to_column("tank") %>%
+  mutate(
+    tank = str_remove(tank, "tank"),
+    prob = inv_logit_scaled(Estimate),
+    prob_lower = inv_logit_scaled(Q2.5),
+    prob_upper = inv_logit_scaled(Q97.5)
+  )
+
+head(no_pool_estimates)
+```
+
+### Question 3.2 {.unnumbered}
+
+Look at the credible intervals for a few tanks. Compare a tank that started with 10 tadpoles to one that started with 35. Which has a wider interval? Why?
+
+```{r}
+# Enter your code here — pick one tank with density 10 and one with density 35
+# and compare their intervals
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+Tanks with density = 10 have wider credible intervals because they have fewer observations. With only 10 data points, there is more uncertainty about the true survival probability. Tanks with density = 35 have tighter intervals because more data constrain the estimate.
+:::
+
+
+## Partial pooling
+
+The hierarchical model lets each tank have its own intercept, but those intercepts come from a shared population distribution. The model learns how spread out the tank-level intercepts are (via the group-level SD, $\sigma_{\text{tank}}$).
+
+```{r}
+#| results: hide
+#| cache: true
+
+fit_partial <- brm(
+  surv | trials(density) ~ 1 + (1 | tank),
+  family = binomial,
+  prior = c(
+    prior(normal(0, 1.5), class = Intercept),
+    prior(exponential(1), class = sd)
+  ),
+  data = d,
+  file = "fits/lab4_fit_partial"
+)
+```
+
+```{r}
+summary(fit_partial)
+```
+
+The `sd(Intercept)` row under "Group-Level Effects" is the estimated population standard deviation of tank-level intercepts (on the log-odds scale). It controls how much pooling happens.
+
+### Question 3.3 {.unnumbered}
+
+What does the `sd(Intercept)` parameter represent in this model? What would happen to the tank-level estimates if it were very close to 0? What if it were very large?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+`sd(Intercept)` is the standard deviation of the population distribution from which tank-level intercepts are drawn. If it were close to 0, all tanks would be forced to have nearly the same intercept, recovering complete pooling. If it were very large, each tank's estimate would be barely influenced by the others, recovering no pooling. The model estimates this parameter from the data, guided by the `exponential(1)` prior, so the amount of pooling is learned, not hand-picked.
+:::
+
+
+## Quick diagnostics check
+
+Now that the partial pooling model is fit, check that the sampler ran well:
+
+```{r}
+#| fig-width: 10
+#| fig-height: 4
+
+mcmc_trace(fit_partial, pars = c("b_Intercept", "sd_tank__Intercept")) +
+  theme_bw(base_size = 14)
+```
+
+Good trace plots look like "fat, hairy caterpillars" — the chains overlap and wander freely through the same region. But trace plots are a visual check. The `summary()` output also reports three numerical diagnostics:
+
+::: callout-note
+## Rhat ($\hat{R}$)
+$\hat{R}$ compares the variance *between* chains to the variance *within* each chain. If all chains have converged to the same posterior, $\hat{R} \approx 1.0$. **Values above 1.01 indicate the chains haven't converged** and the estimates should not be trusted.
+:::
+
+::: callout-note
+## Bulk ESS and Tail ESS
+MCMC draws are autocorrelated, so 4,000 draws carry less information than 4,000 independent samples. **Effective sample size (ESS)** estimates how many independent draws your correlated samples are worth. **Bulk ESS** measures this for the center of the posterior (reliable means and medians). **Tail ESS** measures it for the tails (reliable credible interval endpoints). Both should be **above 400**.
+:::
+
+### Question 3.4 {.unnumbered}
+
+Look at the trace plots and the `summary()` output from `fit_partial`. Are the Rhat values all below 1.01? Are Bulk_ESS and Tail_ESS above 400 for every parameter? Do the trace plots show good mixing?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+For a well-behaved model like this one, Rhat should be very close to 1.00 for all parameters, and both Bulk_ESS and Tail_ESS should be well above 400. The trace plots should show all four chains wandering through the same region with no visible separation. If any of these checks fail, it would indicate a sampling problem, and you'd want to investigate before trusting the estimates.
+:::
+
+
+# Part 4: Shrinkage
+
+Partial pooling produces **shrinkage**: estimates pulled toward the grand mean. Tanks with few observations or extreme raw values get pulled more. Let's see this.
+
+## Building a shrinkage plot
+
+First, get the raw (empirical) survival proportions and the partial-pooling estimates side by side:
+
+```{r}
+# Raw proportions (empirical, no-pooling)
+tank_raw <- d %>%
+  select(tank, density, propsurv) %>%
+  rename(raw_prop = propsurv)
+
+# Partial pooling estimates from the hierarchical model
+tank_partial <- coef(fit_partial)$tank[, , "Intercept"] %>%
+  data.frame() %>%
+  rownames_to_column("tank") %>%
+  mutate(partial_prop = inv_logit_scaled(Estimate))
+
+# Combine
+shrinkage_df <- left_join(tank_raw, tank_partial, by = "tank")
+
+head(shrinkage_df)
+```
+
+Now plot:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 7
+
+# Grand mean (on probability scale)
+grand_mean <- inv_logit_scaled(fixef(fit_partial)[, "Estimate"])
+
+ggplot(shrinkage_df, aes(x = raw_prop, y = partial_prop)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray50") +
+  geom_hline(yintercept = grand_mean, linetype = "dotted", color = "red", linewidth = 0.5) +
+  geom_point(aes(size = density, color = factor(density)), alpha = 0.8) +
+  scale_color_manual(values = c("10" = "steelblue", "25" = "coral", "35" = "seagreen"),
+                     name = "Initial density") +
+  scale_size_continuous(range = c(2, 5), guide = "none") +
+  labs(x = "Raw proportion surviving (no pooling)",
+       y = "Partial pooling estimate",
+       title = "Shrinkage toward the grand mean") +
+  coord_equal(xlim = c(0, 1), ylim = c(0, 1)) +
+  theme_bw(base_size = 14)
+```
+
+Points on the dashed diagonal would mean no shrinkage at all. Points pulled toward the red dotted line (the grand mean) show shrinkage in action.
+
+### Question 4.1 {.unnumbered}
+
+Describe the pattern you see in the shrinkage plot. Which tanks moved the most? How does tank size (density) relate to the amount of shrinkage?
+
+```{r}
+# Enter your answer here
+```
+
+### Question 4.2 {.unnumbered}
+
+Consider a tank that started with 10 tadpoles and all 10 survived (raw proportion = 1.0). What does the partial pooling model do to this estimate? Why?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+The partial pooling model pulls that tank's estimate down from 1.0 toward the grand mean. A 100% survival rate from only 10 tadpoles is likely an overestimate of the true survival probability — with more tadpoles, we'd probably see some deaths. The model recognizes that this extreme value is partly real signal and partly sampling noise, and the shrinkage separates the two. Tanks with density = 10 and extreme proportions (near 0 or 1) show the most shrinkage because they have the least data and the most extreme raw estimates.
+:::
+
+
+# Part 5: Group-level credible intervals
+
+## Caterpillar plot
+
+One of the advantages of Bayesian hierarchical models is that you get full posterior distributions for each group-level parameter. Let's visualize these as a caterpillar plot.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 10
+
+# Extract tank-level intercepts with credible intervals
+tank_intervals <- coef(fit_partial)$tank[, , "Intercept"] %>%
+  data.frame() %>%
+  rownames_to_column("tank") %>%
+  mutate(
+    prob = inv_logit_scaled(Estimate),
+    prob_lower = inv_logit_scaled(Q2.5),
+    prob_upper = inv_logit_scaled(Q97.5)
+  ) %>%
+  left_join(d %>% select(tank, density), by = "tank") %>%
+  arrange(prob) %>%
+  mutate(rank = row_number())
+
+# Grand mean
+gm <- inv_logit_scaled(fixef(fit_partial)[, "Estimate"])
+
+ggplot(tank_intervals, aes(x = prob, xmin = prob_lower, xmax = prob_upper,
+                            y = rank, color = factor(density))) +
+  geom_vline(xintercept = gm, linetype = "dashed", color = "gray40") +
+  geom_pointrange(size = 0.3) +
+  scale_color_manual(values = c("10" = "steelblue", "25" = "coral", "35" = "seagreen"),
+                     name = "Initial density") +
+  labs(x = "Estimated survival probability",
+       y = "Tank (rank ordered)",
+       title = "Tank-level credible intervals (partial pooling)") +
+  theme_bw(base_size = 14)
+```
+
+### A tidybayes alternative
+
+The `tidybayes` package offers a more fluent pipeline for extracting and plotting posterior draws:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 10
+
+fit_partial %>%
+  spread_draws(r_tank[tank, ]) %>%
+  mutate(tank_intercept = r_tank + fixef(fit_partial)[, "Estimate"],
+         prob = inv_logit_scaled(tank_intercept)) %>%
+  group_by(tank) %>%
+  median_qi(prob) %>%
+  mutate(tank = as.character(tank)) %>%
+  left_join(d %>% mutate(tank = as.character(tank)) %>%
+              select(tank, density), by = "tank") %>%
+  arrange(prob) %>%
+  mutate(rank = row_number()) %>%
+
+  ggplot(aes(x = prob, xmin = .lower, xmax = .upper,
+             y = rank, color = factor(density))) +
+  geom_vline(xintercept = gm, linetype = "dashed", color = "gray40") +
+  geom_pointinterval(size = 0.3) +
+  scale_color_manual(values = c("10" = "steelblue", "25" = "coral", "35" = "seagreen"),
+                     name = "Initial density") +
+  labs(x = "Estimated survival probability",
+       y = "Tank (rank ordered)",
+       title = "Tank-level credible intervals (tidybayes version)") +
+  theme_bw(base_size = 14)
+```
+
+### Question 5.1 {.unnumbered}
+
+How do these credible intervals compare to what you would get from `glmer()` in `lme4`? What is fundamentally different about the Bayesian version?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+`glmer()` estimates the group-level standard deviation ($\sigma_{\text{tank}}$) as a single point value and then conditions on it to produce group-level intervals. The Bayesian model integrates over the full posterior uncertainty in $\sigma_{\text{tank}}$, so the credible intervals for each tank reflect uncertainty in both the tank-level intercept *and* the variance component. When the number of groups is small or group sizes are unbalanced, this difference matters: the Bayesian intervals are typically wider and more honest about the overall uncertainty.
+:::
+
+
+## Comparing Bayesian and frequentist intervals
+
+Let's make that comparison concrete. Here is the same model fit with `glmer()`:
+
+```{r}
+fit_freq <- glmer(
+  cbind(surv, density - surv) ~ 1 + (1 | tank),
+  family = binomial,
+  data = d
+)
+```
+
+We can extract the frequentist tank-level intercepts and their conditional standard errors, then build intervals to compare against the Bayesian credible intervals:
+
+```{r}
+#| fig-width: 10
+#| fig-height: 10
+
+# Frequentist estimates
+freq_intercept <- fixef(fit_freq)[["(Intercept)"]]
+freq_ranef <- ranef(fit_freq, condVar = TRUE)$tank
+freq_se <- sqrt(attr(freq_ranef, "postVar")[1, 1, ])
+
+freq_df <- tibble(
+  tank = rownames(freq_ranef),
+  freq_est = freq_intercept + freq_ranef[, 1],
+  freq_lower = freq_est - 1.96 * freq_se,
+  freq_upper = freq_est + 1.96 * freq_se
+) %>%
+  mutate(across(c(freq_est, freq_lower, freq_upper), inv_logit_scaled))
+
+# Bayesian estimates (already computed)
+bayes_df <- tank_intervals %>%
+  mutate(tank = as.character(tank))
+
+# Combine
+compare_df <- left_join(bayes_df, freq_df, by = "tank") %>%
+  arrange(prob) %>%
+  mutate(rank = row_number())
+
+ggplot(compare_df, aes(y = rank)) +
+  # Frequentist intervals (red)
+  geom_pointrange(aes(x = freq_est, xmin = freq_lower, xmax = freq_upper),
+                  color = "tomato", size = 0.25, alpha = 0.7,
+                  position = position_nudge(y = -0.15)) +
+  # Bayesian intervals (blue)
+  geom_pointrange(aes(x = prob, xmin = prob_lower, xmax = prob_upper),
+                  color = "steelblue", size = 0.25, alpha = 0.7,
+                  position = position_nudge(y = 0.15)) +
+  geom_vline(xintercept = gm, linetype = "dashed", color = "gray40") +
+  labs(x = "Estimated survival probability",
+       y = "Tank (rank ordered)",
+       title = "Bayesian (blue) vs frequentist (red) tank-level intervals") +
+  theme_bw(base_size = 14)
+```
+
+### Question 5.2 {.unnumbered}
+
+Compare the blue (Bayesian) and red (frequentist) intervals. What differences do you notice? Which tend to be wider?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+The Bayesian intervals are generally slightly wider than the frequentist intervals. `glmer()` estimates $\sigma_{\text{tank}}$ as a single number and treats it as known when computing the tank-level intervals. The Bayesian model carries forward uncertainty in $\sigma_{\text{tank}}$, so its intervals reflect two sources of uncertainty at once: where each tank's intercept falls, and how spread out tanks are in general. The difference is most visible for tanks with extreme estimates or small sample sizes.
+:::
+
+
+# Part 6: Model checking and comparison
+
+## Posterior predictive check
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+
+pp_check(fit_partial, ndraws = 100) +
+  theme_bw(base_size = 14)
+```
+
+### Question 6.1 {.unnumbered}
+
+Does the posterior predictive distribution capture the general shape of the observed data? Are there any systematic discrepancies?
+
+```{r}
+# Enter your answer here
+```
+
+## LOO-CV model comparison
+
+```{r}
+loo_complete <- loo(fit_complete)
+loo_partial <- loo(fit_partial)
+
+loo_compare(loo_complete, loo_partial)
+```
+
+::: callout-note
+## LOO-CV and ELPD
+Leave-One-Out Cross-Validation (LOO-CV) estimates how well a model predicts held-out data. For each observation, the model is (approximately) refit without it and asked to predict it. The result is summarized as **ELPD** (expected log predictive density) — higher is better. `loo_compare()` puts the best model on top; the `elpd_diff` column tells you how much better it is, and `se_diff` tells you how certain that difference is. A difference much larger than its SE is strong evidence.
+:::
+
+### Question 6.2 {.unnumbered}
+
+Which model wins on LOO-CV? By how much (in ELPD units)? Is this surprising?
+
+```{r}
+# Enter your answer here
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+The partial pooling model should win decisively. The complete pooling model ignores all tank-level variation, so it makes poor predictions for tanks that deviate from the overall mean. The ELPD difference should be large relative to its standard error, indicating strong evidence in favor of the hierarchical model. Since we could *see* substantial between-tank variation in the raw data, it would be surprising if complete pooling won.
+:::
+
+::: callout-note
+## Pareto-k diagnostics
+The `loo()` function uses an approximation rather than actually refitting the model N times. **Pareto-k** values measure how reliable that approximation is for each observation. Values below 0.5 are fine; 0.5--0.7 are acceptable; **above 0.7 means the approximation is unreliable** for that observation. High Pareto-k values often come from influential observations — in hierarchical models, these tend to be observations in small groups or with extreme outcomes. If you see problematic values, `reloo()` can refit the model leaving out those specific observations for exact LOO estimates.
+:::
+
+### Question 6.3 {.unnumbered}
+
+Check the Pareto-k diagnostics from `loo()`. Are there any problematic observations? What would you do about them?
+
+```{r}
+# Enter your code here — look at loo_partial and check for warnings
+```
+
+::: {.callout-tip collapse="true" title="Answer"}
+You should see that nearly all 48 observations have Pareto-k values above 0.7. This happens because the data is aggregated to one row per tank. Leaving out a single row removes an entire tank's data, which is highly influential in a model with tank-level random effects. Despite the unreliable LOO approximation, the comparison with complete pooling is so decisive (ELPD difference ~182 with SE ~34) that the conclusion is robust. For more precise LOO estimates with aggregated data, you can use `loo(fit_partial, moment_match = TRUE)`.
+:::
+
+
+# Optional: Going further
+
+If you finish early, try adding `pred` (predator presence) as a fixed effect to the reedfrogs partial pooling model. Fit the model, compare it to the intercept-only partial pooling model using `loo_compare()`, and interpret the result.
+
+```{r}
+# Enter your code and answers here
+```
+
+## Resources
+
+-   Kurz (2023). [*Statistical Rethinking with brms and the tidyverse*](https://bookdown.org/content/4857/), Chapter 13
+-   McElreath (2020). *Statistical Rethinking*, Chapters 12--13
+-   Gelman & Hill (2007). *Data Analysis Using Regression and Multilevel/Hierarchical Models*, Chapter 12

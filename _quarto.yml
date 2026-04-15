@@ -26,6 +26,7 @@ project:
     - "!**/*Bayes_Hierarchical*Lecture*"
     - "!**/*_navarro*"
     - "!**/*Diagnostics*Lecture*"
+    - "!**/Bayes_Lab_4_Hierarchical.qmd"
 
 
 website:
