@@ -21,7 +21,7 @@ project:
     - "!**/*MLM_simulation*.qmd"
     - "!**/*Lecture_short.qmd"
     - "!**/*Bayes_Lab_3.qmd"
-    - "!**/*Bayes_Lab_3_solutions*"
+    - "!**/*_solutions*"
     - "!**/*Poisson_Regression_S*"
     - "!**/*Bayes_Hierarchical*Lecture*"
     - "!**/*_navarro*"

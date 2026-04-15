@@ -96,26 +96,26 @@ There is substantial variation across tanks. Some tanks had 100% survival, other
 
 ### Question 1.1 {.unnumbered}
 
-Recreate the bar chart above, but facet it by `density` (using `facet_wrap(~ density, scales = "free_x")`). How does the spread of survival proportions compare across the three density levels? Which group shows the most variation?
+Recreate the bar chart above, but facet it by `density` (using `facet_wrap(~ density, scales = "free_x")`). What do you notice about the spread of survival proportions across the three density levels?
 
 ```{r}
 # Enter your code here
 ```
 
 ::: {.callout-tip collapse="true" title="Answer"}
-The density = 10 facet shows the widest spread in survival proportions, ranging from near 0 to 1.0. The density = 35 facet is more tightly clustered. With fewer tadpoles, any single outcome has a larger effect on the proportion, so small tanks produce noisier estimates. When we fit the partial pooling model later, these are the tanks that will be pulled most toward the grand mean.
+The density = 25 and density = 35 facets show wider spread than density = 10. All three levels include tanks near 1.0, but the larger tanks include more tanks with very low survival (likely driven by predator presence). The density = 10 tanks cluster mostly at the high end, with a few dropping to around 0.4.
 :::
 
 ### Question 1.2 {.unnumbered}
 
-Why would smaller tanks produce more extreme estimates?
+With only 10 tadpoles, a single death moves the survival proportion by 0.10. With 35 tadpoles, a single death moves it by only ~0.03. What does this mean for how much we should trust the raw proportions from small vs. large tanks?
 
 ```{r}
 # Enter your answer here
 ```
 
 ::: {.callout-tip collapse="true" title="Answer"}
-Smaller samples produce more variable estimates. With only 10 tadpoles, a single death moves the proportion by 0.10. With 35 tadpoles, a single death moves it by only ~0.03. The small-sample tanks have more sampling noise, so their raw proportions are less reliable estimates of the true survival rate. Partial pooling will pull these extreme estimates toward the grand mean more than the large-sample tanks.
+The raw proportions from small tanks are less reliable. Each individual outcome has a larger effect on the estimate, so the proportion carries more sampling noise. A tank with 10/10 surviving could easily have a true rate of 0.85 where we got lucky, but a tank with 35/35 is stronger evidence of genuinely high survival. When we fit the partial pooling model later, the model will reflect this: tanks with fewer observations will have wider credible intervals and be pulled more toward the grand mean.
 :::
 
 
@@ -653,7 +653,7 @@ Check the Pareto-k diagnostics from `loo()`. Are there any problematic observati
 ```
 
 ::: {.callout-tip collapse="true" title="Answer"}
-If any Pareto-k values exceed 0.7, those observations are highly influential and the LOO approximation may be unreliable for them. You can use `reloo(loo_partial, fit_partial)` to refit the model leaving out those specific observations, giving exact LOO estimates for the problematic cases. In hierarchical models, high Pareto-k values often come from groups with very few observations or extreme outcomes.
+You should see that nearly all 48 observations have Pareto-k values above 0.7. This happens because the data is aggregated to one row per tank. Leaving out a single row removes an entire tank's data, which is highly influential in a model with tank-level random effects. Despite the unreliable LOO approximation, the comparison with complete pooling is so decisive (ELPD difference ~182 with SE ~34) that the conclusion is robust. For more precise LOO estimates with aggregated data, you can use `loo(fit_partial, moment_match = TRUE)`.
 :::
 
 
