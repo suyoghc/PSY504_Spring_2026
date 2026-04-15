@@ -24,6 +24,8 @@ project:
     - "!**/*Bayes_Lab_3_solutions*"
     - "!**/*Poisson_Regression_S*"
     - "!**/*Bayes_Hierarchical*Lecture*"
+    - "!**/*_navarro*"
+    - "!**/*Diagnostics*Lecture*"
 
 
 website:
