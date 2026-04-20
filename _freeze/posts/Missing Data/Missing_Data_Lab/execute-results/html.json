@@ -1,0 +1,15 @@
+{
+  "hash": "ca457f281bedc8d30ffd26ef618917d9",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Missing_Data_Lab\"\nformat: html\neditor: visual\n---\n\nMissing data is a common problem and dealing with it appropriately is extremely important. Ignoring the missing data points or filling them incorrectly may cause the models to work in unexpected ways and cause the predictions and inferences to be biased.\n\nLe'ts consider the `biopics` dataset. It contains information on a number of biographical movies, including their earnings, subject characteristics and some other variables. Some of the data points are, however, missing. \\\n\\\nWe need ot get to know the dataset and fit a linear regression model to explain a movie's earnings.\n\n\n::: {.cell}\n\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

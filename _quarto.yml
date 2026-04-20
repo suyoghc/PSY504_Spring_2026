@@ -27,6 +27,11 @@ project:
     - "!**/*_navarro*"
     - "!**/*Diagnostics*Lecture*"
     - "!**/Bayes_Lab_4_Hierarchical.qmd"
+    - "!**/*Lecture_Narrated*"
+    - "!**/*Missing_Data_Lab*"
+    - "!**/*Missing_Data_2026_Quiz*"
+    - "!**/*Missing_Data_2025*"
+    - "!**/*Missing_Data_2026.qmd"
 
 
 website:
